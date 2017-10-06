@@ -75,24 +75,29 @@ public class OmniBaseCode extends OpMode
 
 
 //MOVING (NOT TURNING) CODE
+        //move forward
         if (gamepad1.left_stick_y < -.1) {
             WheelOne.setPower(gamepad1.left_stick_y);
             WheelTwo.setPower(gamepad1.left_stick_y);
             WheelThree.setPower(gamepad1.left_stick_y);
             WheelZero.setPower(gamepad1.left_stick_y);
         }
+
+        //move backward
         else if (gamepad1.left_stick_y > .1) {
             WheelOne.setPower(gamepad1.left_stick_y);
             WheelTwo.setPower(gamepad1.left_stick_y);
             WheelThree.setPower(gamepad1.left_stick_y);
             WheelZero.setPower(gamepad1.left_stick_y);
         }
+        //move left
         if (gamepad1.left_stick_x < -.1) {
             WheelOne.setPower(gamepad1.left_stick_x);
             WheelTwo.setPower(gamepad1.left_stick_x);
             WheelThree.setPower(-gamepad1.left_stick_x);
             WheelZero.setPower(-gamepad1.left_stick_x);
         }
+        //move right
         else if (gamepad1.left_stick_x > .1) {
             telemetry.addLine("BEN CW");
             WheelOne.setPower(gamepad1.left_stick_x);
@@ -100,6 +105,7 @@ public class OmniBaseCode extends OpMode
             WheelThree.setPower(-gamepad1.left_stick_x);
             WheelZero.setPower(-gamepad1.left_stick_x);
         }
+        //nothing
         else{
             WheelOne.setPower(0);
             WheelTwo.setPower(0);
@@ -111,6 +117,24 @@ public class OmniBaseCode extends OpMode
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+
+
+        //turn left
+        if (gamepad1.right_stick_x < -.1) {
+            WheelOne.setPower(-gamepad1.left_stick_x);
+            WheelTwo.setPower(-gamepad1.left_stick_x);
+            WheelThree.setPower(-gamepad1.left_stick_x);
+            WheelZero.setPower(-gamepad1.left_stick_x);
+        }
+        //turn right
+        else if (gamepad1.right_stick_x > .1) {
+            WheelOne.setPower(gamepad1.left_stick_x);
+            WheelTwo.setPower(gamepad1.left_stick_x);
+            WheelThree.setPower(gamepad1.left_stick_x);
+            WheelZero.setPower(gamepad1.left_stick_x);
+        }
+
+
     }
 
     /*
