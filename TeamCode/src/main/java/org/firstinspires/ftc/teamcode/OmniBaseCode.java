@@ -1,15 +1,10 @@
 
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 @TeleOp(name="Omni with servos", group="Iterative Opmode")
 public class OmniBaseCode extends OpMode
 {
@@ -53,12 +48,69 @@ public class OmniBaseCode extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
+    public void moveForward() {
+        WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
+        WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
+        WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
+        WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
+    }
+    public void moveBackward() {
+        WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
+        WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
+        WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
+        WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
+    }
+    public void moveLeft() {
+        WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
+        WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
+        WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
+        WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
+    }
+    public void moveRight() {
+        WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
+        WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
+        WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
+        WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
+    }
+    public void turnClockwise() {
+        WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
+        WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
+        WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
+        WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
+    }
+    public void turnCounterClockwise() {
+        WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
+        WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
+        WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
+        WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
+    }
+    public void driveStop(){
+        WheelOne.setPower(0);
+        WheelTwo.setPower(0);
+        WheelThree.setPower(0);
+        WheelZero.setPower(0);
+    }
+    public void grabberIn(){
+        ServoFour.setPower(-gamepad1.right_trigger);
+        ServoFive.setPower(-gamepad1.right_trigger);
+    }
+    public void grabberOut(){
+        ServoFour.setPower(gamepad1.left_trigger);
+        ServoFive.setPower(gamepad1.left_trigger);
+    }
+    public void grabberStop(){
+        ServoFour.setPower(0);
+        ServoFive.setPower(0);
+    }
+
+
     @Override
     public void init_loop() {
         WheelOne.setPower(0);
         WheelTwo.setPower(0);
         WheelThree.setPower(0);
         WheelZero.setPower(0);
+
     }
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -66,87 +118,31 @@ public class OmniBaseCode extends OpMode
     @Override
     public void start() {
         runtime.reset();
+
     }
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
     public void loop() {
-//MOVING CODE
-        //move forward
-        if (gamepad1.left_stick_y < -1/(10*moveSpeed))
-        {
-            WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
-            WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
-            WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
-            WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
-        }
-        //move backward
-        else if (gamepad1.left_stick_y > 1/(10*moveSpeed))
-        {
-            WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
-            WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
-            WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
-            WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
-        }
-        //move left
-        if (gamepad1.left_stick_x < -1/(10*moveSpeed))
-        {
-            WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
-            WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
-            WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
-            WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
-        }
-        //move right
-        else if (gamepad1.left_stick_x > 1/(10*moveSpeed))
-        {
-            WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
-            WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
-            WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
-            WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
-        }
-        //turn counter-clockwise
-        if (gamepad1.right_stick_x < -1/(10*turnSpeed))
-        {
-            WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
-            WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
-            WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
-            WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
-        }
-        //turn clockwise
-        else if (gamepad1.right_stick_x > 1/(10*turnSpeed))
-        {
-            WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
-            WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
-            WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
-            WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
-        }
-        //stop motors
-        else
-        {
-            WheelOne.setPower(0);
-            WheelTwo.setPower(0);
-            WheelThree.setPower(0);
-            WheelZero.setPower(0);
-        }
-        //grabber in
-        if (gamepad1.right_trigger > .1)
-        {
-            ServoFour.setPower(-gamepad1.right_trigger);
-            ServoFive.setPower(-gamepad1.right_trigger);
-        }
-        //grabber out
-        else if (gamepad1.left_trigger > .1)
-        {
-            ServoFour.setPower(gamepad1.left_trigger);
-            ServoFive.setPower(gamepad1.left_trigger);
-        }
-        //stop servos
-        else
-        {
-            ServoFour.setPower(0);
-            ServoFive.setPower(0);
-        }
+       //moving forward/backward
+        if (gamepad1.left_stick_y < -1/(10*moveSpeed)) moveForward();
+        else if (gamepad1.left_stick_y > 1/(10*moveSpeed)) moveBackward();
+
+        //moving left/right
+        if (gamepad1.left_stick_x < -1/(10*moveSpeed)) moveLeft();
+        else if (gamepad1.left_stick_x > 1/(10*moveSpeed)) moveRight();
+
+        //turning
+        if (gamepad1.right_stick_x < -1/(10*turnSpeed)) turnCounterClockwise();
+        else if (gamepad1.right_stick_x > 1/(10*turnSpeed))turnClockwise();
+
+        //grabber
+        if (gamepad1.right_trigger > .1)grabberIn();
+        else if (gamepad1.left_trigger > .1)grabberOut();
+        else grabberStop();
+
+
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
         telemetry.addData("right_stick_y", gamepad1.right_stick_y);
