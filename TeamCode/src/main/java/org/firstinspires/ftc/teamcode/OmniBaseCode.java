@@ -125,6 +125,9 @@ public class OmniBaseCode extends OpMode
      */
     @Override
     public void loop() {
+        //stopping
+        if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
+
        //moving forward/backward
         if (gamepad1.left_stick_y < -1/(10*moveSpeed)) moveForward();
         else if (gamepad1.left_stick_y > 1/(10*moveSpeed)) moveBackward();
@@ -136,6 +139,7 @@ public class OmniBaseCode extends OpMode
         //turning
         if (gamepad1.right_stick_x < -1/(10*turnSpeed)) turnCounterClockwise();
         else if (gamepad1.right_stick_x > 1/(10*turnSpeed))turnClockwise();
+
 
         //grabber
         if (gamepad1.right_trigger > .1)grabberIn();
