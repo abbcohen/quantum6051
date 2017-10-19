@@ -53,7 +53,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 
 @TeleOp(name="POTATO YEAH BOW BOW FLOCKA GAME WEEK!", group="Iterative Opmode")
-public class PushbotTeleopTank_Iterative extends OpMode
+public class PotatoCode extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
