@@ -14,9 +14,11 @@ public class OmniBaseCode extends OpMode
     private DcMotor WheelTwo = null;
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
+    private DcMotor LiftMotor = null;
     private CRServo ServoOne = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
+    private double liftSpeed = .1;
     private boolean slomo;
     /*
      * Code to run ONCE when the driver hits INIT
@@ -97,6 +99,15 @@ public class OmniBaseCode extends OpMode
     public void grabberStop(){
         ServoOne.setPower(0);
     }
+    public void liftUp(){
+        LiftMotor.setPower(gamepad2.right_stick_x*liftSpeed);
+    }
+    public void liftDown(){
+        LiftMotor.setPower(-gamepad2.right_stick_x*liftSpeed);
+    }
+    public void liftStop(){
+        LiftMotor.setPower(0g);
+    }
 
 
     @Override
@@ -145,12 +156,14 @@ public class OmniBaseCode extends OpMode
         if (gamepad1.right_stick_x < -1/(10*turnSpeed)) turnCounterClockwise();
         else if (gamepad1.right_stick_x > 1/(10*turnSpeed))turnClockwise();
 
-
         //grabber
         if (gamepad2.right_trigger > .1)grabberIn();
         else if (gamepad2.left_trigger > .1)grabberOut();
         else grabberStop();
 
+        if (gamepad1.right_stick_x > -1/(10*turnSpeed)) liftUp();
+        else if (gamepad1.right_stick_x < 1/(10*turnSpeed))liftDown();
+        else liftStop();
 
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
