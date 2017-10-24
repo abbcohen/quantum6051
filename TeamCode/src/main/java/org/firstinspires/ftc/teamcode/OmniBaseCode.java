@@ -14,8 +14,7 @@ public class OmniBaseCode extends OpMode
     private DcMotor WheelTwo = null;
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
-    private CRServo ServoFour = null;
-    private CRServo ServoFive = null;
+    private CRServo ServoOne = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     /*
@@ -38,10 +37,8 @@ public class OmniBaseCode extends OpMode
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
         //Servo initialization
-        ServoFour = hardwareMap.get(CRServo.class, "ServoFour");
-        ServoFive = hardwareMap.get(CRServo.class, "ServoFive");
-        ServoFour.setDirection(CRServo.Direction.REVERSE);
-        ServoFive.setDirection(CRServo.Direction.FORWARD);
+        ServoOne = hardwareMap.get(CRServo.class, "ServoOne");
+        ServoOne.setDirection(CRServo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -91,16 +88,13 @@ public class OmniBaseCode extends OpMode
         WheelZero.setPower(0);
     }
     public void grabberIn(){
-        ServoFour.setPower(-gamepad1.right_trigger);
-        ServoFive.setPower(-gamepad1.right_trigger);
+        ServoOne.setPower(-gamepad1.right_trigger);
     }
     public void grabberOut(){
-        ServoFour.setPower(gamepad1.left_trigger);
-        ServoFive.setPower(gamepad1.left_trigger);
+        ServoOne.setPower(-gamepad1.right_trigger);
     }
     public void grabberStop(){
-        ServoFour.setPower(0);
-        ServoFive.setPower(0);
+        ServoOne.setPower(0);
     }
 
 
