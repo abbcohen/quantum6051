@@ -17,6 +17,7 @@ public class OmniBaseCode extends OpMode
     private CRServo ServoOne = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
+    private boolean slomo;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -88,10 +89,10 @@ public class OmniBaseCode extends OpMode
         WheelZero.setPower(0);
     }
     public void grabberIn(){
-        ServoOne.setPower(-gamepad1.right_trigger);
+        ServoOne.setPower(-gamepad2.right_trigger);
     }
     public void grabberOut(){
-        ServoOne.setPower(-gamepad1.right_trigger);
+        ServoOne.setPower(-gamepad2.right_trigger);
     }
     public void grabberStop(){
         ServoOne.setPower(0);
@@ -119,10 +120,20 @@ public class OmniBaseCode extends OpMode
      */
     @Override
     public void loop() {
+        //slow-motion code:
+        if(gamepad1.a==true) slomo=!slomo;
+        if(slomo){
+            moveSpeed = .375;
+            turnSpeed = .25;
+        }
+        else{
+            moveSpeed = .75;
+            turnSpeed = .5;
+        }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
 
-       //moving forward/backward
+        //moving forward/backward
         if (gamepad1.left_stick_y < -1/(10*moveSpeed)) moveForward();
         else if (gamepad1.left_stick_y > 1/(10*moveSpeed)) moveBackward();
 
@@ -136,8 +147,8 @@ public class OmniBaseCode extends OpMode
 
 
         //grabber
-        if (gamepad1.right_trigger > .1)grabberIn();
-        else if (gamepad1.left_trigger > .1)grabberOut();
+        if (gamepad2.right_trigger > .1)grabberIn();
+        else if (gamepad2.left_trigger > .1)grabberOut();
         else grabberStop();
 
 
