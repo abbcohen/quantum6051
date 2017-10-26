@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.CRServo;
-@TeleOp(name="Omni with servos", group="Iterative Opmode")
+@TeleOp(name="Emlyn Sucks (with a lift)", group="Iterative Opmode")
 public class OmniBaseCode extends OpMode
 {
     // Declare OpMode members.
@@ -15,11 +16,12 @@ public class OmniBaseCode extends OpMode
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
     private DcMotor LiftMotor = null;
-    private CRServo ServoOne = null;
+    private Servo ServoOne = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = .1;
     private boolean slomo;
+    public double servoPos = .5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -33,15 +35,17 @@ public class OmniBaseCode extends OpMode
         WheelTwo  = hardwareMap.get(DcMotor.class, "WheelTwo");
         WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
+        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         WheelOne.setDirection(DcMotor.Direction.FORWARD);
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
+        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
         //Servo initialization
-        ServoOne = hardwareMap.get(CRServo.class, "ServoOne");
-        ServoOne.setDirection(CRServo.Direction.REVERSE);
+        ServoOne = hardwareMap.get(Servo.class, "ServoOne");
+        ServoOne.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -90,23 +94,18 @@ public class OmniBaseCode extends OpMode
         WheelThree.setPower(0);
         WheelZero.setPower(0);
     }
-    public void grabberIn(){
-        ServoOne.setPower(-gamepad2.right_trigger);
-    }
-    public void grabberOut(){
-        ServoOne.setPower(-gamepad2.right_trigger);
-    }
-    public void grabberStop(){
-        ServoOne.setPower(0);
+    public void grabber(double pos) {
+        ServoOne.scaleRange();
+        ServoOne.setPosition(pos);
     }
     public void liftUp(){
-        LiftMotor.setPower(gamepad2.right_stick_x*liftSpeed);
+        LiftMotor.setPower(gamepad2.right_stick_y*liftSpeed);
     }
     public void liftDown(){
-        LiftMotor.setPower(-gamepad2.right_stick_x*liftSpeed);
+        LiftMotor.setPower(-gamepad2.right_stick_y*liftSpeed);
     }
     public void liftStop(){
-        LiftMotor.setPower(0g);
+        LiftMotor.setPower(0);
     }
 
 
@@ -157,20 +156,22 @@ public class OmniBaseCode extends OpMode
         else if (gamepad1.right_stick_x > 1/(10*turnSpeed))turnClockwise();
 
         //grabber
-        if (gamepad2.right_trigger > .1)grabberIn();
-        else if (gamepad2.left_trigger > .1)grabberOut();
-        else grabberStop();
+        if (gamepad2.right_trigger > .1) grabber(.01);
+        else if (gamepad2.left_trigger > .1)grabber(0);
 
-        if (gamepad1.right_stick_x > -1/(10*turnSpeed)) liftUp();
-        else if (gamepad1.right_stick_x < 1/(10*turnSpeed))liftDown();
+        if (gamepad1.right_stick_y > -1/(10*turnSpeed)) liftUp();
+        else if (gamepad1.right_stick_y < 1/(10*turnSpeed))liftDown();
         else liftStop();
-
+        telemetry.addData("Servo Position", ServoOne.getPosition());
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
         telemetry.addData("right_stick_y", gamepad1.right_stick_y);
         telemetry.addData("right_stick_x", gamepad1.right_stick_x);
         telemetry.addData("x_button", gamepad1.x);
         telemetry.addData("b_button", gamepad1.b);
+        telemetry.addData("right trigger", gamepad2.right_trigger);
+        telemetry.addData("left trigger", gamepad2.left_trigger);
+        telemetry.addData("lift", gamepad2.right_stick_y);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
