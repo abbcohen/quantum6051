@@ -16,7 +16,7 @@ public class OmniBaseCode extends OpMode
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
     private DcMotor LiftMotor = null;
-    private Servo ServoOne = null;
+    private Servo GlyphServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = .5;
@@ -44,8 +44,8 @@ public class OmniBaseCode extends OpMode
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
         LiftMotor.setDirection(DcMotor.Direction.FORWARD);
         //Servo initialization
-        ServoOne = hardwareMap.get(Servo.class, "ServoOne");
-        ServoOne.setDirection(Servo.Direction.REVERSE);
+        GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
+        GlyphServo.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -95,14 +95,18 @@ public class OmniBaseCode extends OpMode
         WheelZero.setPower(0);
     }
     public void grabber(double pos) {
-        ServoOne.scaleRange();
-        ServoOne.setPosition(pos);
+        if(pos==0){
+            GlyphServo.setPosition(.5);
+        }
+        else if (pos==1) {
+            GlyphServo.setPosition(.55);
+        }
     }
     public void liftUp(){
         LiftMotor.setPower(gamepad2.right_stick_y*liftSpeed);
     }
     public void liftDown(){
-        LiftMotor.setPower(-gamepad2.right_stick_y*liftSpeed);
+        LiftMotor.setPower(gamepad2.right_stick_y*liftSpeed);
     }
     public void liftStop(){
         LiftMotor.setPower(0);
@@ -156,21 +160,22 @@ public class OmniBaseCode extends OpMode
         else if (gamepad1.right_stick_x > 1/(10*turnSpeed))turnClockwise();
 
         //grabber
-        if (gamepad2.right_trigger > .1) grabber(.01);
-        else if (gamepad2.left_trigger > .1)grabber(0);
+        if (gamepad2.right_bumper) grabber(0);
+        else if (gamepad2.left_bumper)grabber(1);
 
-        if (gamepad1.right_stick_y > -1/(10*turnSpeed)) liftUp();
-        else if (gamepad1.right_stick_y < 1/(10*turnSpeed))liftDown();
+        //lift
+        if((gamepad2.right_stick_y > -1/(10*turnSpeed)) && !(gamepad2.right_stick_y<.1)) liftUp();
+        else if (gamepad2.right_stick_y < 1/(10*turnSpeed) && !(gamepad2.right_stick_y>-.1))liftDown();
         else liftStop();
-        telemetry.addData("Servo Position", ServoOne.getPosition());
+        telemetry.addData("Servo Position", GlyphServo.getPosition());
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
         telemetry.addData("right_stick_y", gamepad1.right_stick_y);
         telemetry.addData("right_stick_x", gamepad1.right_stick_x);
         telemetry.addData("x_button", gamepad1.x);
         telemetry.addData("b_button", gamepad1.b);
-        telemetry.addData("right trigger", gamepad2.right_trigger);
-        telemetry.addData("left trigger", gamepad2.left_trigger);
+        telemetry.addData("right bumper", gamepad2.right_bumper);
+        telemetry.addData("left bumper", gamepad2.left_bumper);
         telemetry.addData("lift", gamepad2.right_stick_y);
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
