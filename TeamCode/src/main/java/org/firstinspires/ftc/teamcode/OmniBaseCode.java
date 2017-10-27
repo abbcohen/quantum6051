@@ -19,7 +19,7 @@ public class OmniBaseCode extends OpMode
     private Servo ServoOne = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
-    private double liftSpeed = .1;
+    private double liftSpeed = .5;
     private boolean slomo;
     public double servoPos = .5;
     /*
