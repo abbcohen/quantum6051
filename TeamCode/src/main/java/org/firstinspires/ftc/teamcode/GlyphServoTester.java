@@ -31,10 +31,10 @@ public class GlyphServoTester extends OpMode
      */
     public void grabber(double pos) {
         if(pos==0){
-            GlyphServo.setPosition(.5);
+            GlyphServo.setPosition(.45);
         }
         else if (pos==1) {
-            GlyphServo.setPosition(.55);
+            GlyphServo.setPosition(.65);
         }
     }
 
