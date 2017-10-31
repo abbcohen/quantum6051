@@ -17,9 +17,10 @@ public class OmniBaseCode extends OpMode
     private DcMotor WheelZero = null;
     private DcMotor LiftMotor = null;
     private Servo GlyphServo = null;
+    private Servo JewelServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
-    private double liftSpeed = .5;
+    private double liftSpeed = 1;
     private boolean slomo;
     public double servoPos = .5;
     /*
@@ -42,10 +43,13 @@ public class OmniBaseCode extends OpMode
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
-        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        LiftMotor.setDirection(DcMotor.Direction.REVERSE); 
         //Servo initialization
         GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
         GlyphServo.setDirection(Servo.Direction.REVERSE);
+        GlyphServo.scaleRange(0,2);
+        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
+        JewelServo.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -99,9 +103,14 @@ public class OmniBaseCode extends OpMode
             GlyphServo.setPosition(.5);
         }
         else if (pos==1) {
-            GlyphServo.setPosition(.55);
+            GlyphServo.setPosition(.65);
         }
     }
+    public void jewel(char button){
+        if(button == 'b') JewelServo.setPosition(75);
+        if(button =='x') JewelServo.setPosition(5);
+    }
+
     public void liftUp(){
         LiftMotor.setPower(gamepad2.right_stick_y*liftSpeed);
     }
@@ -162,6 +171,10 @@ public class OmniBaseCode extends OpMode
         //grabber
         if (gamepad2.right_bumper) grabber(0);
         else if (gamepad2.left_bumper)grabber(1);
+
+        //jewel
+        if (gamepad2.b) jewel('b');
+        else if(gamepad2.x) jewel('x');
 
         //lift
         if((gamepad2.right_stick_y > -1/(10*turnSpeed)) && !(gamepad2.right_stick_y<.1)) liftUp();
