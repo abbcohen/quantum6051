@@ -43,7 +43,7 @@ public class OmniBaseCode extends OpMode
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
-        LiftMotor.setDirection(DcMotor.Direction.REVERSE); 
+        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
         //Servo initialization
         GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
         GlyphServo.setDirection(Servo.Direction.REVERSE);
@@ -100,15 +100,17 @@ public class OmniBaseCode extends OpMode
     }
     public void grabber(double pos) {
         if(pos==0){
-            GlyphServo.setPosition(.5);
+            //OUT
+            GlyphServo.setPosition(.4);
         }
         else if (pos==1) {
-            GlyphServo.setPosition(.65);
+            //IN
+            GlyphServo.setPosition(.55);
         }
     }
     public void jewel(char button){
-        if(button == 'b') JewelServo.setPosition(75);
-        if(button =='x') JewelServo.setPosition(5);
+        if(button == 'a') JewelServo.setPosition(90);
+        if(button =='y') JewelServo.setPosition(0);
     }
 
     public void liftUp(){
@@ -173,8 +175,8 @@ public class OmniBaseCode extends OpMode
         else if (gamepad2.left_bumper)grabber(1);
 
         //jewel
-        if (gamepad2.b) jewel('b');
-        else if(gamepad2.x) jewel('x');
+        if (gamepad2.a) jewel('a');
+        else if(gamepad2.y) jewel('y');
 
         //lift
         if((gamepad2.right_stick_y > -1/(10*turnSpeed)) && !(gamepad2.right_stick_y<.1)) liftUp();
@@ -185,8 +187,8 @@ public class OmniBaseCode extends OpMode
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
         telemetry.addData("right_stick_y", gamepad1.right_stick_y);
         telemetry.addData("right_stick_x", gamepad1.right_stick_x);
-        telemetry.addData("x_button", gamepad1.x);
-        telemetry.addData("b_button", gamepad1.b);
+        telemetry.addData("y_button", gamepad1.y);
+        telemetry.addData("a_button", gamepad1.a);
         telemetry.addData("right bumper", gamepad2.right_bumper);
         telemetry.addData("left bumper", gamepad2.left_bumper);
         telemetry.addData("lift", gamepad2.right_stick_y);
