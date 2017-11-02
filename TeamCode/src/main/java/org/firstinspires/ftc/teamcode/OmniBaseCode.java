@@ -43,7 +43,7 @@ public class OmniBaseCode extends OpMode
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
-        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        LiftMotor.setDirection(DcMotor.Direction.REVERSE);
         //Servo initialization
         GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
         GlyphServo.setDirection(Servo.Direction.REVERSE);
@@ -99,11 +99,11 @@ public class OmniBaseCode extends OpMode
         WheelZero.setPower(0);
     }
     public void grabber(double pos) {
-        if(pos==0){
+        if(pos==1){
             //OUT
             GlyphServo.setPosition(.4);
         }
-        else if (pos==1) {
+        else if (pos==0) {
             //IN
             GlyphServo.setPosition(.55);
         }
@@ -146,32 +146,32 @@ public class OmniBaseCode extends OpMode
     @Override
     public void loop() {
         //slow-motion code:
-        if(gamepad1.a==true) slomo=!slomo;
+        if(gamepad1.right_bumper==true) slomo=!slomo;
         if(slomo){
-            moveSpeed = .375;
-            turnSpeed = .25;
+            moveSpeed = .25;
         }
         else{
             moveSpeed = .75;
-            turnSpeed = .5;
         }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
 
         //moving forward/backward
-        if (gamepad1.left_stick_y < -1/(10*moveSpeed)) moveForward();
-        else if (gamepad1.left_stick_y > 1/(10*moveSpeed)) moveBackward();
+        if (gamepad1.left_stick_y < -.2) moveForward();
+        else if (gamepad1.left_stick_y > .2) moveBackward();
 
         //moving left/right
-        if (gamepad1.left_stick_x < -1/(10*moveSpeed)) moveLeft();
-        else if (gamepad1.left_stick_x > 1/(10*moveSpeed)) moveRight();
+        if (gamepad1.left_stick_x < -.2) moveLeft();
+        else if (gamepad1.left_stick_x > .2) moveRight();
 
         //turning
-        if (gamepad1.right_stick_x < -1/(10*turnSpeed)) turnCounterClockwise();
-        else if (gamepad1.right_stick_x > 1/(10*turnSpeed))turnClockwise();
+        if (gamepad1.right_stick_x < -.2) turnCounterClockwise();
+        else if (gamepad1.right_stick_x > .2)turnClockwise();
 
         //grabber
+        //in
         if (gamepad2.right_bumper) grabber(0);
+        //out
         else if (gamepad2.left_bumper)grabber(1);
 
         //jewel
@@ -179,8 +179,8 @@ public class OmniBaseCode extends OpMode
         else if(gamepad2.y) jewel('y');
 
         //lift
-        if((gamepad2.right_stick_y > -1/(10*turnSpeed)) && !(gamepad2.right_stick_y<.1)) liftUp();
-        else if (gamepad2.right_stick_y < 1/(10*turnSpeed) && !(gamepad2.right_stick_y>-.1))liftDown();
+        if((gamepad2.right_stick_y > -.1) && !(gamepad2.right_stick_y<.1)) liftUp();
+        else if (gamepad2.right_stick_y < .1 && !(gamepad2.right_stick_y>-.1))liftDown();
         else liftStop();
         telemetry.addData("Servo Position", GlyphServo.getPosition());
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
