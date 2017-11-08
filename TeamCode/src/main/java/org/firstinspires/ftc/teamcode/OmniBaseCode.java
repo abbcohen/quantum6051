@@ -100,12 +100,13 @@ public class OmniBaseCode extends OpMode
     }
     public void grabber(double pos) {
         if(pos==1){
-            //OUT
-            GlyphServo.setPosition(.2);
+
+            //OUT left
+            GlyphServo.setPosition(.41);
         }
         else if (pos==0) {
-            //IN - right bumper
-            GlyphServo.setPosition(.4);
+            //IN right
+            GlyphServo.setPosition(.54);
         }
     }
     public void jewel(char button){
