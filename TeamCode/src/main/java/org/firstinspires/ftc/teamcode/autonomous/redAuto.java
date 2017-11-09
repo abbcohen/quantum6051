@@ -1,7 +1,10 @@
 
 package org.firstinspires.ftc.teamcode.autonomous;
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -17,6 +20,7 @@ public class redAuto extends OpMode {
     private CRServo ServoFive = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
+    private ColorSensor colorSensor;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -41,8 +45,13 @@ public class redAuto extends OpMode {
         ServoFive = hardwareMap.get(CRServo.class, "ServoFive");
         ServoFour.setDirection(CRServo.Direction.REVERSE);
         ServoFive.setDirection(CRServo.Direction.FORWARD);
+
+        colorSensor = hardwareMap.colorSensor.get("color sensor");
+        boolean bLedOn = true;
+        colorSensor.enableLed(bLedOn);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+
     }
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -115,20 +124,40 @@ public class redAuto extends OpMode {
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-    public void start() {
+    public void start() {// initialize here
         runtime.reset();
+        init();
     }
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
     public void loop() {
+       //do stuff here
+        // convert the RGB values to HSV values.
+        int red=0;
+        int blue=0;
+        float hsvValues[] = {0F, 0F, 0F};
+        Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
 
+        // send the info back to driver station using telemetry function.
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+
+        Color.RGBToHSV(colorSensor.red() * 255/800, colorSensor.green() * 255/800, colorSensor.blue() * 255/800, hsvValues);
+            if (hsvValues[0] > 140 && hsvValues[0] < 310) {
+
+
+            }
     }
     /*
      * Code to run ONCE after the driver hits STOP
      */
     @Override
     public void stop() {
+        //stop everything
     }
 }

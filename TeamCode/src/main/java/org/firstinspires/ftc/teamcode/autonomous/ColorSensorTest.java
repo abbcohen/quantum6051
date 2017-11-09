@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 /* Copyright (c) 2015 Qualcomm Technologies Inc
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification,
