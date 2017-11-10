@@ -33,6 +33,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -44,15 +45,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * a Modern Robotics Color Sensor.
  *
  * The op mode assumes that the color sensor
- * is configured with a name of "sensor_color".
+ * is configured with a name of "colorSensor".
  *
  * You can use the X button on gamepad1 to toggle the LED on and off.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@TeleOp(name = "Sensor: MR Color", group = "Sensor")
-@Disabled
+@Autonomous(name = "Sensor: MR Color", group = "Sensor")
 public class SensorMRColor extends LinearOpMode {
 
   ColorSensor colorSensor;    // Hardware Device Object
@@ -80,7 +80,7 @@ public class SensorMRColor extends LinearOpMode {
     boolean bLedOn = true;
 
     // get a reference to our ColorSensor object.
-    colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
+    colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
     // Set the LED in the beginning
     colorSensor.enableLed(bLedOn);

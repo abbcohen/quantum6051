@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
+/*
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -37,7 +37,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -52,34 +60,51 @@ import java.util.Locale;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
  */
-@Autonomous(name = "Sensor: REVColorDistance", group = "Sensor")
-public class SensorREVColorDistance extends LinearOpMode {
+@Autonomous(name = "red juuuul auto", group = "Sensor")
+public class redAutoV2 extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
      * It has a light/distance (range) sensor.  It also has an RGB color sensor.
      * The light/distance sensor saturates at around 2" (5cm).  This means that targets that are 2"
      * or closer will display the same value for distance/light detected.
-     *
+     * <p>
      * Although you configure a single REV Robotics Color-Distance sensor in your configuration file,
      * you can treat the sensor as two separate sensors that share the same name in your op mode.
-     *
+     * <p>
      * In this example, we represent the detected color by a hue, saturation, and value color
      * model (see https://en.wikipedia.org/wiki/HSL_and_HSV).  We change the background
      * color of the screen to match the detected color.
-     *
+     * <p>
      * In this example, we  also use the distance sensor to display the distance
      * to the target object.  Note that the distance sensor saturates at around 2" (5 cm).
-     *
      */
-    ColorSensor sensorColor;
+    ColorSensor colorSensor;
     DistanceSensor sensorDistance;
+
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor WheelOne = null;
+    private DcMotor WheelTwo = null;
+    private DcMotor WheelThree = null;
+    private DcMotor WheelZero = null;
+    private Servo JewelServo = null;
 
     @Override
     public void runOpMode() {
+        WheelOne = hardwareMap.get(DcMotor.class, "WheelOne");
+        WheelTwo = hardwareMap.get(DcMotor.class, "WheelTwo");
+        WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
+        WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
+        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
+        JewelServo.setDirection(Servo.Direction.REVERSE);
+        WheelOne.setDirection(DcMotor.Direction.FORWARD);
+        WheelTwo.setDirection(DcMotor.Direction.REVERSE);
+        WheelThree.setDirection(DcMotor.Direction.REVERSE);
+        WheelZero.setDirection(DcMotor.Direction.FORWARD);
+
 
         // get a reference to the color sensor.
-        sensorColor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "colorSensor");
@@ -102,37 +127,35 @@ public class SensorREVColorDistance extends LinearOpMode {
         // wait for the start button to be pressed.
         waitForStart();
 
-        // loop and read the RGB and distance data.
-        // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-        while (opModeIsActive()) {
-            // convert the RGB values to HSV values.
-            // multiply by the SCALE_FACTOR.
-            // then cast it back to int (SCALE_FACTOR is a double)
-            Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
-                    (int) (sensorColor.green() * SCALE_FACTOR),
-                    (int) (sensorColor.blue() * SCALE_FACTOR),
-                    hsvValues);
+        JewelServo.setPosition(70);
+        // convert the RGB values to HSV values.
+        // multiply by the SCALE_FACTOR.
+        // then cast it back to int (SCALE_FACTOR is a double)
+        Color.RGBToHSV((int) (colorSensor.red() * SCALE_FACTOR),
+                (int) (colorSensor.green() * SCALE_FACTOR),
+                (int) (colorSensor.blue() * SCALE_FACTOR),
+                hsvValues);
 
-            // send the info back to driver station using telemetry function.
-            telemetry.addData("Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("Alpha", sensorColor.alpha());
-            telemetry.addData("Red  ", sensorColor.red());
-            telemetry.addData("Green", sensorColor.green());
-            telemetry.addData("Blue ", sensorColor.blue());
-            telemetry.addData("Hue", hsvValues[0]);
+        // send the info back to driver station using telemetry function.
+//            telemetry.addData("Distance (cm)",
+//                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
+//            telemetry.addData("Alpha", colorSensor.alpha());
+//            telemetry.addData("Red  ", colorSensor.red());
+//            telemetry.addData("Green", colorSensor.green());
+//            telemetry.addData("Blue ", colorSensor.blue());
+//            telemetry.addData("Hue", hsvValues[0]);
 
-            // change the background color to match the color detected by the RGB sensor.
-            // pass a reference to the hue, saturation, and value array as an argument
-            // to the HSVToColor method.
-            relativeLayout.post(new Runnable() {
-                public void run() {
-                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-                }
-            });
+        // change the background color to match the color detected by the RGB sensor.
+        // pass a reference to the hue, saturation, and value array as an argument
+        // to the HSVToColor method.
+        relativeLayout.post(new Runnable() {
+            public void run() {
+                relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+            }
+        });
 
-            telemetry.update();
-        }
+        telemetry.update();
+
 
         // Set the panel back to the default color
         relativeLayout.post(new Runnable() {
@@ -140,5 +163,73 @@ public class SensorREVColorDistance extends LinearOpMode {
                 relativeLayout.setBackgroundColor(Color.WHITE);
             }
         });
+        int red = 0;
+        int blue = 0;
+        int count = 0;
+        for (int i = 0; i < 10; i++) {
+            if (colorSensor.red() > colorSensor.blue()) {
+                red++;
+            }
+            if (colorSensor.red() < colorSensor.blue()) {
+                blue++;
+            }
+            telemetry.update();
+        }
+
+
+        double initialtime = getRuntime();
+        if (red > blue) {
+            telemetry.addData("Red Wins!", colorSensor.red());
+            telemetry.update();
+            while (getRuntime() < (initialtime + .2)) {
+                turnCounterClockwise();
+            }
+        } else {
+            telemetry.addData("Blue Wins!", colorSensor.red());
+            telemetry.update();
+            while (getRuntime() < (initialtime + .2)) {
+                turnClockwise();
+            }
+
+        }
+
+
+
+//        double secondtime = getRuntime();
+//        if(red>blue) {
+//            while (getRuntime() < (secondtime + .2)) {
+//                turnClockwise();
+//            }
+//        }
+//        if(blue>red) {
+//            while (getRuntime() < (secondtime + .2)) {
+//                turnCounterClockwise();
+//            }
+//        }
+
+        JewelServo.setPosition(0);
+
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+        telemetry.addData("RED", red);
+        telemetry.addData("BLUE", blue);
+    }
+
+
+    public void turnClockwise() {
+        WheelOne.setPower(.25);
+        WheelTwo.setPower(-.25);
+        WheelThree.setPower(-.25);
+        WheelZero.setPower(.25);
+    }
+
+    public void turnCounterClockwise() {
+        WheelOne.setPower(-.25);
+        WheelTwo.setPower(.25);
+        WheelThree.setPower(.25);
+        WheelZero.setPower(-.25);
     }
 }
