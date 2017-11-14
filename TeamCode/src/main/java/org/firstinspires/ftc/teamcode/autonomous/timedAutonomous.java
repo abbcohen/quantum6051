@@ -139,9 +139,7 @@ public class timedAutonomous extends LinearOpMode {
 
         //grab glyph
         GlyphServo.setPosition(.54);
-        liftUp();
-        sleep(250);
-        liftStop();
+
 
         //jewel sensing
         int red = 0;
@@ -156,6 +154,10 @@ public class timedAutonomous extends LinearOpMode {
             telemetry.update();
         }
 
+        liftUp();
+        sleep(250);
+        liftStop();
+
 //        telemetry.addData("Clear", colorSensor.alpha());
 //        telemetry.addData("Red  ", colorSensor.red());
 //        telemetry.addData("Green", colorSensor.green());
@@ -163,6 +165,7 @@ public class timedAutonomous extends LinearOpMode {
 //        telemetry.addData("Hue", hsvValues[0]);
 //        telemetry.addData("RED", red);
 //        telemetry.addData("BLUE", blue);
+
 
         //knock off jewel
         double time1 = getRuntime();
@@ -186,10 +189,12 @@ public class timedAutonomous extends LinearOpMode {
         JewelServo.setPosition(0);
         moveTime(0,.5);
 
+        moveTime(0,5);
+
         //move to safe zone
         moveTime(3, 1);
-        //turn around
-        moveTime(5, 1.9);
+        //turn to cryptobox
+        moveTime(5, 9);
         //put glyph in box
         moveTime(2, 1.5);
         //release glyph
@@ -204,7 +209,9 @@ public class timedAutonomous extends LinearOpMode {
         double startTime = 0;
         if(dir == 0){
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){}
+            while(getRuntime() < startTime + time){
+
+            }
         }
         if(dir == 1){
             startTime = getRuntime();
@@ -279,6 +286,12 @@ public class timedAutonomous extends LinearOpMode {
         WheelTwo.setPower(turnSpeed);
         WheelThree.setPower(turnSpeed);
         WheelZero.setPower(-turnSpeed);
+    }
+    public void driveStop(){
+        WheelOne.setPower(0);
+        WheelTwo.setPower(0);
+        WheelThree.setPower(0);
+        WheelZero.setPower(0);
     }
 
     public void liftUp(){
