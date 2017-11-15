@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.app.Activity;
@@ -51,9 +50,9 @@ public class timedAutonomous extends LinearOpMode {
     private DcMotor WheelTwo = null;
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
-    private DcMotor LiftMotor = null;
     private Servo JewelServo = null;
     private Servo GlyphServo = null;
+    private DcMotor LiftMotor = null;
 
     private double moveSpeed = .25;
     private double turnSpeed = .25;
@@ -64,18 +63,16 @@ public class timedAutonomous extends LinearOpMode {
         WheelTwo = hardwareMap.get(DcMotor.class, "WheelTwo");
         WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
-        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
-
-        GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
-
+        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+        JewelServo.setDirection(Servo.Direction.REVERSE);
         WheelOne.setDirection(DcMotor.Direction.FORWARD);
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
         LiftMotor.setDirection(DcMotor.Direction.FORWARD);
-
-        JewelServo.setDirection(Servo.Direction.REVERSE);
+        //Servo initialization
+        GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
         GlyphServo.setDirection(Servo.Direction.REVERSE);
         GlyphServo.scaleRange(0,2);
 
@@ -104,9 +101,7 @@ public class timedAutonomous extends LinearOpMode {
         // wait for the start button to be pressed.
         waitForStart();
 
-        //jewel arm down
         JewelServo.setPosition(70);
-
         // convert the RGB values to HSV values.
         // multiply by the SCALE_FACTOR.
         // then cast it back to int (SCALE_FACTOR is a double)
@@ -136,17 +131,15 @@ public class timedAutonomous extends LinearOpMode {
         });
 
 
-
-        //grab glyph
+        //GRAB GLYPH
         GlyphServo.setPosition(.54);
-        liftUp();
-        sleep(250);
-        liftStop();
 
-        //jewel sensing
+        //JEWEL
+
         int red = 0;
         int blue = 0;
-        for (int i = 0; i < 10; i++) {
+        int count = 0;
+        for (int i = 0; i < 100; i++) {
             if (colorSensor.red() > colorSensor.blue()) {
                 red++;
             }
@@ -156,55 +149,47 @@ public class timedAutonomous extends LinearOpMode {
             telemetry.update();
         }
 
-//        telemetry.addData("Clear", colorSensor.alpha());
-//        telemetry.addData("Red  ", colorSensor.red());
-//        telemetry.addData("Green", colorSensor.green());
-//        telemetry.addData("Blue ", colorSensor.blue());
-//        telemetry.addData("Hue", hsvValues[0]);
-//        telemetry.addData("RED", red);
-//        telemetry.addData("BLUE", blue);
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+        telemetry.addData("RED", red);
+        telemetry.addData("BLUE", blue);
 
         //knock off jewel
-        double time1 = getRuntime();
+        double jewelturntime = getRuntime();
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5, .15);
-            sleep(100);
-            moveTime(6, .10);
-            sleep(10);
+            moveTime(5,.15);
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6, .15);
-            sleep(100);
-            moveTime(5, .10);
-            sleep(10);
+            moveTime(6,.15);
         }
 
-        //jewel arm up
         JewelServo.setPosition(0);
-        moveTime(0,.5);
 
-        //move to safe zone
-        moveTime(3, 1);
-        //turn around
-        moveTime(5, 1.9);
-        //put glyph in box
-        moveTime(2, 1.5);
-        //release glyph
-        GlyphServo.setPosition(.41);
-        //move back
-        moveTime(1, .25);
+        //turn back to initial position
+        if(red>blue) {
+            moveTime(6,.15);
+        } else if(blue>red) {
+            moveTime(5,.15);
+        }
 
-        sleep(5000);
+        //MOVE TO SAFE ZONE
+        moveTime(3,1.2);
+
+
     }
-
     public void moveTime(int dir, double time){
         double startTime = 0;
         if(dir == 0){
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){}
+            while(getRuntime() < startTime + time){
+                driveStop();
+            }
         }
         if(dir == 1){
             startTime = getRuntime();
@@ -279,6 +264,12 @@ public class timedAutonomous extends LinearOpMode {
         WheelTwo.setPower(turnSpeed);
         WheelThree.setPower(turnSpeed);
         WheelZero.setPower(-turnSpeed);
+    }
+    public void driveStop(){
+        WheelOne.setPower(0);
+        WheelTwo.setPower(0);
+        WheelThree.setPower(0);
+        WheelZero.setPower(0);
     }
 
     public void liftUp(){
