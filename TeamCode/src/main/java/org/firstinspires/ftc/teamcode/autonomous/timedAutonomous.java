@@ -288,3 +288,4 @@ public class timedAutonomous extends LinearOpMode {
     public void liftStop(){
         LiftMotor.setPower(0);
     }
+}
