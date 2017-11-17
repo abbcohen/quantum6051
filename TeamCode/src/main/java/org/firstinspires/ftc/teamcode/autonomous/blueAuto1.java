@@ -22,8 +22,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "timed blue auto", group = "Sensor")
-public class timedAutonomous extends LinearOpMode {
+@Autonomous(name = "blue 1", group = "Sensor")
+public class blueAuto1 extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
@@ -189,7 +189,7 @@ public class timedAutonomous extends LinearOpMode {
         moveTime(0,1);
         GlyphServo.setPosition(.48);
         moveTime(0,1);
-        moveTime(2,.5);
+        moveTime(2,.25);
 
 
     }

@@ -1,32 +1,3 @@
-/*
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.app.Activity;
@@ -51,17 +22,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-/*
- * This is an example LinearOpMode that shows how to use
- * the REV Robotics Color-Distance Sensor.
- *
- * It assumes the sensor is configured with the name "sensor_color_distance".
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- */
-@Autonomous(name = "red juuuul auto", group = "Sensor")
-public class redAutoV2 extends LinearOpMode {
+@Autonomous(name = "blue 2", group = "Sensor")
+public class blueAuto2 extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
@@ -79,6 +41,7 @@ public class redAutoV2 extends LinearOpMode {
      * In this example, we  also use the distance sensor to display the distance
      * to the target object.  Note that the distance sensor saturates at around 2" (5 cm).
      */
+
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
 
@@ -88,6 +51,11 @@ public class redAutoV2 extends LinearOpMode {
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
     private Servo JewelServo = null;
+    private Servo GlyphServo = null;
+    private DcMotor LiftMotor = null;
+
+    private double moveSpeed = .25;
+    private double turnSpeed = .25;
 
     @Override
     public void runOpMode() {
@@ -96,11 +64,17 @@ public class redAutoV2 extends LinearOpMode {
         WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
+        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         JewelServo.setDirection(Servo.Direction.REVERSE);
         WheelOne.setDirection(DcMotor.Direction.FORWARD);
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
+        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        //Servo initialization
+        GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
+        GlyphServo.setDirection(Servo.Direction.REVERSE);
+        GlyphServo.scaleRange(0,2);
 
 
         // get a reference to the color sensor.
@@ -136,14 +110,6 @@ public class redAutoV2 extends LinearOpMode {
                 (int) (colorSensor.blue() * SCALE_FACTOR),
                 hsvValues);
 
-        // send the info back to driver station using telemetry function.
-//            telemetry.addData("Distance (cm)",
-//                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-//            telemetry.addData("Alpha", colorSensor.alpha());
-//            telemetry.addData("Red  ", colorSensor.red());
-//            telemetry.addData("Green", colorSensor.green());
-//            telemetry.addData("Blue ", colorSensor.blue());
-//            telemetry.addData("Hue", hsvValues[0]);
 
         // change the background color to match the color detected by the RGB sensor.
         // pass a reference to the hue, saturation, and value array as an argument
@@ -163,10 +129,20 @@ public class redAutoV2 extends LinearOpMode {
                 relativeLayout.setBackgroundColor(Color.WHITE);
             }
         });
+
+
+        //GRAB GLYPH
+        GlyphServo.setPosition(.54);
+        liftStop(1);
+        liftUp(.25);
+        liftStop(1);
+
+        //JEWEL
+
         int red = 0;
         int blue = 0;
         int count = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             if (colorSensor.red() > colorSensor.blue()) {
                 red++;
             }
@@ -176,39 +152,6 @@ public class redAutoV2 extends LinearOpMode {
             telemetry.update();
         }
 
-
-        double initialtime = getRuntime();
-        if (red > blue) {
-            telemetry.addData("Red Wins!", colorSensor.red());
-            telemetry.update();
-            while (getRuntime() < (initialtime + .2)) {
-                turnCounterClockwise();
-            }
-        } else {
-            telemetry.addData("Blue Wins!", colorSensor.red());
-            telemetry.update();
-            while (getRuntime() < (initialtime + .2)) {
-                turnClockwise();
-            }
-
-        }
-
-
-
-//        double secondtime = getRuntime();
-//        if(red>blue) {
-//            while (getRuntime() < (secondtime + .2)) {
-//                turnClockwise();
-//            }
-//        }
-//        if(blue>red) {
-//            while (getRuntime() < (secondtime + .2)) {
-//                turnCounterClockwise();
-//            }
-//        }
-
-        JewelServo.setPosition(0);
-
         telemetry.addData("Clear", colorSensor.alpha());
         telemetry.addData("Red  ", colorSensor.red());
         telemetry.addData("Green", colorSensor.green());
@@ -216,20 +159,147 @@ public class redAutoV2 extends LinearOpMode {
         telemetry.addData("Hue", hsvValues[0]);
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
+
+        //knock off jewel
+        double jewelturntime = getRuntime();
+        if (red > blue) {
+            telemetry.addData("Red Wins!", colorSensor.red());
+            telemetry.update();
+            moveTime(5,.15);
+        } else {
+            telemetry.addData("Blue Wins!", colorSensor.red());
+            telemetry.update();
+            moveTime(6,.15);
+        }
+
+        JewelServo.setPosition(0);
+
+        //turn back to initial position
+        if(red>blue) {
+            moveTime(6,.15);
+        } else if(blue>red) {
+            moveTime(5,.15);
+        }
+
+        //MOVE TO SAFE ZONE
+        moveTime(4,1.4);
+
+        moveTime(6,1.5);
+        moveTime(1,1.75);
+        moveTime(0,1);
+        GlyphServo.setPosition(.48);
+        moveTime(0,1);
+        moveTime(2,.25);
+
+
     }
+    public void moveTime(int dir, double time){
+        double startTime = 0;
+        if(dir == 0){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                driveStop();
+            }
+        }
+        if(dir == 1){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                moveForward();
+            }
 
-
+        }
+        if(dir == 2){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                moveBackward();
+            }
+        }
+        if(dir == 3){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                moveLeft();
+            }
+        }
+        if(dir == 4){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                moveRight();
+            }
+        }
+        if(dir == 5){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                turnClockwise();
+            }
+        }
+        if(dir == 6){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                turnCounterClockwise();
+            }
+        }
+    }
+    public void moveForward() {
+        WheelOne.setPower(-moveSpeed);
+        WheelTwo.setPower(-moveSpeed);
+        WheelThree.setPower(-moveSpeed);
+        WheelZero.setPower(-moveSpeed);
+    }
+    public void moveBackward() {
+        WheelOne.setPower(moveSpeed);
+        WheelTwo.setPower(moveSpeed);
+        WheelThree.setPower(moveSpeed);
+        WheelZero.setPower(moveSpeed);
+    }
+    public void moveLeft() {
+        WheelOne.setPower(moveSpeed);
+        WheelTwo.setPower(moveSpeed);
+        WheelThree.setPower(-moveSpeed);
+        WheelZero.setPower(-moveSpeed);
+    }
+    public void moveRight() {
+        WheelOne.setPower(-moveSpeed);
+        WheelTwo.setPower(-moveSpeed);
+        WheelThree.setPower(moveSpeed);
+        WheelZero.setPower(moveSpeed);
+    }
     public void turnClockwise() {
-        WheelOne.setPower(.25);
-        WheelTwo.setPower(-.25);
-        WheelThree.setPower(-.25);
-        WheelZero.setPower(.25);
+        WheelOne.setPower(turnSpeed);
+        WheelTwo.setPower(-turnSpeed);
+        WheelThree.setPower(-turnSpeed);
+        WheelZero.setPower(turnSpeed);
+    }
+    public void turnCounterClockwise() {
+        WheelOne.setPower(-turnSpeed);
+        WheelTwo.setPower(turnSpeed);
+        WheelThree.setPower(turnSpeed);
+        WheelZero.setPower(-turnSpeed);
+    }
+    public void driveStop() {
+        WheelOne.setPower(0);
+        WheelTwo.setPower(0);
+        WheelThree.setPower(0);
+        WheelZero.setPower(0);
     }
 
-    public void turnCounterClockwise() {
-        WheelOne.setPower(-.25);
-        WheelTwo.setPower(.25);
-        WheelThree.setPower(.25);
-        WheelZero.setPower(-.25);
+    public void liftUp(double time) {
+        double startTime = getRuntime();
+        while (getRuntime() < startTime + time) {
+            LiftMotor.setPower(1);
+        }
+    }
+
+    public void liftDown(double time) {
+        double startTime = getRuntime();
+        while (getRuntime() < startTime + time) {
+            LiftMotor.setPower(-1);
+        }
+    }
+
+    public void liftStop(double time) {
+        double startTime = getRuntime();
+        while (getRuntime() < startTime + time) {
+            LiftMotor.setPower(0);
+        }
     }
 }
