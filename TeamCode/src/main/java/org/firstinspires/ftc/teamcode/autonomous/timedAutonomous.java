@@ -133,6 +133,9 @@ public class timedAutonomous extends LinearOpMode {
 
         //GRAB GLYPH
         GlyphServo.setPosition(.54);
+        liftStop(1);
+        liftUp(.25);
+        liftStop(1);
 
         //JEWEL
 
@@ -179,7 +182,14 @@ public class timedAutonomous extends LinearOpMode {
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(3,1.2);
+        moveTime(3,1.4);
+
+        moveTime(5,1.5);
+        moveTime(1,1.75);
+        moveTime(0,1);
+        GlyphServo.setPosition(.48);
+        moveTime(0,1);
+        moveTime(2,.5);
 
 
     }
@@ -230,16 +240,16 @@ public class timedAutonomous extends LinearOpMode {
         }
     }
     public void moveForward() {
-        WheelOne.setPower(moveSpeed);
-        WheelTwo.setPower(moveSpeed);
-        WheelThree.setPower(moveSpeed);
-        WheelZero.setPower(moveSpeed);
-    }
-    public void moveBackward() {
         WheelOne.setPower(-moveSpeed);
         WheelTwo.setPower(-moveSpeed);
         WheelThree.setPower(-moveSpeed);
         WheelZero.setPower(-moveSpeed);
+    }
+    public void moveBackward() {
+        WheelOne.setPower(moveSpeed);
+        WheelTwo.setPower(moveSpeed);
+        WheelThree.setPower(moveSpeed);
+        WheelZero.setPower(moveSpeed);
     }
     public void moveLeft() {
         WheelOne.setPower(moveSpeed);
@@ -265,20 +275,31 @@ public class timedAutonomous extends LinearOpMode {
         WheelThree.setPower(turnSpeed);
         WheelZero.setPower(-turnSpeed);
     }
-    public void driveStop(){
+    public void driveStop() {
         WheelOne.setPower(0);
         WheelTwo.setPower(0);
         WheelThree.setPower(0);
         WheelZero.setPower(0);
     }
 
-    public void liftUp(){
-        LiftMotor.setPower(1);
+    public void liftUp(double time) {
+        double startTime = getRuntime();
+        while (getRuntime() < startTime + time) {
+            LiftMotor.setPower(1);
+        }
     }
-    public void liftDown(){
-        LiftMotor.setPower(-1);
+
+    public void liftDown(double time) {
+        double startTime = getRuntime();
+        while (getRuntime() < startTime + time) {
+            LiftMotor.setPower(-1);
+        }
     }
-    public void liftStop(){
-        LiftMotor.setPower(0);
+
+    public void liftStop(double time) {
+        double startTime = getRuntime();
+        while (getRuntime() < startTime + time) {
+            LiftMotor.setPower(0);
+        }
     }
 }
