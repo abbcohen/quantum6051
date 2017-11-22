@@ -22,8 +22,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "blue 1", group = "Sensor")
-public class blueAuto1 extends LinearOpMode {
+@Autonomous(name = "red 1", group = "Sensor")
+public class redAuto1 extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
@@ -131,18 +131,17 @@ public class blueAuto1 extends LinearOpMode {
         });
 
 
-        //GRAB GLYPH
-        GlyphServo.setPosition(.54);
-        liftStop(1);
+        //Grab glyph and lift
+        GlyphServo.setPosition(.55);
+        liftStop(3);
         liftUp(.25);
         liftStop(1);
 
-        //JEWEL
-
+        //read color
         int red = 0;
         int blue = 0;
         int count = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 25; i++) {
             if (colorSensor.red() > colorSensor.blue()) {
                 red++;
             }
@@ -165,31 +164,49 @@ public class blueAuto1 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5,.15);
+            moveTime(6,.15);
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6,.15);
+            moveTime(5,.15);
         }
-
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if(red>blue) {
-            moveTime(6,.15);
-        } else if(blue>red) {
             moveTime(5,.15);
+        } else if(blue>red) {
+            moveTime(6,.15);
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(3,1.4);
+        moveTime(4,1.764);
 
+        //turn to face cryptobox
+        moveTime(5,1.815);
 
-        moveTime(5,1.5);
-        moveTime(1,1.75);
+        //move forward
+        moveTime(1,1.2);
+
+        //pause
         moveTime(0,1);
+
+        //lower lift
+        liftDown(0);
+
+        //release glyph
         GlyphServo.setPosition(.48);
+
+        //pause
         moveTime(0,1);
+
+        //move back
+        moveTime(2,.25);
+
+        //push back in
+        moveTime(1,.3);
+
+        //move back out
         moveTime(2,.25);
 
 
