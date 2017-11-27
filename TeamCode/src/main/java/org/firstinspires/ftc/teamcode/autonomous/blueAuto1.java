@@ -51,7 +51,8 @@ public class blueAuto1 extends LinearOpMode {
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
     private Servo JewelServo = null;
-    private Servo GlyphServo = null;
+    private Servo GlyphServo1 = null;
+    private Servo GlyphServo2 = null;
     private DcMotor LiftMotor = null;
 
     private double moveSpeed = .25;
@@ -72,9 +73,11 @@ public class blueAuto1 extends LinearOpMode {
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
         LiftMotor.setDirection(DcMotor.Direction.FORWARD);
         //Servo initialization
-        GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
-        GlyphServo.setDirection(Servo.Direction.REVERSE);
-        GlyphServo.scaleRange(0,2);
+        GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
+        GlyphServo1.setDirection(Servo.Direction.FORWARD);
+        //Servo initialization
+        GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
+        GlyphServo2.setDirection(Servo.Direction.REVERSE);
 
 
         // get a reference to the color sensor.
@@ -132,7 +135,8 @@ public class blueAuto1 extends LinearOpMode {
 
 
         //GRAB GLYPH
-        GlyphServo.setPosition(.54);
+        GlyphServo1.setPosition(95);
+        GlyphServo2.setPosition(95);
         liftStop(1);
         liftUp(.25);
         liftStop(1);
@@ -188,7 +192,8 @@ public class blueAuto1 extends LinearOpMode {
         moveTime(5,1.5);
         moveTime(1,1.75);
         moveTime(0,1);
-        GlyphServo.setPosition(.48);
+        GlyphServo1.setPosition(80);
+        GlyphServo2.setPosition(80);
         moveTime(0,1);
         moveTime(2,.25);
 
