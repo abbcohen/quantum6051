@@ -1,5 +1,6 @@
 
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,6 +19,8 @@ public class OmniBaseCode extends OpMode
     private DcMotor LiftMotor = null;
     private Servo GlyphServo1 = null;
     private Servo GlyphServo2 = null;
+    private RevRoboticsCoreHexMotor GlyphWheel1 = null;
+    private RevRoboticsCoreHexMotor GlyphWheel2 = null;
     private Servo JewelServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
@@ -37,6 +40,8 @@ public class OmniBaseCode extends OpMode
         WheelTwo  = hardwareMap.get(DcMotor.class, "WheelTwo");
         WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
+        GlyphWheel1 = hardwareMap.get(RevRoboticsCoreHexMotor.class, "GlyphWheel1");
+        GlyphWheel2 = hardwareMap.get(RevRoboticsCoreHexMotor.class, "GlyphWheel2");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -99,6 +104,18 @@ public class OmniBaseCode extends OpMode
         WheelTwo.setPower(0);
         WheelThree.setPower(0);
         WheelZero.setPower(0);
+    }
+    public void succ() {
+        GlyphWheel1.equals(.6);
+        GlyphWheel2.equals(.6);
+    }
+    public void nosucc() {
+        GlyphWheel1.equals(0);
+        GlyphWheel2.equals(0);
+    }
+    public void blow() {
+        GlyphWheel1.equals(-.6);
+        GlyphWheel2.equals(-.6);
     }
     public void grabber(double pos) {
             GlyphServo1.setPosition(pos);
@@ -163,6 +180,12 @@ public class OmniBaseCode extends OpMode
         //turning
         if (gamepad1.right_stick_x < -.2) turnCounterClockwise();
         else if (gamepad1.right_stick_x > .2)turnClockwise();
+
+        //glyph wheels
+        if(gamepad2.dpad_down) succ();
+        else if(gamepad2.dpad_up) blow();
+        else nosucc();
+
 
         //grabber
         if (gamepad2.right_bumper) grabber(95); //in
