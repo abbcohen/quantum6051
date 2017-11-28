@@ -186,15 +186,35 @@ public class blueAuto1 extends LinearOpMode {
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(3,1.4);
+        moveTime(3,1.764);
 
 
-        moveTime(5,1.5);
-        moveTime(1,1.75);
+        //turn to face cryptobox
+        moveTime(6,1.815);
+
+        //move forward
+        moveTime(1,1.2);
+
+        //pause
         moveTime(0,1);
+
+        //lower lift
+        liftDown(0);
+
+        //release glyph
         GlyphServo1.setPosition(80);
         GlyphServo2.setPosition(80);
+
+        //pause
         moveTime(0,1);
+
+        //move back
+        moveTime(2,.25);
+
+        //push back in
+        moveTime(1,.3);
+
+        //move back out
         moveTime(2,.25);
 
 
