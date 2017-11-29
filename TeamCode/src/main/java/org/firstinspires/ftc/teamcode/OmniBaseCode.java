@@ -59,10 +59,11 @@ public class OmniBaseCode extends OpMode
         JewelServo.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
-        GlyphServo1.scaleRange(0,180);
+        /*GlyphServo1.scaleRange(0,180);
         GlyphServo2.scaleRange(0,180);
         GlyphServo1.setPosition(50);
         GlyphServo2.setPosition(50);
+        */
     }
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -190,10 +191,10 @@ public class OmniBaseCode extends OpMode
         else nosucc();
 
         //grabber
-        if (gamepad2.right_bumper) grabber(95); //grab
-        else if (gamepad2.left_bumper) grabber(85); //lil out
-        else if (gamepad2.left_trigger> 0.1) grabber(50);//far out
-        else if (gamepad2.right_trigger> 0.1) grabber(0);//flat
+        if (gamepad2.right_bumper) grabber(1); //grab
+        else if (gamepad2.left_bumper) grabber(.9); //lil out
+        else if (gamepad2.left_trigger> 0.1) grabber(0);//far out
+        else if (gamepad2.right_trigger> 0.1) grabber(.5);//flat
 
         //jewel
         if (gamepad2.a) JewelServo.setPosition(0);
