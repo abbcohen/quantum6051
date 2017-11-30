@@ -192,7 +192,7 @@ public class OmniBaseCode extends OpMode
 
         //grabber
         if (gamepad2.right_bumper) grabber(.2); //grab
-        else if (gamepad2.left_bumper) grabber(.3); // out
+        else if (gamepad2.left_bumper) grabber(.325); // out
 
         //jewel
         if (gamepad2.a) JewelServo.setPosition(0);
