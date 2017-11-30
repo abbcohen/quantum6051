@@ -68,6 +68,9 @@ public class redAuto1 extends LinearOpMode {
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
+        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWeel2");
+
         JewelServo.setDirection(Servo.Direction.REVERSE);
         WheelOne.setDirection(DcMotor.Direction.FORWARD);
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
