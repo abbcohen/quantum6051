@@ -1,12 +1,12 @@
 
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.CRServo;
-@TeleOp(name="Emlyn Sucks (with a lift)", group="Iterative Opmode")
+@TeleOp(name="succ, grab, lyft", group="Iterative Opmode")
 public class OmniBaseCode extends OpMode
 {
     // Declare OpMode members.
@@ -16,13 +16,15 @@ public class OmniBaseCode extends OpMode
     private DcMotor WheelThree = null;
     private DcMotor WheelZero = null;
     private DcMotor LiftMotor = null;
-    private Servo GlyphServo = null;
+    private Servo GlyphServo1 = null;
+    private Servo GlyphServo2 = null;
+    private DcMotor GlyphWheel1 = null;
+    private DcMotor GlyphWheel2 = null;
     private Servo JewelServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = 1;
     private boolean slomo;
-    public double servoPos = .5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -36,6 +38,8 @@ public class OmniBaseCode extends OpMode
         WheelTwo  = hardwareMap.get(DcMotor.class, "WheelTwo");
         WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
+        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -44,14 +48,22 @@ public class OmniBaseCode extends OpMode
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
         LiftMotor.setDirection(DcMotor.Direction.REVERSE);
+        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
         //Servo initialization
-        GlyphServo = hardwareMap.get(Servo.class, "GlyphServo");
-        GlyphServo.setDirection(Servo.Direction.REVERSE);
-        GlyphServo.scaleRange(0,2);
+        GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
+        GlyphServo1.setDirection(Servo.Direction.REVERSE);
+        GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
+        GlyphServo2.setDirection(Servo.Direction.FORWARD);
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         JewelServo.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+        /*GlyphServo1.scaleRange(0,180);
+        GlyphServo2.scaleRange(0,180);
+        GlyphServo1.setPosition(50);
+        GlyphServo2.setPosition(50);
+        */
     }
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -98,16 +110,21 @@ public class OmniBaseCode extends OpMode
         WheelThree.setPower(0);
         WheelZero.setPower(0);
     }
+    public void succ() {
+        GlyphWheel1.setPower(.6);
+        GlyphWheel2.setPower(.6);
+    }
+    public void nosucc() {
+        GlyphWheel1.setPower(0);
+        GlyphWheel2.setPower(0);
+    }
+    public void blow() {
+        GlyphWheel1.setPower(-.6);
+        GlyphWheel2.setPower(-.6);
+    }
     public void grabber(double pos) {
-        if(pos==1){
-
-            //OUT left
-            GlyphServo.setPosition(.41);
-        }
-        else if (pos==0) {
-            //IN right
-            GlyphServo.setPosition(.54);
-        }
+            GlyphServo1.setPosition(pos);
+            GlyphServo2.setPosition(pos);
     }
     public void jewel(char button){
         if(button == 'a') JewelServo.setPosition(90);
@@ -139,7 +156,6 @@ public class OmniBaseCode extends OpMode
     @Override
     public void start() {
         runtime.reset();
-
     }
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
@@ -169,21 +185,26 @@ public class OmniBaseCode extends OpMode
         if (gamepad1.right_stick_x < -.2) turnCounterClockwise();
         else if (gamepad1.right_stick_x > .2)turnClockwise();
 
+        //glyph wheels
+        if(gamepad2.dpad_down) succ();
+        else if(gamepad2.dpad_up) blow();
+        else nosucc();
+
         //grabber
-        //in
-        if (gamepad2.right_bumper) grabber(0);
-        //out
-        else if (gamepad2.left_bumper)grabber(1);
+        if (gamepad2.right_bumper) grabber(.2); //grab
+        else if (gamepad2.left_bumper) grabber(.3); // out
 
         //jewel
-        if (gamepad2.a) jewel('a');
-        else if(gamepad2.y) jewel('y');
+        if (gamepad2.a) JewelServo.setPosition(0);
+        else if(gamepad2.y) JewelServo.setPosition(70);
 
         //lift
         if((gamepad2.right_stick_y > -.1) && !(gamepad2.right_stick_y<.1)) liftUp();
         else if (gamepad2.right_stick_y < .1 && !(gamepad2.right_stick_y>-.1))liftDown();
         else liftStop();
-        telemetry.addData("Servo Position", GlyphServo.getPosition());
+
+        telemetry.addData("Glyph Servo 1", GlyphServo1.getPosition());
+        telemetry.addData("Glyph Servo 2", GlyphServo2.getPosition());
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
         telemetry.addData("right_stick_y", gamepad1.right_stick_y);
