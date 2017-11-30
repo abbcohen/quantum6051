@@ -150,19 +150,9 @@ public class redAuto extends OpMode {
     public void loop() {
        //do stuff here
         // convert the RGB values to HSV values.
-
-
-
         float hsvValues[] = {0F, 0F, 0F};
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
-
         // send the info back to driver station using telemetry function.
-        telemetry.addData("Clear", colorSensor.alpha());
-        telemetry.addData("Red  ", colorSensor.red());
-        telemetry.addData("Green", colorSensor.green());
-        telemetry.addData("Blue ", colorSensor.blue());
-        telemetry.addData("Hue", hsvValues[0]);
-
 
         int red=0;
         int blue=0;
@@ -179,13 +169,23 @@ public class redAuto extends OpMode {
 
         if(red>blue){
             while(getRuntime() < (initialtime + 1.5)) {
-                turnClockwise();
+                //turnClockwise();
             }
         } else{
             while(getRuntime() < (initialtime + 1.5)) {
-                turnCounterClockwise();
+                //turnCounterClockwise();
             }
         }
+
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+        telemetry.addData("r", red);
+        telemetry.addData("b", blue);
+        telemetry.addData("hsv", hsvValues);
+
 
 //        Color.RGBToHSV(colorSensor.red() * 255/800, colorSensor.green() * 255/800, colorSensor.blue() * 255/800, hsvValues);
 //            if (hsvValues[0] > 140 && hsvValues[0] < 310) {
