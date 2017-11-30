@@ -53,6 +53,8 @@ public class blueAuto1 extends LinearOpMode {
     private Servo JewelServo = null;
     private Servo GlyphServo1 = null;
     private Servo GlyphServo2 = null;
+    private DcMotor GlyphWheel1 = null;
+    private DcMotor GlyphWheel2 = null;
     private DcMotor LiftMotor = null;
 
     private double moveSpeed = .25;
@@ -72,12 +74,13 @@ public class blueAuto1 extends LinearOpMode {
         WheelThree.setDirection(DcMotor.Direction.REVERSE);
         WheelZero.setDirection(DcMotor.Direction.FORWARD);
         LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
         //Servo initialization
         GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
-        GlyphServo1.setDirection(Servo.Direction.FORWARD);
-        //Servo initialization
+        GlyphServo1.setDirection(Servo.Direction.REVERSE);
         GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
-        GlyphServo2.setDirection(Servo.Direction.REVERSE);
+        GlyphServo2.setDirection(Servo.Direction.FORWARD);
 
 
         // get a reference to the color sensor.
@@ -135,8 +138,7 @@ public class blueAuto1 extends LinearOpMode {
 
 
         //GRAB GLYPH
-        GlyphServo1.setPosition(95);
-        GlyphServo2.setPosition(95);
+        grabber(.2);
         liftStop(1);
         liftUp(.25);
         liftStop(1);
@@ -202,8 +204,7 @@ public class blueAuto1 extends LinearOpMode {
         liftDown(0);
 
         //release glyph
-        GlyphServo1.setPosition(80);
-        GlyphServo2.setPosition(80);
+        grabber(.3);
 
         //pause
         moveTime(0,1);
@@ -264,6 +265,23 @@ public class blueAuto1 extends LinearOpMode {
                 turnCounterClockwise();
             }
         }
+    }
+
+    public void succ() {
+        GlyphWheel1.setPower(.6);
+        GlyphWheel2.setPower(.6);
+    }
+    public void nosucc() {
+        GlyphWheel1.setPower(0);
+        GlyphWheel2.setPower(0);
+    }
+    public void blow() {
+        GlyphWheel1.setPower(-.6);
+        GlyphWheel2.setPower(-.6);
+    }
+    public void grabber(double pos) {
+        GlyphServo1.setPosition(pos);
+        GlyphServo2.setPosition(pos);
     }
     public void moveForward() {
         WheelOne.setPower(-moveSpeed);

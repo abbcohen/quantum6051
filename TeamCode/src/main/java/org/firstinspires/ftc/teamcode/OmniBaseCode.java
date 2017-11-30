@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-@TeleOp(name="Emlyn Sucks (with a lift)", group="Iterative Opmode")
+@TeleOp(name="succ, grab, lyft", group="Iterative Opmode")
 public class OmniBaseCode extends OpMode
 {
     // Declare OpMode members.
@@ -191,10 +191,8 @@ public class OmniBaseCode extends OpMode
         else nosucc();
 
         //grabber
-        if (gamepad2.right_bumper) grabber(1); //grab
-        else if (gamepad2.left_bumper) grabber(.9); //lil out
-        else if (gamepad2.left_trigger> 0.1) grabber(0);//far out
-        else if (gamepad2.right_trigger> 0.1) grabber(.5);//flat
+        if (gamepad2.right_bumper) grabber(.2); //grab
+        else if (gamepad2.left_bumper) grabber(.3); // out
 
         //jewel
         if (gamepad2.a) JewelServo.setPosition(0);
