@@ -110,22 +110,11 @@ public class OmniBaseCode extends OpMode
         WheelThree.setPower(0);
         WheelZero.setPower(0);
     }
-    public void succ() {
-        GlyphWheel1.setPower(.6);
-        GlyphWheel2.setPower(.6);
+    public void succ (double speed) {
+        GlyphWheel1.setPower(speed);
+        GlyphWheel2.setPower(speed);
     }
-    public void nosucc() {
-        GlyphWheel1.setPower(0);
-        GlyphWheel2.setPower(0);
-    }
-    public void blow() {
-        GlyphWheel1.setPower(-.6);
-        GlyphWheel2.setPower(-.6);
-    }
-    public void grabber(double pos) {
-            GlyphServo1.setPosition(pos);
-            GlyphServo2.setPosition(pos);
-    }
+
     public void jewel(char button){
         if(button == 'a') JewelServo.setPosition(90);
         if(button =='y') JewelServo.setPosition(0);
@@ -148,7 +137,6 @@ public class OmniBaseCode extends OpMode
         WheelTwo.setPower(0);
         WheelThree.setPower(0);
         WheelZero.setPower(0);
-
     }
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -162,14 +150,6 @@ public class OmniBaseCode extends OpMode
      */
     @Override
     public void loop() {
-        //slow-motion code:
-        if(gamepad1.right_bumper==true) slomo=!slomo;
-        if(slomo){
-            moveSpeed = .25;
-        }
-        else{
-            moveSpeed = .75;
-        }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
 
@@ -183,20 +163,38 @@ public class OmniBaseCode extends OpMode
 
         //turning
         if (gamepad1.right_stick_x < -.2) turnCounterClockwise();
-        else if (gamepad1.right_stick_x > .2)turnClockwise();
+        else if (gamepad1.right_stick_x > .2) turnClockwise();
 
         //glyph wheels
-        if(gamepad2.dpad_down) succ();
-        else if(gamepad2.dpad_up) blow();
-        else nosucc();
+        if(gamepad2.right_trigger > .1) succ(1);
+        else if(gamepad2.left_trigger > .1) succ(-1);
+        else if (gamepad2.right_bumper) succ(.5);
+        else if (gamepad2.left_bumper) succ(-.5);
+        else succ(0);
 
         //grabber
-        if (gamepad2.right_bumper) grabber(.2); //grab
-        else if (gamepad2.left_bumper) grabber(.325); // out
+        if (gamepad2.dpad_down){ //in
+            GlyphServo1.setPosition(.2);
+            GlyphServo2.setPosition(.2);
+        }
+        else if (gamepad2.dpad_up) { //middle
+            GlyphServo1.setPosition(.275);
+            GlyphServo2.setPosition(.275);
+        }
+        else if (gamepad2.dpad_left){ //left out
+            GlyphServo1.setPosition(.4);
+            GlyphServo2.setPosition(.275);
+        }
+        else if (gamepad2.dpad_right) { //right out
+            GlyphServo1.setPosition(.275);
+            GlyphServo2.setPosition(.4);
+        }
+        else { //out
+            GlyphServo1.setPosition(.375);
+            GlyphServo2.setPosition(.375);
+        }
 
-        //jewel
-        if (gamepad2.a) JewelServo.setPosition(0);
-        else if(gamepad2.y) JewelServo.setPosition(70);
+        JewelServo.setPosition(0);
 
         //lift
         if((gamepad2.right_stick_y > -.1) && !(gamepad2.right_stick_y<.1)) liftUp();
@@ -209,8 +207,6 @@ public class OmniBaseCode extends OpMode
         telemetry.addData("left_stick_x", gamepad1.left_stick_x);
         telemetry.addData("right_stick_y", gamepad1.right_stick_y);
         telemetry.addData("right_stick_x", gamepad1.right_stick_x);
-        telemetry.addData("y_button", gamepad1.y);
-        telemetry.addData("a_button", gamepad1.a);
         telemetry.addData("right bumper", gamepad2.right_bumper);
         telemetry.addData("left bumper", gamepad2.left_bumper);
         telemetry.addData("lift", gamepad2.right_stick_y);
