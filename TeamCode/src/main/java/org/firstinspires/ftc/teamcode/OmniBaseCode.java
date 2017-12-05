@@ -163,13 +163,13 @@ public class OmniBaseCode extends OpMode
     @Override
     public void loop() {
         //slow-motion code:
-        if(gamepad1.right_bumper==true) slomo=!slomo;
-        if(slomo){
-            moveSpeed = .25;
-        }
-        else{
-            moveSpeed = .75;
-        }
+        //if(gamepad1.right_bumper==true) slomo=!slomo;
+//        if(slomo){
+//            moveSpeed = .25;
+//        }
+//        else{
+//            moveSpeed = .75;
+//        }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
 
@@ -191,8 +191,12 @@ public class OmniBaseCode extends OpMode
         else nosucc();
 
         //grabber
-        if (gamepad2.right_bumper) grabber(.2); //grab
-        else if (gamepad2.left_bumper) grabber(.3); // out
+        if (gamepad2.right_bumper) {
+            if (GlyphServo2.getPosition() < .19999 - .01 || GlyphServo2.getPosition() > .19999 + .01) grabber(.19999999); //grab
+        }
+        else if (gamepad2.left_bumper) {
+            if (GlyphServo2.getPosition() < .29999 - .01 || GlyphServo2.getPosition() > .29999 + .01) grabber(.29999999); // out
+        }
 
         //jewel
         if (gamepad2.a) JewelServo.setPosition(0);

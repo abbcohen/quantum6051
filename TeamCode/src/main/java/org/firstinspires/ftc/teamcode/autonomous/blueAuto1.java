@@ -68,6 +68,9 @@ public class blueAuto1 extends LinearOpMode {
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
+        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+
         JewelServo.setDirection(Servo.Direction.REVERSE);
         WheelOne.setDirection(DcMotor.Direction.FORWARD);
         WheelTwo.setDirection(DcMotor.Direction.REVERSE);
@@ -148,7 +151,7 @@ public class blueAuto1 extends LinearOpMode {
         int red = 0;
         int blue = 0;
         int count = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 25 ; i++) {
             if (colorSensor.red() > colorSensor.blue()) {
                 red++;
             }
