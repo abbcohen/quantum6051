@@ -22,8 +22,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@Autonomous(name = "red 1", group = "Sensor")
-public class redAuto1 extends LinearOpMode {
+@Autonomous(name = "red 2", group = "Sensor")
+public class redAuto2 extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
@@ -182,10 +182,11 @@ public class redAuto1 extends LinearOpMode {
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(4,1.761);
+        moveTime(4,1.761); //side
+        moveTime(1, .2);
 
         //turn to face cryptobox
-        moveTime(5,1.815);
+        moveTime(5,.9075);
 
         //move forward
         moveTime(1,1.2);

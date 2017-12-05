@@ -140,14 +140,7 @@ public class blueAuto1 extends LinearOpMode {
         });
 
 
-        //GRAB GLYPH
-        grabber(.2);
-        liftStop(1);
-        liftUp(.25);
-        liftStop(1);
-
         //JEWEL
-
         int red = 0;
         int blue = 0;
         int count = 0;
@@ -191,11 +184,11 @@ public class blueAuto1 extends LinearOpMode {
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(3,1.764);
+        moveTime(3,1.763);
 
 
         //turn to face cryptobox
-        moveTime(6,1.815);
+        moveTime(6,1.814);
 
         //move forward
         moveTime(1,1.2);
@@ -203,11 +196,8 @@ public class blueAuto1 extends LinearOpMode {
         //pause
         moveTime(0,1);
 
-        //lower lift
-        liftDown(0);
-
         //release glyph
-        grabber(.3);
+        moveTime(8, .28);
 
         //pause
         moveTime(0,1);
@@ -266,6 +256,18 @@ public class blueAuto1 extends LinearOpMode {
             startTime = getRuntime();
             while(getRuntime() < startTime + time){
                 turnCounterClockwise();
+            }
+        }
+        if(dir == 7){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                succ();
+            }
+        }
+        if(dir == 8){
+            startTime = getRuntime();
+            while(getRuntime() < startTime + time){
+                blow();
             }
         }
     }

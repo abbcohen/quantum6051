@@ -192,10 +192,10 @@ public class OmniBaseCode extends OpMode
 
         //grabber
         if (gamepad2.right_bumper) {
-            if (GlyphServo2.getPosition() < .19999 - .01 || GlyphServo2.getPosition() > .19999 + .01) grabber(.19999999); //grab
+            if (GlyphServo2.getPosition() < .19999 - .01 || GlyphServo2.getPosition() > .19999 + .01) grabber(2); //grab
         }
         else if (gamepad2.left_bumper) {
-            if (GlyphServo2.getPosition() < .29999 - .01 || GlyphServo2.getPosition() > .29999 + .01) grabber(.29999999); // out
+            if (GlyphServo2.getPosition() < .29999 - .01 || GlyphServo2.getPosition() > .29999 + .01) grabber(3); // out
         }
 
         //jewel
