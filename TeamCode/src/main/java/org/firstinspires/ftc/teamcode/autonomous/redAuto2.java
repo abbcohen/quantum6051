@@ -68,6 +68,7 @@ public class redAuto2 extends LinearOpMode {
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
 
@@ -139,6 +140,16 @@ public class redAuto2 extends LinearOpMode {
             }
         });
 
+
+
+
+        //GRAB GLYPH
+        grabber(.2);
+        liftStop(1);
+        liftUp(.25);
+        liftStop(1);
+
+
         //read color
         int red = 0;
         int blue = 0;
@@ -182,11 +193,17 @@ public class redAuto2 extends LinearOpMode {
         }
 
         //MOVE TO SAFE ZONE
+
         moveTime(4,1.761); //side
         moveTime(1, .2);
 
         //turn to face cryptobox
         moveTime(5,.9075);
+
+        moveTime(4,1.764);
+
+        //turn to face cryptobox
+        moveTime(5,1.815);
 
         //move forward
         moveTime(1,1.2);
@@ -196,6 +213,12 @@ public class redAuto2 extends LinearOpMode {
 
         //release glyph
         moveTime(8, .28);
+
+        //lower lift
+        liftDown(0);
+
+        //release glyph
+        grabber(.3);
 
         //pause
         moveTime(0,1);
@@ -256,6 +279,7 @@ public class redAuto2 extends LinearOpMode {
                 turnCounterClockwise();
             }
         }
+
         if(dir == 7){
             startTime = getRuntime();
             while(getRuntime() < startTime + time){
