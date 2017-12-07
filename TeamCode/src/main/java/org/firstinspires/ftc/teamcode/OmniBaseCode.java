@@ -166,10 +166,10 @@ public class OmniBaseCode extends OpMode
         else if (gamepad1.right_stick_x > .2) turnClockwise();
 
         //glyph wheels
-        if(gamepad2.right_trigger > .1) succ(1);
-        else if(gamepad2.left_trigger > .1) succ(-1);
-        else if (gamepad2.right_bumper) succ(.5);
-        else if (gamepad2.left_bumper) succ(-.5);
+        if(gamepad1.right_trigger > .1) succ(1);
+        else if(gamepad1.left_trigger > .1) succ(-1);
+        else if (gamepad1.right_bumper) succ(.5);
+        else if (gamepad1.left_bumper) succ(-.5);
         else succ(0);
 
         //grabber
