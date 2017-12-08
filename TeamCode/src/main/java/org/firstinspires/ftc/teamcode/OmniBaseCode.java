@@ -68,6 +68,7 @@ public class OmniBaseCode extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
+
     public void moveForward() {
         WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
         WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
@@ -150,6 +151,19 @@ public class OmniBaseCode extends OpMode
      */
     @Override
     public void loop() {
+
+        //switch slomo
+        if(gamepad1.a) slomo=!slomo;
+
+        //set speed off slomo
+        if (!slomo){
+            moveSpeed = .75;
+            turnSpeed = .5;
+        }else if (slomo){
+            moveSpeed = .525;
+            turnSpeed = .35;
+
+        }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
 
@@ -166,10 +180,8 @@ public class OmniBaseCode extends OpMode
         else if (gamepad1.right_stick_x > .2) turnClockwise();
 
         //glyph wheels
-        if(gamepad1.right_trigger > .1) succ(1);
-        else if(gamepad1.left_trigger > .1) succ(-1);
-        else if (gamepad1.right_bumper) succ(.5);
-        else if (gamepad1.left_bumper) succ(-.5);
+        if (gamepad1.right_bumper) succ(1);
+        else if (gamepad1.left_bumper) succ(-1);
         else succ(0);
 
         //grabber
@@ -177,17 +189,17 @@ public class OmniBaseCode extends OpMode
             GlyphServo1.setPosition(.2);
             GlyphServo2.setPosition(.2);
         }
-        else if (gamepad2.dpad_up) { //middle
+        else if (gamepad2.dpad_up) { //out
             GlyphServo1.setPosition(.275);
             GlyphServo2.setPosition(.275);
         }
         else if (gamepad2.dpad_left){ //left out
-            GlyphServo1.setPosition(.4);
-            GlyphServo2.setPosition(.275);
+            GlyphServo1.setPosition(.2);
+            GlyphServo2.setPosition(.375);
         }
         else if (gamepad2.dpad_right) { //right out
-            GlyphServo1.setPosition(.275);
-            GlyphServo2.setPosition(.4);
+            GlyphServo1.setPosition(.375);
+            GlyphServo2.setPosition(.2);
         }
         else { //out
             GlyphServo1.setPosition(.375);
