@@ -166,19 +166,20 @@ public class blueAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6,.15);
+            moveTime(5,.154);
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5,.15);
+            moveTime(6,.154);
         }
+
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if(red>blue) {
-            moveTime(5,.15);
+            moveTime(6,.154);
         } else if(blue>red) {
-            moveTime(6,.15);
+            moveTime(5,.154);
         }
 
         //MOVE TO SAFE ZONE

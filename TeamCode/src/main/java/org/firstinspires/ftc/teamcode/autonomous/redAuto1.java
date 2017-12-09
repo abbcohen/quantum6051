@@ -185,7 +185,7 @@ public class redAuto1 extends LinearOpMode {
         moveTime(4,1.761);
 
         //turn to face cryptobox
-        moveTime(5,1.815);
+        moveTime(5,1.614);
 
         //move forward
         moveTime(1,1.2);

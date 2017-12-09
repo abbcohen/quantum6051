@@ -194,12 +194,12 @@ public class OmniBaseCode extends OpMode
             GlyphServo2.setPosition(.275);
         }
         else if (gamepad2.dpad_left){ //left out
-            GlyphServo1.setPosition(.2);
             GlyphServo2.setPosition(.375);
+            GlyphServo1.setPosition(.2);
         }
         else if (gamepad2.dpad_right) { //right out
-            GlyphServo1.setPosition(.375);
             GlyphServo2.setPosition(.2);
+            GlyphServo1.setPosition(.375);
         }
         else { //out
             GlyphServo1.setPosition(.375);
