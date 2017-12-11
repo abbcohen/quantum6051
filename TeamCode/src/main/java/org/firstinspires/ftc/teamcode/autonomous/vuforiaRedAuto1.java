@@ -154,7 +154,7 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         } else if (column == RelicRecoveryVuMark.RIGHT) {
             moveTime(4,1.861);//fill w right value
         }
-        
+
         //turn to face cryptobox
         moveTime(5,1.614);
 
