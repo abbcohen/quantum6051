@@ -18,13 +18,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 import java.util.Locale;
 
-@Autonomous(name = "red 1", group = "Sensor")
-public class redAuto1 extends LinearOpMode {
+@Autonomous(name = "vu red 1", group = "Sensor")
+public class vuforiaRedAuto1 extends LinearOpMode {
 
+    RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;
 
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
@@ -145,9 +146,15 @@ public class redAuto1 extends LinearOpMode {
             moveTime(6,.15);
         }
 
-        //MOVE TO SAFE ZONE
-        moveTime(4,1.761);
-
+        //MOVE TO THE CORRECT COLUMN
+        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+            moveTime(4,1.761); //fill w center value
+        } else if (column == RelicRecoveryVuMark.LEFT) {
+            moveTime(4,1.661); //fill w left value
+        } else if (column == RelicRecoveryVuMark.RIGHT) {
+            moveTime(4,1.861);//fill w right value
+        }
+        
         //turn to face cryptobox
         moveTime(5,1.614);
 
