@@ -32,7 +32,7 @@ import java.util.Locale;
 
 @Autonomous(name = "vu red 1", group = "Sensor")
 public class vuforiaRedAuto1 extends LinearOpMode {
-
+    ElapsedTime clock = new ElapsedTime();
     RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;
 
     ColorSensor colorSensor;
@@ -135,35 +135,38 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         telemetry.addData("BLUE", blue);
 
         //knock off jewel
-        double jewelturntime = getRuntime();
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6, .15);
+            moveTime(6,.15);
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5, .15);
+            moveTime(5,.15);
         }
         JewelServo.setPosition(0);
 
         //turn back to initial position
-        if (red > blue) {
-            moveTime(5, .15);
-        } else if (blue > red) {
-            moveTime(6, .15);
+        if(red>blue) {
+            moveTime(5,.15);
+        } else if(blue>red) {
+            moveTime(6,.15);
         }
+        column = getPicto();
+        telemetry.addData("column", column);
+        telemetry.update();
+        delay(3000);
 
-        column=getPicto();
-        
-        //MOVE TO THE CORRECT COLUMN
-        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(4, 1.761); //fill w center value
-        } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(4, 1.661); //fill w left value
-        } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(4, 1.861);//fill w right value
-        }
+        moveTime(4,1.761);
+
+//        //MOVE TO THE CORRECT COLUMN
+//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+//            moveTime(4,1.761); //fill w center value
+//        } else if (column == RelicRecoveryVuMark.LEFT) {
+//            moveTime(4, 1.661); //fill w left value
+//        } else if (column == RelicRecoveryVuMark.RIGHT) {
+//            moveTime(4, 1.861);//fill w right value
+//        } else moveTime(4,1.761);
 
         //turn to face cryptobox
         moveTime(5, 1.614);
@@ -340,6 +343,11 @@ public class vuforiaRedAuto1 extends LinearOpMode {
             LiftMotor.setPower(0);
         }
     }
+    public void delay(int time) {
+        double startTime = clock.milliseconds();
+        while (clock.milliseconds() - startTime < time) {
+        }
+    }
 
     public RelicRecoveryVuMark getPicto() {
         OpenGLMatrix lastLocation = null;
@@ -392,6 +400,30 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         while (getRuntime() - startTime < 3) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
         }
+
+//        //TURN UNTIL YOU SEE THE MARK
+//        int turnTime = 0;
+//        startTime = getRuntime();
+//        while (getRuntime() - startTime < 10) {
+//                while (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+//                    turnTime += 20;
+//                    moveTime(5, .3);
+//                    sleep(1);
+//                    startTime = getRuntime();
+//                    while (getRuntime() - startTime < 10) {
+//                        {
+//                            vuMark = RelicRecoveryVuMark.from(relicTemplate);
+//                        }
+//                        telemetry.addData("VuMark", "not visible");
+//                        telemetry.update();
+//                    }
+//                    break;
+//                }
+//                sleep(3);
+//                if (turnTime > 0)
+//                    moveTime(6, .3);
+//                sleep(1);
+//        }
         return vuMark;
     }
 }

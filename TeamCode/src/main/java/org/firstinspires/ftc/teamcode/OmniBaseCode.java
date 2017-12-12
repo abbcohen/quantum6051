@@ -4,6 +4,7 @@ import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name="succ, grab, lyft", group="Iterative Opmode")
@@ -20,6 +21,7 @@ public class OmniBaseCode extends OpMode
     private Servo GlyphServo2 = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
+    private DcMotor GlyphWheel3 = null;
     private Servo JewelServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
@@ -38,8 +40,9 @@ public class OmniBaseCode extends OpMode
         WheelTwo  = hardwareMap.get(DcMotor.class, "WheelTwo");
         WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
         WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
-        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
+        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+        GlyphWheel3 = hardwareMap.get(DcMotor.class, "GlyphWheel3");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -50,6 +53,7 @@ public class OmniBaseCode extends OpMode
         LiftMotor.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+        GlyphWheel3.setDirection(DcMotor.Direction.REVERSE);
         //Servo initialization
         GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
         GlyphServo1.setDirection(Servo.Direction.REVERSE);
@@ -184,27 +188,32 @@ public class OmniBaseCode extends OpMode
         else if (gamepad1.left_bumper) succ(-1);
         else succ(0);
 
-        //grabber
+        //grabber 1 IS LEFT, 2 IS RIGHT
         if (gamepad2.dpad_down){ //in
-            GlyphServo1.setPosition(.2);
+            GlyphServo1.setPosition(.17); //make left tighter
             GlyphServo2.setPosition(.2);
         }
+        //dpad press flat
+
         else if (gamepad2.dpad_up) { //out
-            GlyphServo1.setPosition(.275);
-            GlyphServo2.setPosition(.275);
+            GlyphServo1.setPosition(.275); //right out a lil
+            GlyphServo2.setPosition(.28);
         }
-        else if (gamepad2.dpad_left){ //left out
-            GlyphServo2.setPosition(.375);
-            GlyphServo1.setPosition(.2);
+        else if (gamepad2.dpad_left){ //left in
+            GlyphServo2.setPosition(.4); //left out a lil
+            GlyphServo1.setPosition(.25);
         }
-        else if (gamepad2.dpad_right) { //right out
-            GlyphServo2.setPosition(.2);
-            GlyphServo1.setPosition(.375);
+        else if (gamepad2.dpad_right) { //right in
+            GlyphServo2.setPosition(.17);
+            GlyphServo1.setPosition(.4); //right out a lot
         }
         else { //out
             GlyphServo1.setPosition(.375);
             GlyphServo2.setPosition(.375);
         }
+        if (gamepad2.right_stick_button) GlyphWheel3.setPower(1);
+        else GlyphWheel3.setPower(0);
+
 
         JewelServo.setPosition(0);
 
