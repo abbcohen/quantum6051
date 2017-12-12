@@ -17,7 +17,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.CRServo;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
@@ -112,11 +111,15 @@ public class vuforiaRedAuto1 extends LinearOpMode {
                 (int) (colorSensor.blue() * SCALE_FACTOR),
                 hsvValues);
 
+        column = getPicto();
+        telemetry.addData("column", column);
+        telemetry.update();
+
         //read color
         int red = 0;
         int blue = 0;
         int count = 0;
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 40; i++) {
             if (colorSensor.red() > colorSensor.blue()) {
                 red++;
             }
@@ -152,21 +155,15 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         } else if(blue>red) {
             moveTime(6,.15);
         }
-        column = getPicto();
-        telemetry.addData("column", column);
-        telemetry.update();
-        delay(3000);
 
-        moveTime(4,1.761);
-
-//        //MOVE TO THE CORRECT COLUMN
-//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-//            moveTime(4,1.761); //fill w center value
-//        } else if (column == RelicRecoveryVuMark.LEFT) {
-//            moveTime(4, 1.661); //fill w left value
-//        } else if (column == RelicRecoveryVuMark.RIGHT) {
-//            moveTime(4, 1.861);//fill w right value
-//        } else moveTime(4,1.761);
+        //MOVE TO THE CORRECT COLUMN
+        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+            moveTime(4,1.761); //fill w center value
+        } else if (column == RelicRecoveryVuMark.LEFT) {
+            moveTime(4, 1.661); //fill w left value
+        } else if (column == RelicRecoveryVuMark.RIGHT) {
+            moveTime(4, 1.861);//fill w right value
+        } else moveTime(4,1.761);
 
         //turn to face cryptobox
         moveTime(5, 1.614);
@@ -323,29 +320,29 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         WheelZero.setPower(0);
     }
 
-    public void liftUp(double time) {
-        double startTime = getRuntime();
-        while (getRuntime() < startTime + time) {
-            LiftMotor.setPower(1);
-        }
-    }
-
-    public void liftDown(double time) {
-        double startTime = getRuntime();
-        while (getRuntime() < startTime + time) {
-            LiftMotor.setPower(-1);
-        }
-    }
-
-    public void liftStop(double time) {
-        double startTime = getRuntime();
-        while (getRuntime() < startTime + time) {
-            LiftMotor.setPower(0);
-        }
-    }
+//    public void liftUp(double time) {
+//        double startTime = getRuntime();
+//        while (getRuntime() < startTime + time) {
+//            LiftMotor.setPower(1);
+//        }
+//    }
+//
+//    public void liftDown(double time) {
+//        double startTime = getRuntime();
+//        while (getRuntime() < startTime + time) {
+//            LiftMotor.setPower(-1);
+//        }
+//    }
+//
+//    public void liftStop(double time) {
+//        double startTime = getRuntime();
+//        while (getRuntime() < startTime + time) {
+//            LiftMotor.setPower(0);
+//        }
+//    }
     public void delay(int time) {
-        double startTime = clock.milliseconds();
-        while (clock.milliseconds() - startTime < time) {
+        double delayStartTime = clock.milliseconds();
+        while (clock.milliseconds() - delayStartTime < time) {
         }
     }
 
@@ -396,8 +393,8 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         relicTrackables.activate();
 
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        double startTime = getRuntime();
-        while (getRuntime() - startTime < 3) {
+        double vuStartTime = getRuntime();
+        while (getRuntime() - vuStartTime < 3) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
         }
 
