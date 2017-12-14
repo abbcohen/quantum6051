@@ -26,7 +26,7 @@ public class OmniBaseCode extends OpMode
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = 1;
-    private boolean slomo;
+    private boolean slomo = true;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -159,7 +159,7 @@ public class OmniBaseCode extends OpMode
         //switch slomo
         if(gamepad1.a) slomo=!slomo;
 
-        //set speed off slomo
+        //set speed of slomo
         if (!slomo){
             moveSpeed = .75;
             turnSpeed = .5;
@@ -184,8 +184,8 @@ public class OmniBaseCode extends OpMode
         else if (gamepad1.right_stick_x > .2) turnClockwise();
 
         //glyph wheels
-        if (gamepad1.right_bumper) succ(1);
-        else if (gamepad1.left_bumper) succ(-1);
+        if (gamepad2.right_bumper) succ(1);
+        else if (gamepad2.left_bumper) succ(-1);
         else succ(0);
 
         //grabber 1 IS LEFT, 2 IS RIGHT
@@ -196,16 +196,16 @@ public class OmniBaseCode extends OpMode
         //dpad press flat
 
         else if (gamepad2.dpad_up) { //out
-            GlyphServo1.setPosition(.275); //right out a lil
+            GlyphServo1.setPosition(.275);
             GlyphServo2.setPosition(.28);
         }
         else if (gamepad2.dpad_left){ //left in
-            GlyphServo2.setPosition(.4); //left out a lil
+            GlyphServo2.setPosition(.4);
             GlyphServo1.setPosition(.25);
         }
         else if (gamepad2.dpad_right) { //right in
-            GlyphServo2.setPosition(.17);
-            GlyphServo1.setPosition(.4); //right out a lot
+            GlyphServo2.setPosition(.27);
+            GlyphServo1.setPosition(.4);
         }
         else { //out
             GlyphServo1.setPosition(.375);
