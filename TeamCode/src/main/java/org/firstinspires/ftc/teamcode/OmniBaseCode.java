@@ -26,7 +26,7 @@ public class OmniBaseCode extends OpMode
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = 1;
-    private boolean slomo = true;
+    private boolean slomo;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -142,6 +142,8 @@ public class OmniBaseCode extends OpMode
         WheelTwo.setPower(0);
         WheelThree.setPower(0);
         WheelZero.setPower(0);
+
+        slomo=true;
     }
     /*
      * Code to run ONCE when the driver hits PLAY
