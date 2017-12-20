@@ -168,7 +168,6 @@ public class OmniBaseCode extends OpMode
         }else if (slomo){
             moveSpeed = .525;
             turnSpeed = .35;
-
         }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();

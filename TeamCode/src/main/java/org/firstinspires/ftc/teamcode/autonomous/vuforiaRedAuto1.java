@@ -188,8 +188,6 @@ public class vuforiaRedAuto1 extends LinearOpMode {
 
         //move back out
         moveTime(2, .25);
-
-
     }
 
     public void moveTime(int dir, double time) {

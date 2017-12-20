@@ -129,22 +129,17 @@ public class vuforiaRedAuto2 extends LinearOpMode {
             telemetry.update();
         }
 
-        telemetry.addData("Clear", colorSensor.alpha());
-        telemetry.addData("Red  ", colorSensor.red());
-        telemetry.addData("Green", colorSensor.green());
-        telemetry.addData("Blue ", colorSensor.blue());
-        telemetry.addData("Hue", hsvValues[0]);
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
 
         //knock off jewel
         double jewelturntime = getRuntime();
         if (red > blue) {
-            telemetry.addData("Red Wins!", colorSensor.red());
+            telemetry.addData("senses red", colorSensor.red());
             telemetry.update();
             moveTime(6,.15);
         } else {
-            telemetry.addData("Blue Wins!", colorSensor.red());
+            telemetry.addData("senses blue", colorSensor.red());
             telemetry.update();
             moveTime(5,.15);
         }
@@ -158,20 +153,17 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(4,1.761); //side
+
+        moveTime(4,1.6); //side
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, .6); //fill w center value
+            moveTime(1, .86); //correct
         } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, .8); //fill w left value
+            moveTime(1, .2); //test left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(1, .2);
-        } else moveTime(1, .6);
-
-
-
-        moveTime(1, .2);
+            //right value
+        } moveTime(1, .86);
 
         //turn to face cryptobox
         moveTime(5,.9075);
