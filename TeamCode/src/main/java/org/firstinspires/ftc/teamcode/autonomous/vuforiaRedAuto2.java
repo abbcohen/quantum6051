@@ -154,13 +154,13 @@ public class vuforiaRedAuto2 extends LinearOpMode {
 
         //MOVE TO SAFE ZONE
 
-        moveTime(4,1.6); //side
+        moveTime(4,1.4); //side
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
             moveTime(1, .86); //correct
         } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, .2); //test left value
+            moveTime(1, .18); //test left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
             //right value
         } moveTime(1, .86);

@@ -7,15 +7,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="succ, grab, lyft", group="Iterative Opmode")
 public class OmniBaseCode extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor WheelOne = null;
-    private DcMotor WheelTwo = null;
-    private DcMotor WheelThree = null;
-    private DcMotor WheelZero = null;
+    private DcMotor FR = null;
+    private DcMotor FL = null;
+    private DcMotor BR = null;
+    private DcMotor BL = null;
     private DcMotor LiftMotor = null;
     private Servo GlyphServo1 = null;
     private Servo GlyphServo2 = null;
@@ -36,21 +37,20 @@ public class OmniBaseCode extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        WheelOne  = hardwareMap.get(DcMotor.class, "WheelOne");
-        WheelTwo  = hardwareMap.get(DcMotor.class, "WheelTwo");
-        WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
-        WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
+        FR = hardwareMap.get(DcMotor.class, "FR");
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        BR = hardwareMap.get(DcMotor.class, "BR");
+        BL = hardwareMap.get(DcMotor.class, "BL");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
         GlyphWheel3 = hardwareMap.get(DcMotor.class, "GlyphWheel3");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        WheelOne.setDirection(DcMotor.Direction.FORWARD);
-        WheelTwo.setDirection(DcMotor.Direction.REVERSE);
-        WheelThree.setDirection(DcMotor.Direction.REVERSE);
-        WheelZero.setDirection(DcMotor.Direction.FORWARD);
-        LiftMotor.setDirection(DcMotor.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel3.setDirection(DcMotor.Direction.REVERSE);
@@ -73,47 +73,48 @@ public class OmniBaseCode extends OpMode
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
 
-    public void moveForward() {
-        WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
-        WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
-        WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
-        WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
-    }
-    public void moveBackward() {
-        WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
-        WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
-        WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
-        WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
-    }
-    public void moveLeft() {
-        WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
-        WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
-        WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
-        WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
-    }
-    public void moveRight() {
-        WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
-        WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
-        WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
-        WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
-    }
-    public void turnClockwise() {
-        WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
-        WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
-        WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
-        WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
-    }
-    public void turnCounterClockwise() {
-        WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
-        WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
-        WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
-        WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
-    }
+//    public void moveForward() {
+//        WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
+//        WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
+//        WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
+//        WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
+//    }
+//    public void moveBackward() {
+//        WheelOne.setPower(gamepad1.left_stick_y*moveSpeed);
+//        WheelTwo.setPower(gamepad1.left_stick_y*moveSpeed);
+//        WheelThree.setPower(gamepad1.left_stick_y*moveSpeed);
+//        WheelZero.setPower(gamepad1.left_stick_y*moveSpeed);
+//    }
+//    public void moveLeft() {
+//        WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
+//        WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
+//        WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
+//        WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
+//    }
+//    public void moveRight() {
+//        WheelOne.setPower(-gamepad1.left_stick_x*moveSpeed);
+//        WheelTwo.setPower(-gamepad1.left_stick_x*moveSpeed);
+//        WheelThree.setPower(gamepad1.left_stick_x*moveSpeed);
+//        WheelZero.setPower(gamepad1.left_stick_x*moveSpeed);
+//    }
+//    public void turnClockwise() {
+//        WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
+//        WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
+//        WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
+//        WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
+//    }
+//    public void turnCounterClockwise() {
+//        WheelOne.setPower(gamepad1.right_stick_x*turnSpeed);
+//        WheelTwo.setPower(-gamepad1.right_stick_x*turnSpeed);
+//        WheelThree.setPower(-gamepad1.right_stick_x*turnSpeed);
+//        WheelZero.setPower(gamepad1.right_stick_x*turnSpeed);
+//    }
+
     public void driveStop(){
-        WheelOne.setPower(0);
-        WheelTwo.setPower(0);
-        WheelThree.setPower(0);
-        WheelZero.setPower(0);
+        FR.setPower(0);
+        FL.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
     }
     public void succ (double speed) {
         GlyphWheel1.setPower(speed);
@@ -131,19 +132,21 @@ public class OmniBaseCode extends OpMode
     public void liftDown(){
         LiftMotor.setPower(gamepad2.right_stick_y*liftSpeed);
     }
-    public void liftStop(){
+    public void liftNoPower(){
         LiftMotor.setPower(0);
+    }
+    public void liftStop(){
+        LiftMotor.setPower(.05);
     }
 
 
     @Override
     public void init_loop() {
-        WheelOne.setPower(0);
-        WheelTwo.setPower(0);
-        WheelThree.setPower(0);
-        WheelZero.setPower(0);
+        FR.setPower(0);
+        FL.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
 
-        slomo=true;
     }
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -159,30 +162,52 @@ public class OmniBaseCode extends OpMode
     public void loop() {
 
         //switch slomo
-        if(gamepad1.a) slomo=!slomo;
+        if(gamepad1.right_bumper) slomo=true;
+        else slomo=false;
 
         //set speed of slomo
         if (!slomo){
             moveSpeed = .75;
-            turnSpeed = .5;
         }else if (slomo){
-            moveSpeed = .525;
-            turnSpeed = .35;
+            moveSpeed = .6;
         }
         //stopping
         if (gamepad1.left_stick_x==0 && gamepad1.left_stick_y==0 && gamepad1.right_stick_x==0) driveStop();
 
-        //moving forward/backward
-        if (gamepad1.left_stick_y < -.2) moveForward();
-        else if (gamepad1.left_stick_y > .2) moveBackward();
+        //driving
+        double scale = (gamepad1.right_bumper ? .3 : .7);
+        double drive_scale = (gamepad1.right_bumper ? .3 : 1);
 
-        //moving left/right
-        if (gamepad1.left_stick_x < -.2) moveLeft();
-        else if (gamepad1.left_stick_x > .2) moveRight();
+        double gamepad1LeftY = -gamepad1.left_stick_y * drive_scale;
+        double gamepad1LeftX = gamepad1.left_stick_x * drive_scale;
+        double gamepad1RightX = gamepad1.right_stick_x * scale;
+        double frontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+        double frontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+        double backRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+        double backLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+        if (Math.abs(gamepad1LeftX) > .2 || Math.abs(gamepad1LeftY) > .2 || Math.abs(gamepad1RightX) > .2) {
+            // holonomic formulas
 
-        //turning
-        if (gamepad1.right_stick_x < -.2) turnCounterClockwise();
-        else if (gamepad1.right_stick_x > .2) turnClockwise();
+            // clip the right/left values so that the values never exceed +/- 1
+            frontRight = Range.clip(frontRight, -1, 1);
+            frontLeft = Range.clip(frontLeft, -1, 1);
+            backLeft = Range.clip(backLeft, -1, 1);
+            backRight = Range.clip(backRight, -1, 1);
+        } else {
+            frontRight = 0;
+            frontLeft = 0;
+            backRight = 0;
+            backLeft = 0;
+        }
+        telemetry.addData("FR", frontRight);
+        telemetry.addData("FL", frontLeft);
+        telemetry.addData("BR", backRight);
+        telemetry.addData("BL", backLeft);
+        double tolerance = .1;
+        FR.setPower(frontRight*moveSpeed);
+        FL.setPower(frontLeft*moveSpeed);
+        BR.setPower(backRight*moveSpeed);
+        BL.setPower(backLeft*moveSpeed);
 
         //glyph wheels
         if (gamepad2.right_bumper) succ(1);
@@ -221,7 +246,8 @@ public class OmniBaseCode extends OpMode
         //lift
         if((gamepad2.right_stick_y > -.1) && !(gamepad2.right_stick_y<.1)) liftUp();
         else if (gamepad2.right_stick_y < .1 && !(gamepad2.right_stick_y>-.1))liftDown();
-        else liftStop();
+        if (gamepad1.right_stick_x<-.1) liftStop();
+        else liftNoPower();
 
         telemetry.addData("Glyph Servo 1", GlyphServo1.getPosition());
         telemetry.addData("Glyph Servo 2", GlyphServo2.getPosition());
