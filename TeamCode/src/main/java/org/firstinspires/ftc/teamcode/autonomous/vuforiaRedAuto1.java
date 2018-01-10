@@ -118,14 +118,9 @@ public class vuforiaRedAuto1 extends LinearOpMode {
         //read color
         int red = 0;
         int blue = 0;
-        int count = 0;
         for (int i = 0; i < 40; i++) {
-            if (colorSensor.red() > colorSensor.blue()) {
-                red++;
-            }
-            if (colorSensor.red() < colorSensor.blue()) {
-                blue++;
-            }
+            if (colorSensor.red() > colorSensor.blue()) red++;
+            if (colorSensor.red() < colorSensor.blue()) blue++;
             telemetry.update();
         }
 
@@ -158,11 +153,11 @@ public class vuforiaRedAuto1 extends LinearOpMode {
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(4,1.761); //fill w center value
+            moveTime(4, 0); //fill w center value
         } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(4, 1.661); //fill w left value
+            moveTime(4, 0); //fill w left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(4, 1.861);//fill w right value
+            moveTime(4, 0);//fill w right value
         } else moveTime(4,1.761);
 
         //turn to face cryptobox

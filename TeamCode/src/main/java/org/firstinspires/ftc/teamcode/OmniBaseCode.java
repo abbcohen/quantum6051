@@ -23,11 +23,12 @@ public class OmniBaseCode extends OpMode
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
     private DcMotor GlyphWheel3 = null;
-    private Servo JewelServo = null;
+    private Servo PushServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = 1;
     private boolean slomo;
+    private boolean push = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -59,8 +60,8 @@ public class OmniBaseCode extends OpMode
         GlyphServo1.setDirection(Servo.Direction.REVERSE);
         GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
         GlyphServo2.setDirection(Servo.Direction.FORWARD);
-        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
-        JewelServo.setDirection(Servo.Direction.REVERSE);
+        PushServo = hardwareMap.get(Servo.class, "PushServo");
+        PushServo.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         /*GlyphServo1.scaleRange(0,180);
@@ -121,9 +122,14 @@ public class OmniBaseCode extends OpMode
         GlyphWheel2.setPower(speed);
     }
 
-    public void jewel(char button){
-        if(button == 'a') JewelServo.setPosition(90);
-        if(button =='y') JewelServo.setPosition(0);
+//    public void jewel(char button){
+//        if(button == 'a') JewelServo.setPosition(90);
+//        if(button =='y') JewelServo.setPosition(0);
+//    }
+    public void push(){
+        if (push) PushServo.setPosition(90);
+        else PushServo.setPosition(15);
+        push=!push;
     }
 
     public void liftUp(){
@@ -220,7 +226,6 @@ public class OmniBaseCode extends OpMode
             GlyphServo2.setPosition(.2);
         }
         //dpad press flat
-
         else if (gamepad2.dpad_up) { //out
             GlyphServo1.setPosition(.275);
             GlyphServo2.setPosition(.28);
@@ -240,8 +245,8 @@ public class OmniBaseCode extends OpMode
         if (gamepad2.right_stick_button) GlyphWheel3.setPower(1);
         else GlyphWheel3.setPower(0);
 
-
-        JewelServo.setPosition(0);
+        if (gamepad2.a) push();
+        PushServo.setPosition(0);
 
         //lift
         if((gamepad2.right_stick_y > -.1) && !(gamepad2.right_stick_y<.1)) liftUp();
