@@ -18,14 +18,6 @@ public class OmniBaseCode extends OpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private DcMotor LiftMotor = null;
-<<<<<<< HEAD
-    private Servo GlyphServo1 = null;
-    private Servo PushyServo = null;
-    private Servo GlyphServo2 = null;
-    private DcMotor GlyphWheel1 = null;
-    private DcMotor GlyphWheel2 = null;
-    private DcMotor GlyphWheel3 = null;
-=======
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
     private Servo GlyphServoL = null;
@@ -34,7 +26,6 @@ public class OmniBaseCode extends OpMode {
     private Servo PushServo = null;
 
     //declare variables
->>>>>>> 9b638c04bc3af36279d583d1406eaaf49d5d35d5
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = 1;
@@ -66,22 +57,11 @@ public class OmniBaseCode extends OpMode {
         FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
-<<<<<<< HEAD
-        GlyphWheel3.setDirection(DcMotor.Direction.REVERSE);
-        //Servo initialization
-        GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
-        GlyphServo1.setDirection(Servo.Direction.REVERSE);
-        GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
-        GlyphServo2.setDirection(Servo.Direction.FORWARD);
-        PushyServo = hardwareMap.get(Servo.class, "PushyServo");
-        PushyServo.setDirection(Servo.Direction.REVERSE);
-=======
         GlyphServoL.setDirection(Servo.Direction.REVERSE);
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
         JewelServo.setDirection(Servo.Direction.REVERSE);
         PushServo.setDirection(Servo.Direction.REVERSE);
 
->>>>>>> 9b638c04bc3af36279d583d1406eaaf49d5d35d5
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -98,21 +78,10 @@ public class OmniBaseCode extends OpMode {
         GlyphWheel2.setPower(speed);
     }
 
-<<<<<<< HEAD
-//    public void jewel(char button){
-//        if(button == 'a') JewelServo.setPosition(90);
-//        if(button =='y') JewelServo.setPosition(0);
-//    }
     public void push(){
-        if (push) PushyServo.setPosition(.3);//out (up)
-        else PushyServo.setPosition(.7); // in (down)
+        if (push) PushServo.setPosition(.3);//out (up)
+        else PushServo.setPosition(.7); // in (down)
         push=!push;
-=======
-    public void push() {
-        if (push) PushServo.setPosition(.90);
-        else PushServo.setPosition(.15);
-        push = !push;
->>>>>>> 9b638c04bc3af36279d583d1406eaaf49d5d35d5
     }
 
     public void liftUp() {
