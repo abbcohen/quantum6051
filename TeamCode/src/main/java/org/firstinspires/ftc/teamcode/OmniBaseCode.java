@@ -19,11 +19,11 @@ public class OmniBaseCode extends OpMode
     private DcMotor BL = null;
     private DcMotor LiftMotor = null;
     private Servo GlyphServo1 = null;
+    private Servo PushyServo = null;
     private Servo GlyphServo2 = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
     private DcMotor GlyphWheel3 = null;
-    private Servo PushServo = null;
     private double moveSpeed = .75;
     private double turnSpeed = .5;
     private double liftSpeed = 1;
@@ -60,8 +60,8 @@ public class OmniBaseCode extends OpMode
         GlyphServo1.setDirection(Servo.Direction.REVERSE);
         GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
         GlyphServo2.setDirection(Servo.Direction.FORWARD);
-        PushServo = hardwareMap.get(Servo.class, "PushServo");
-        PushServo.setDirection(Servo.Direction.REVERSE);
+        PushyServo = hardwareMap.get(Servo.class, "PushyServo");
+        PushyServo.setDirection(Servo.Direction.REVERSE);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         /*GlyphServo1.scaleRange(0,180);
@@ -127,8 +127,8 @@ public class OmniBaseCode extends OpMode
 //        if(button =='y') JewelServo.setPosition(0);
 //    }
     public void push(){
-        if (push) PushServo.setPosition(90);
-        else PushServo.setPosition(15);
+        if (push) PushyServo.setPosition(.3);//out (up)
+        else PushyServo.setPosition(.7); // in (down)
         push=!push;
     }
 
@@ -246,7 +246,6 @@ public class OmniBaseCode extends OpMode
         else GlyphWheel3.setPower(0);
 
         if (gamepad2.a) push();
-        PushServo.setPosition(0);
 
         //lift
         if((gamepad2.right_stick_y > -.1) && !(gamepad2.right_stick_y<.1)) liftUp();
