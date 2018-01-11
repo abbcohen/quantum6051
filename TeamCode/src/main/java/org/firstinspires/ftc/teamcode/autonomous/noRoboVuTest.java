@@ -26,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import java.util.Locale;
 
 @Autonomous(name = "no robo vu test", group = "Sensor")
+@Disabled //SO YOU CANNOT RUN IT
 public class noRoboVuTest extends LinearOpMode {
 
     RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;

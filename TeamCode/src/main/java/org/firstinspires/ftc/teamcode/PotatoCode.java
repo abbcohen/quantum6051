@@ -53,6 +53,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 
 @TeleOp(name="POTATO YEAH BOW BOW FLOCKA GAME WEEK!", group="Iterative Opmode")
+@Disabled //SO YOU CANNOT RUN IT
 public class PotatoCode extends OpMode
 {
     // Declare OpMode members.
