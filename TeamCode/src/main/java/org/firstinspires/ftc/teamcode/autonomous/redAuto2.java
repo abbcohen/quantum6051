@@ -24,51 +24,46 @@ import java.util.Locale;
 
 @Autonomous(name = "red 2", group = "Sensor")
 public class redAuto2 extends LinearOpMode {
-
-
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
 
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor WheelOne = null;
-    private DcMotor WheelTwo = null;
-    private DcMotor WheelThree = null;
-    private DcMotor WheelZero = null;
+    private DcMotor FR = null;
+    private DcMotor FL = null;
+    private DcMotor BR = null;
+    private DcMotor BL = null;
     private Servo JewelServo = null;
     private Servo GlyphServo1 = null;
     private Servo GlyphServo2 = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
-    private DcMotor LiftMotor = null;
 
     private double moveSpeed = .25;
     private double turnSpeed = .25;
 
     @Override
     public void runOpMode() {
-        WheelOne = hardwareMap.get(DcMotor.class, "WheelOne");
-        WheelTwo = hardwareMap.get(DcMotor.class, "WheelTwo");
-        WheelThree = hardwareMap.get(DcMotor.class, "WheelThree");
-        WheelZero = hardwareMap.get(DcMotor.class, "WheelZero");
+        FR = hardwareMap.get(DcMotor.class, "FR");
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        BR = hardwareMap.get(DcMotor.class, "BR");
+        BL = hardwareMap.get(DcMotor.class, "BL");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
-        LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
 
         JewelServo.setDirection(Servo.Direction.REVERSE);
-        WheelOne.setDirection(DcMotor.Direction.FORWARD);
-        WheelTwo.setDirection(DcMotor.Direction.REVERSE);
-        WheelThree.setDirection(DcMotor.Direction.REVERSE);
-        WheelZero.setDirection(DcMotor.Direction.FORWARD);
-        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+
         //Servo initialization
         GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
         GlyphServo1.setDirection(Servo.Direction.REVERSE);
         GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
         GlyphServo2.setDirection(Servo.Direction.FORWARD);
-
 
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -86,11 +81,6 @@ public class redAuto2 extends LinearOpMode {
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
 
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
         // wait for the start button to be pressed.
         waitForStart();
 
@@ -106,14 +96,9 @@ public class redAuto2 extends LinearOpMode {
         //read color
         int red = 0;
         int blue = 0;
-        int count = 0;
-        for (int i = 0; i < 25; i++) {
-            if (colorSensor.red() > colorSensor.blue()) {
-                red++;
-            }
-            if (colorSensor.red() < colorSensor.blue()) {
-                blue++;
-            }
+        for (int i = 0; i < 40; i++) {
+            if (colorSensor.red() > colorSensor.blue()) red++;
+            if (colorSensor.red() < colorSensor.blue()) blue++;
             telemetry.update();
         }
 
@@ -172,145 +157,118 @@ public class redAuto2 extends LinearOpMode {
 
         //move back out
         moveTime(2,.25);
-
-
     }
-    public void moveTime(int dir, double time){
+
+    public void moveTime(int dir, double time) {
         double startTime = 0;
-        if(dir == 0){
+        if (dir == 0) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 driveStop();
             }
         }
-        if(dir == 1){
+        if (dir == 1) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 moveForward();
             }
 
         }
-        if(dir == 2){
+        if (dir == 2) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 moveBackward();
             }
         }
-        if(dir == 3){
+        if (dir == 3) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 moveLeft();
             }
         }
-        if(dir == 4){
+        if (dir == 4) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 moveRight();
             }
         }
-        if(dir == 5){
+        if (dir == 5) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 turnClockwise();
             }
         }
-        if(dir == 6){
+        if (dir == 6) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
+            while (getRuntime() < startTime + time) {
                 turnCounterClockwise();
             }
         }
-        if(dir == 7){
+        if (dir == 7) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
-                succ();
+            while (getRuntime() < startTime + time) {
+                glyphWheels(.6); //pull in
             }
         }
-        if(dir == 8){
+        if (dir == 8) {
             startTime = getRuntime();
-            while(getRuntime() < startTime + time){
-                blow();
+            while (getRuntime() < startTime + time) {
+                glyphWheels(-.6); //pull in
             }
         }
     }
 
-    public void succ() {
-        GlyphWheel1.setPower(.6);
-        GlyphWheel2.setPower(.6);
+    public void glyphWheels(double speed) {
+        GlyphWheel1.setPower(speed);
+        GlyphWheel2.setPower(speed);
     }
-    public void nosucc() {
-        GlyphWheel1.setPower(0);
-        GlyphWheel2.setPower(0);
-    }
-    public void blow() {
-        GlyphWheel1.setPower(-.6);
-        GlyphWheel2.setPower(-.6);
-    }
-    public void grabber(double pos) {
-        GlyphServo1.setPosition(pos);
-        GlyphServo2.setPosition(pos);
-    }
+
     public void moveForward() {
-        WheelOne.setPower(-moveSpeed);
-        WheelTwo.setPower(-moveSpeed);
-        WheelThree.setPower(-moveSpeed);
-        WheelZero.setPower(-moveSpeed);
+        FR.setPower(moveSpeed);
+        FL.setPower(moveSpeed);
+        BR.setPower(moveSpeed);
+        BL.setPower(moveSpeed);
     }
+
     public void moveBackward() {
-        WheelOne.setPower(moveSpeed);
-        WheelTwo.setPower(moveSpeed);
-        WheelThree.setPower(moveSpeed);
-        WheelZero.setPower(moveSpeed);
+        FR.setPower(-moveSpeed);
+        FL.setPower(-moveSpeed);
+        BR.setPower(-moveSpeed);
+        BL.setPower(-moveSpeed);
     }
+
     public void moveLeft() {
-        WheelOne.setPower(moveSpeed);
-        WheelTwo.setPower(moveSpeed);
-        WheelThree.setPower(-moveSpeed);
-        WheelZero.setPower(-moveSpeed);
+        FR.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
+        BR.setPower(-moveSpeed);
+        BL.setPower(moveSpeed);
     }
+
     public void moveRight() {
-        WheelOne.setPower(-moveSpeed);
-        WheelTwo.setPower(-moveSpeed);
-        WheelThree.setPower(moveSpeed);
-        WheelZero.setPower(moveSpeed);
+        FR.setPower(-moveSpeed);
+        FL.setPower(moveSpeed);
+        BR.setPower(moveSpeed);
+        BL.setPower(-moveSpeed);
     }
+
     public void turnClockwise() {
-        WheelOne.setPower(turnSpeed);
-        WheelTwo.setPower(-turnSpeed);
-        WheelThree.setPower(-turnSpeed);
-        WheelZero.setPower(turnSpeed);
+        FR.setPower(-turnSpeed);
+        FL.setPower(turnSpeed);
+        BR.setPower(-turnSpeed);
+        BL.setPower(turnSpeed);
     }
+
     public void turnCounterClockwise() {
-        WheelOne.setPower(-turnSpeed);
-        WheelTwo.setPower(turnSpeed);
-        WheelThree.setPower(turnSpeed);
-        WheelZero.setPower(-turnSpeed);
+        FR.setPower(turnSpeed);
+        FL.setPower(-turnSpeed);
+        BR.setPower(turnSpeed);
+        BL.setPower(-turnSpeed);
     }
+
     public void driveStop() {
-        WheelOne.setPower(0);
-        WheelTwo.setPower(0);
-        WheelThree.setPower(0);
-        WheelZero.setPower(0);
-    }
-
-    public void liftUp(double time) {
-        double startTime = getRuntime();
-        while (getRuntime() < startTime + time) {
-            LiftMotor.setPower(1);
-        }
-    }
-
-    public void liftDown(double time) {
-        double startTime = getRuntime();
-        while (getRuntime() < startTime + time) {
-            LiftMotor.setPower(-1);
-        }
-    }
-
-    public void liftStop(double time) {
-        double startTime = getRuntime();
-        while (getRuntime() < startTime + time) {
-            LiftMotor.setPower(0);
-        }
+        FR.setPower(0);
+        FL.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
     }
 }
