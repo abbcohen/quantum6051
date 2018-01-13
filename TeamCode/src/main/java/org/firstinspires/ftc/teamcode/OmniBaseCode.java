@@ -25,6 +25,8 @@ public class OmniBaseCode extends OpMode {
     private Servo GlyphServoR = null;
     private Servo JewelServo = null;
     private Servo PushServo = null;
+    private Servo RelicWristServo = null;
+    private Servo RelicFingerServo = null;
 
     //declare variables
     private double moveSpeed = .75;
@@ -32,6 +34,9 @@ public class OmniBaseCode extends OpMode {
     private double liftSpeed = 1;
     private boolean slomo = false;
     private boolean push = false;
+    private int wristPosition = 0;
+    private int fingerPosition = 0;
+
 
     //Code to run ONCE when the driver hits INIT
     @Override
@@ -51,6 +56,8 @@ public class OmniBaseCode extends OpMode {
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         PushServo = hardwareMap.get(Servo.class, "PushServo");
+        RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
+        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
 
         //set motor and servo directions
         FL.setDirection(DcMotor.Direction.REVERSE);
@@ -63,6 +70,8 @@ public class OmniBaseCode extends OpMode {
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
         JewelServo.setDirection(Servo.Direction.REVERSE);
         PushServo.setDirection(Servo.Direction.REVERSE);
+        RelicWristServo.setDirection(Servo.Direction.FORWARD);
+        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -99,6 +108,18 @@ public class OmniBaseCode extends OpMode {
 
     public void relicArmStop() {
         RelicMotor.setPower(0);
+    }
+
+    public void FlipRelicWrist() {
+        if (wristPosition==1) wristPosition=0;
+        else wristPosition=1;
+        RelicWristServo.setPosition(wristPosition); //0 is down, 1 is up
+    }
+
+    public void RelicHandClose(){
+        if (fingerPosition==1) fingerPosition=0;
+        else fingerPosition=1;
+        RelicFingerServo.setPosition(fingerPosition); //0 is down, 1 is up
     }
 
     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -192,6 +213,8 @@ public class OmniBaseCode extends OpMode {
         //relic
         if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) relicArmMove();
         else relicArmStop();
+        if (gamepad2.b) FlipRelicWrist();
+        if (gamepad2.x) RelicHandClose();
 
         //Keep the jewel servo up
         JewelServo.setPosition(0);
