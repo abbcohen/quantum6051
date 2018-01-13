@@ -149,11 +149,9 @@ public class OmniBaseCode extends OpMode {
         else moveSpeed = .75;
 
         //driving (omni wheel magic)
-        double scale = (gamepad1.right_bumper ? .3 : .7);
-        double drive_scale = (gamepad1.right_bumper ? .3 : 1);
-        double gamepad1LeftY = -gamepad1.left_stick_y * drive_scale;
-        double gamepad1LeftX = gamepad1.left_stick_x * drive_scale;
-        double gamepad1RightX = gamepad1.right_stick_x * scale;
+        double gamepad1LeftY = -gamepad1.left_stick_y ;
+        double gamepad1LeftX = gamepad1.left_stick_x;
+        double gamepad1RightX = gamepad1.right_stick_x * .7;
         double frontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
         double frontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
         double backRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
@@ -207,11 +205,11 @@ public class OmniBaseCode extends OpMode {
 
         //lift
         if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) liftMove();
-        if (gamepad1.right_stick_x < -.1) liftStop();
+        if (gamepad2.right_stick_x < -.1) liftStop();
         else liftNoPower();
 
         //relic
-        if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) relicArmMove();
+        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
         else relicArmStop();
         if (gamepad2.b) FlipRelicWrist();
         if (gamepad2.x) RelicHandClose();
