@@ -31,8 +31,8 @@ public class vuforiaRedAuto2 extends LinearOpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private Servo JewelServo = null;
-    private Servo GlyphServo1 = null;
-    private Servo GlyphServo2 = null;
+//    private Servo GlyphServoL = null;
+//    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
 
@@ -57,11 +57,11 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
 
-        //Servo initialization
-        GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
-        GlyphServo1.setDirection(Servo.Direction.REVERSE);
-        GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
-        GlyphServo2.setDirection(Servo.Direction.FORWARD);
+//        //Servo initialization
+//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
+//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
+//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
+//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
 
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -122,36 +122,36 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("senses red", colorSensor.red());
             telemetry.update();
-            moveTime(6,.15);
+            moveTime(6,.18);
         } else {
             telemetry.addData("senses blue", colorSensor.red());
             telemetry.update();
-            moveTime(5,.15);
+            moveTime(5,.18);
         }
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if(red>blue) {
-            moveTime(5,.15);
+            moveTime(5,.18);
         } else if(blue>red) {
-            moveTime(6,.15);
+            moveTime(6,.18);
         }
 
         //MOVE TO SAFE ZONE
 
-        moveTime(4,1.4); //side
+        moveTime(4,1.35); //side
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
             moveTime(1, 0); //center value
         } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, 0); // left value
+            moveTime(1, .5); // left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
             moveTime(1, 0); //right value
         } moveTime(1, .86);
 
         //turn to face cryptobox
-        moveTime(5,.9075);
+        moveTime(5,.908);
 
         //move forward
         moveTime(1,1.2);
@@ -242,44 +242,44 @@ public class vuforiaRedAuto2 extends LinearOpMode {
 
     public void moveForward() {
         FR.setPower(moveSpeed);
-        FL.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
         BR.setPower(moveSpeed);
-        BL.setPower(moveSpeed);
+        BL.setPower(-moveSpeed);
     }
 
     public void moveBackward() {
         FR.setPower(-moveSpeed);
-        FL.setPower(-moveSpeed);
-        BR.setPower(-moveSpeed);
-        BL.setPower(-moveSpeed);
-    }
-
-    public void moveLeft() {
-        FR.setPower(moveSpeed);
-        FL.setPower(-moveSpeed);
+        FL.setPower(moveSpeed);
         BR.setPower(-moveSpeed);
         BL.setPower(moveSpeed);
     }
 
+    public void moveLeft() {
+        FR.setPower(moveSpeed);
+        FL.setPower(moveSpeed);
+        BR.setPower(-moveSpeed);
+        BL.setPower(-moveSpeed);
+    }
+
     public void moveRight() {
         FR.setPower(-moveSpeed);
-        FL.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
         BR.setPower(moveSpeed);
-        BL.setPower(-moveSpeed);
+        BL.setPower(moveSpeed);
     }
 
     public void turnClockwise() {
         FR.setPower(-turnSpeed);
-        FL.setPower(turnSpeed);
+        FL.setPower(-turnSpeed);
         BR.setPower(-turnSpeed);
-        BL.setPower(turnSpeed);
+        BL.setPower(-turnSpeed);
     }
 
     public void turnCounterClockwise() {
         FR.setPower(turnSpeed);
-        FL.setPower(-turnSpeed);
+        FL.setPower(turnSpeed);
         BR.setPower(turnSpeed);
-        BL.setPower(-turnSpeed);
+        BL.setPower(turnSpeed);
     }
 
     public void driveStop() {

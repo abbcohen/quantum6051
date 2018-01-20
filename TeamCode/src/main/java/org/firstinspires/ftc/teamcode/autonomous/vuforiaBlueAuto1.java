@@ -31,8 +31,8 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private Servo JewelServo = null;
-    private Servo GlyphServo1 = null;
-    private Servo GlyphServo2 = null;
+//    private Servo GlyphServoL = null;
+//    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
 
@@ -58,10 +58,10 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
 
         //Servo initialization
-        GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
-        GlyphServo1.setDirection(Servo.Direction.REVERSE);
-        GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
-        GlyphServo2.setDirection(Servo.Direction.FORWARD);
+//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
+//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
+//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
+//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
 
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -237,44 +237,44 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
 
     public void moveForward() {
         FR.setPower(moveSpeed);
-        FL.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
         BR.setPower(moveSpeed);
-        BL.setPower(moveSpeed);
+        BL.setPower(-moveSpeed);
     }
 
     public void moveBackward() {
         FR.setPower(-moveSpeed);
-        FL.setPower(-moveSpeed);
-        BR.setPower(-moveSpeed);
-        BL.setPower(-moveSpeed);
-    }
-
-    public void moveLeft() {
-        FR.setPower(moveSpeed);
-        FL.setPower(-moveSpeed);
+        FL.setPower(moveSpeed);
         BR.setPower(-moveSpeed);
         BL.setPower(moveSpeed);
     }
 
+    public void moveLeft() {
+        FR.setPower(moveSpeed);
+        FL.setPower(moveSpeed);
+        BR.setPower(-moveSpeed);
+        BL.setPower(-moveSpeed);
+    }
+
     public void moveRight() {
         FR.setPower(-moveSpeed);
-        FL.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
         BR.setPower(moveSpeed);
-        BL.setPower(-moveSpeed);
+        BL.setPower(moveSpeed);
     }
 
     public void turnClockwise() {
         FR.setPower(-turnSpeed);
-        FL.setPower(turnSpeed);
+        FL.setPower(-turnSpeed);
         BR.setPower(-turnSpeed);
-        BL.setPower(turnSpeed);
+        BL.setPower(-turnSpeed);
     }
 
     public void turnCounterClockwise() {
         FR.setPower(turnSpeed);
-        FL.setPower(-turnSpeed);
+        FL.setPower(turnSpeed);
         BR.setPower(turnSpeed);
-        BL.setPower(-turnSpeed);
+        BL.setPower(turnSpeed);
     }
 
     public void driveStop() {

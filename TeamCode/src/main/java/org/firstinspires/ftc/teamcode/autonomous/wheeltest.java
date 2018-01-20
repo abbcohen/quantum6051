@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@Autonomous(name = "vu blue 2", group = "Sensor")
-public class vuforiaBlueAuto2 extends LinearOpMode {
+@Autonomous(name = "wheeltest", group = "Sensor")
+public class wheeltest extends LinearOpMode {
     ElapsedTime clock = new ElapsedTime();
     RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;
 
@@ -31,8 +31,8 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private Servo JewelServo = null;
+    //    private Servo GlyphServoR = null;
 //    private Servo GlyphServoL = null;
-//    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
 
@@ -57,122 +57,12 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
 
-        //Servo initialization
-//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
-//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
-//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
-//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
+        moveTime(3,2);
+        moveTime(4,2);
+        moveTime(5,2);
+        moveTime(6,2);
 
-        // get a reference to the color sensor.
-        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
-        // get a reference to the distance sensor that shares the same name.
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "colorSensor");
-
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
-        // sometimes it helps to multiply the raw RGB values with a scale factor
-        // to amplify/attentuate the measured values.
-        final double SCALE_FACTOR = 255;
-
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
-        // wait for the start button to be pressed.
-        waitForStart();
-
-        JewelServo.setPosition(70);
-        // convert the RGB values to HSV values.
-        // multiply by the SCALE_FACTOR.
-        // then cast it back to int (SCALE_FACTOR is a double)
-        Color.RGBToHSV((int) (colorSensor.red() * SCALE_FACTOR),
-                (int) (colorSensor.green() * SCALE_FACTOR),
-                (int) (colorSensor.blue() * SCALE_FACTOR),
-                hsvValues);
-
-        column = getPicto();
-        telemetry.addData("column", column);
-        telemetry.update();
-
-        //read color
-        int red = 0;
-        int blue = 0;
-        for (int i = 0; i < 40; i++) {
-            if (colorSensor.red() > colorSensor.blue()) red++;
-            if (colorSensor.red() < colorSensor.blue()) blue++;
-            telemetry.update();
-        }
-
-        telemetry.addData("Clear", colorSensor.alpha());
-        telemetry.addData("Red  ", colorSensor.red());
-        telemetry.addData("Green", colorSensor.green());
-        telemetry.addData("Blue ", colorSensor.blue());
-        telemetry.addData("Hue", hsvValues[0]);
-        telemetry.addData("RED", red);
-        telemetry.addData("BLUE", blue);
-
-        //knock off jewel
-        double jewelturntime = getRuntime();
-        if (red > blue) {
-            telemetry.addData("Red Wins!", colorSensor.red());
-            telemetry.update();
-            moveTime(5,.154);
-        } else {
-            telemetry.addData("Blue Wins!", colorSensor.red());
-            telemetry.update();
-            moveTime(6,.154);
-        }
-
-        JewelServo.setPosition(0);
-
-        //turn back to initial position
-        if(red>blue) {
-            moveTime(6,.154);
-        } else if(blue>red) {
-            moveTime(5,.154);
-        }
-
-        //MOVE TO SAFE ZONE
-        moveTime(3,1.761); //side
-
-        //MOVE TO THE CORRECT COLUMN
-        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, 0); //center value
-        } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, 0); // left value
-        } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(1, 0); //right value
-        } moveTime(1, .86);
-
-        //turn to face cryptobox
-        moveTime(6,.9075);
-
-        //move forward
-        moveTime(1,1.2);
-
-        //pause
-        moveTime(0,1);
-
-        //release glyph
-        moveTime(8, .28);
-
-        //pause
-        moveTime(0,1);
-
-        //move back
-        moveTime(2,.25);
-
-        //push back in
-        moveTime(1,.3);
-
-        //move back out
-        moveTime(2,.25);
     }
     public void moveTime(int dir, double time) {
         double startTime = 0;
