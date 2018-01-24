@@ -18,15 +18,15 @@ public class OmniBaseCode extends OpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private DcMotor LiftMotor = null;
-    private DcMotor RelicMotor = null;
+   // private DcMotor RelicMotor = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
     private Servo GlyphServoL = null;
     private Servo GlyphServoR = null;
     private Servo JewelServo = null;
     private Servo PushServo = null;
-    private Servo RelicWristServo = null;
-    private Servo RelicFingerServo = null;
+//    private Servo RelicWristServo = null;
+//    private Servo RelicFingerServo = null;
 
     //declare variables
     private double moveSpeed = .75;
@@ -49,15 +49,15 @@ public class OmniBaseCode extends OpMode {
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
-        RelicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
+        //RelicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
         GlyphServoL = hardwareMap.get(Servo.class, "GlyphServoL");
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         PushServo = hardwareMap.get(Servo.class, "PushServo");
-        RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
-        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
+//        RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
+//        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
 
         //set motor and servo directions
         FL.setDirection(DcMotor.Direction.REVERSE);
@@ -70,8 +70,8 @@ public class OmniBaseCode extends OpMode {
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
         JewelServo.setDirection(Servo.Direction.REVERSE);
         PushServo.setDirection(Servo.Direction.REVERSE);
-        RelicWristServo.setDirection(Servo.Direction.FORWARD);
-        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
+//        RelicWristServo.setDirection(Servo.Direction.FORWARD);
+//        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -102,24 +102,24 @@ public class OmniBaseCode extends OpMode {
         LiftMotor.setPower(.05);
     }
 
-    public void relicArmMove() {
-        RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
-    }
-
-    public void relicArmStop() {
-        RelicMotor.setPower(0);
-    }
+//    public void relicArmMove() {
+//        RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
+//    }
+//
+//    public void relicArmStop() {
+//        RelicMotor.setPower(0);
+//    }
 
     public void FlipRelicWrist() {
         if (wristPosition==1) wristPosition=0;
         else wristPosition=1;
-        RelicWristServo.setPosition(wristPosition); //0 is down, 1 is up
+//        RelicWristServo.setPosition(wristPosition); //0 is down, 1 is up
     }
 
     public void RelicHandClose(){
         if (fingerPosition==1) fingerPosition=0;
         else fingerPosition=1;
-        RelicFingerServo.setPosition(fingerPosition); //0 is down, 1 is up
+//        RelicFingerServo.setPosition(fingerPosition); //0 is down, 1 is up
     }
 
     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -209,10 +209,10 @@ public class OmniBaseCode extends OpMode {
         else liftNoPower();
 
         //relic
-        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
-        else relicArmStop();
-        if (gamepad2.b) FlipRelicWrist();
-        if (gamepad2.x) RelicHandClose();
+//        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
+//        else relicArmStop();
+//        if (gamepad2.b) FlipRelicWrist();
+//        if (gamepad2.x) RelicHandClose();
 
         //Keep the jewel servo up
         JewelServo.setPosition(0);

@@ -31,8 +31,6 @@ public class vuforiaRedAuto2 extends LinearOpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private Servo JewelServo = null;
-//    private Servo GlyphServoL = null;
-//    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
 
@@ -56,12 +54,6 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
-
-//        //Servo initialization
-//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
-//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
-//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
-//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
 
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -143,12 +135,12 @@ public class vuforiaRedAuto2 extends LinearOpMode {
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, 0); //center value
+            moveTime(1, .45); //center value
         } else if (column == RelicRecoveryVuMark.LEFT) {
             moveTime(1, .5); // left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
             moveTime(1, 0); //right value
-        } moveTime(1, .86);
+        } moveTime(1, .4);
 
         //turn to face cryptobox
         moveTime(5,.908);
