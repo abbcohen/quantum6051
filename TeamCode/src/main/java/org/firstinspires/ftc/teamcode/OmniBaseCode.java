@@ -18,7 +18,7 @@ public class OmniBaseCode extends OpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private DcMotor LiftMotor = null;
-   // private DcMotor RelicMotor = null;
+    private DcMotor RelicMotor = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
     private Servo GlyphServoL = null;
@@ -30,7 +30,7 @@ public class OmniBaseCode extends OpMode {
 
     //declare variables
     private double moveSpeed = .75;
-    private double relicSpeed = .75;
+    private double relicSpeed = .7;
     private double liftSpeed = 1;
     private boolean slomo = false;
     private boolean push = false;
@@ -49,7 +49,7 @@ public class OmniBaseCode extends OpMode {
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
-        //RelicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
+        RelicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
         GlyphServoL = hardwareMap.get(Servo.class, "GlyphServoL");
@@ -102,13 +102,13 @@ public class OmniBaseCode extends OpMode {
         LiftMotor.setPower(.05);
     }
 
-//    public void relicArmMove() {
-//        RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
-//    }
-//
-//    public void relicArmStop() {
-//        RelicMotor.setPower(0);
-//    }
+    public void relicArmMove() {
+        RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
+    }
+
+    public void relicArmStop() {
+        RelicMotor.setPower(.05);
+    }
 
     public void FlipRelicWrist() {
         if (wristPosition==1) wristPosition=0;
@@ -129,7 +129,7 @@ public class OmniBaseCode extends OpMode {
         FL.setPower(0);
         BR.setPower(0);
         BL.setPower(0);
-        JewelServo.setPosition(0);
+        JewelServo.setPosition(.5);
     }
 
     //Code to run ONCE when the driver hits PLAY
@@ -209,13 +209,13 @@ public class OmniBaseCode extends OpMode {
         else liftNoPower();
 
         //relic
-//        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
-//        else relicArmStop();
+        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
+        else relicArmStop();
 //        if (gamepad2.b) FlipRelicWrist();
 //        if (gamepad2.x) RelicHandClose();
 
         //Keep the jewel servo up
-        JewelServo.setPosition(0);
+        JewelServo.setPosition(.5);
 
         //console
         telemetry.addData("Status", "Run Time: " + runtime.toString());
