@@ -94,10 +94,6 @@ public class OmniBaseCode extends OpMode {
         LiftMotor.setPower(gamepad2.right_stick_y * liftSpeed);
     }
 
-    public void liftNoPower() {
-        LiftMotor.setPower(0);
-    }
-
     public void liftStop() {
         LiftMotor.setPower(.05);
     }
@@ -201,12 +197,12 @@ public class OmniBaseCode extends OpMode {
 
         //glyph pusher plate
         if (gamepad2.a) PushServo.setPosition(.3);//out (up)
-        else PushServo.setPosition(.65); // in (down)
+        else PushServo.setPosition(.7); // in (down)
 
         //lift
         if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) liftMove();
-        if (gamepad2.right_stick_x < -.1) liftStop();
-        else liftNoPower();
+        else if (gamepad2.right_stick_x < -.1) liftStop();
+        else LiftMotor.setPower(0);
 
         //relic
         if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
