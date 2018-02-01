@@ -25,7 +25,7 @@ public class OmniBaseCode extends OpMode {
     private Servo GlyphServoR = null;
     private Servo JewelServo = null;
     private Servo PushServo = null;
-//    private Servo RelicWristServo = null;
+    private Servo RelicWristServo = null;
 //    private Servo RelicFingerServo = null;
 
     //declare variables
@@ -56,7 +56,7 @@ public class OmniBaseCode extends OpMode {
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         PushServo = hardwareMap.get(Servo.class, "PushServo");
-//        RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
+        RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
 //        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
 
         //set motor and servo directions
@@ -70,7 +70,7 @@ public class OmniBaseCode extends OpMode {
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
         JewelServo.setDirection(Servo.Direction.REVERSE);
         PushServo.setDirection(Servo.Direction.REVERSE);
-//        RelicWristServo.setDirection(Servo.Direction.FORWARD);
+        RelicWristServo.setDirection(Servo.Direction.FORWARD);
 //        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
@@ -109,7 +109,7 @@ public class OmniBaseCode extends OpMode {
     public void FlipRelicWrist() {
         if (wristPosition==1) wristPosition=0;
         else wristPosition=1;
-//        RelicWristServo.setPosition(wristPosition); //0 is down, 1 is up
+        RelicWristServo.setPosition(wristPosition); //0 is down, 1 is up
     }
 
     public void RelicHandClose(){
@@ -207,7 +207,7 @@ public class OmniBaseCode extends OpMode {
         //relic
         if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
         else relicArmStop();
-//        if (gamepad2.b) FlipRelicWrist();
+        if (gamepad2.b) FlipRelicWrist();
 //        if (gamepad2.x) RelicHandClose();
 
         //Keep the jewel servo up
