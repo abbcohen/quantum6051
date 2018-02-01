@@ -34,7 +34,6 @@ public class OmniBaseCode extends OpMode {
     private double liftSpeed = 1;
     private boolean slomo = false;
     private boolean push = false;
-    private int wristPosition = 0;
     private int fingerPosition = 0;
 
 
@@ -107,9 +106,8 @@ public class OmniBaseCode extends OpMode {
     }
 
     public void FlipRelicWrist() {
-        if (wristPosition==1) wristPosition=0;
-        else wristPosition=1;
-        RelicWristServo.setPosition(wristPosition); //0 is down, 1 is up
+        if (RelicWristServo.getPosition()>.5) RelicWristServo.setPosition(0);
+        else RelicWristServo.setPosition(1); //0 is down, 1 is up
     }
 
     public void RelicHandClose(){
@@ -219,6 +217,7 @@ public class OmniBaseCode extends OpMode {
         telemetry.addData("FL", frontLeft);
         telemetry.addData("BR", backRight);
         telemetry.addData("BL", backLeft);
+        telemetry.addData("relicWrist", RelicWristServo.getPosition());
         telemetry.addData("Glyph Servo 1", GlyphServoL.getPosition());
         telemetry.addData("Glyph Servo 2", GlyphServoR.getPosition());
         telemetry.addData("left_stick_y", gamepad1.left_stick_y);
