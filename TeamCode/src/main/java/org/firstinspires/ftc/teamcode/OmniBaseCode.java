@@ -26,15 +26,14 @@ public class OmniBaseCode extends OpMode {
     private Servo JewelServo = null;
     private Servo PushServo = null;
     private Servo RelicWristServo = null;
-//    private Servo RelicFingerServo = null;
+    private Servo RelicFingerServo = null;
 
     //declare variables
     private double moveSpeed = .75;
     private double relicSpeed = .7;
     private double liftSpeed = 1;
     private boolean slomo = false;
-    private boolean push = false;
-    private int fingerPosition = 0;
+    private boolean read = false;
 
 
     //Code to run ONCE when the driver hits INIT
@@ -56,7 +55,7 @@ public class OmniBaseCode extends OpMode {
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         PushServo = hardwareMap.get(Servo.class, "PushServo");
         RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
-//        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
+        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
 
         //set motor and servo directions
         FL.setDirection(DcMotor.Direction.REVERSE);
@@ -70,7 +69,7 @@ public class OmniBaseCode extends OpMode {
         JewelServo.setDirection(Servo.Direction.REVERSE);
         PushServo.setDirection(Servo.Direction.REVERSE);
         RelicWristServo.setDirection(Servo.Direction.FORWARD);
-//        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
+        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -106,14 +105,13 @@ public class OmniBaseCode extends OpMode {
     }
 
     public void FlipRelicWrist() {
-        if (RelicWristServo.getPosition()>.5) RelicWristServo.setPosition(0);
-        else RelicWristServo.setPosition(1); //0 is down, 1 is up
+        if (RelicWristServo.getPosition()>.5) RelicWristServo.setPosition(.1);
+        else RelicWristServo.setPosition(.9); //0 is down, 1 is up
     }
 
     public void RelicHandClose(){
-        if (fingerPosition==1) fingerPosition=0;
-        else fingerPosition=1;
-//        RelicFingerServo.setPosition(fingerPosition); //0 is down, 1 is up
+        if (RelicFingerServo.getPosition()>.6) RelicFingerServo.setPosition(.5);
+        else RelicFingerServo.setPosition(.7); //.1 is in, .8 is out
     }
 
     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -143,7 +141,7 @@ public class OmniBaseCode extends OpMode {
         else moveSpeed = .75;
 
         //driving (omni wheel magic)
-        double gamepad1LeftY = -gamepad1.left_stick_y ;
+        double gamepad1LeftY = -gamepad1.left_stick_y;
         double gamepad1LeftX = gamepad1.left_stick_x;
         double gamepad1RightX = gamepad1.right_stick_x * .7;
         double frontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
@@ -168,7 +166,8 @@ public class OmniBaseCode extends OpMode {
         BL.setPower(backLeft * moveSpeed);
 
         //stop driving
-        if (gamepad1.left_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0) stopDriving();
+        if (gamepad1.left_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0)
+            stopDriving();
 
         //glyph intake wheels
         if (gamepad2.right_bumper) glyphWheels(1); //pull glyph in
@@ -205,29 +204,39 @@ public class OmniBaseCode extends OpMode {
         //relic
         if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
         else relicArmStop();
-        if (gamepad2.b) FlipRelicWrist();
-//        if (gamepad2.x) RelicHandClose();
+        if (gamepad2.x) {
+            if (!read) {
+                read = true;
+                RelicHandClose();
+            }
+        }else if (gamepad2.b) {
+            if (!read) {
+                read = true;
+                FlipRelicWrist();
+                }
+        } else read = false;
 
-        //Keep the jewel servo up
-        JewelServo.setPosition(.5);
+            //Keep the jewel servo up
+            JewelServo.setPosition(.5);
 
-        //console
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("FR", frontRight);
-        telemetry.addData("FL", frontLeft);
-        telemetry.addData("BR", backRight);
-        telemetry.addData("BL", backLeft);
-        telemetry.addData("relicWrist", RelicWristServo.getPosition());
-        telemetry.addData("Glyph Servo 1", GlyphServoL.getPosition());
-        telemetry.addData("Glyph Servo 2", GlyphServoR.getPosition());
-        telemetry.addData("left_stick_y", gamepad1.left_stick_y);
-        telemetry.addData("left_stick_x", gamepad1.left_stick_x);
-        telemetry.addData("right_stick_y", gamepad1.right_stick_y);
-        telemetry.addData("right_stick_x", gamepad1.right_stick_x);
-        telemetry.addData("right bumper", gamepad2.right_bumper);
-        telemetry.addData("left bumper", gamepad2.left_bumper);
-        telemetry.addData("lift", gamepad2.right_stick_y);
-    }
+            //console
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("FR", frontRight);
+            telemetry.addData("FL", frontLeft);
+            telemetry.addData("BR", backRight);
+            telemetry.addData("BL", backLeft);
+            telemetry.addData("relicFinger", RelicFingerServo.getPosition());
+            telemetry.addData("relicWrist", RelicWristServo.getPosition());
+            telemetry.addData("Glyph Servo 1", GlyphServoL.getPosition());
+            telemetry.addData("Glyph Servo 2", GlyphServoR.getPosition());
+            telemetry.addData("left_stick_y", gamepad1.left_stick_y);
+            telemetry.addData("left_stick_x", gamepad1.left_stick_x);
+            telemetry.addData("right_stick_y", gamepad1.right_stick_y);
+            telemetry.addData("right_stick_x", gamepad1.right_stick_x);
+            telemetry.addData("right bumper", gamepad2.right_bumper);
+            telemetry.addData("left bumper", gamepad2.left_bumper);
+            telemetry.addData("lift", gamepad2.right_stick_y);
+        }
 
     //Code to run ONCE after the driver hits STOP
     @Override
