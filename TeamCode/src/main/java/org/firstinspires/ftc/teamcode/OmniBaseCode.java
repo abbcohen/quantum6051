@@ -137,7 +137,7 @@ public class OmniBaseCode extends OpMode {
         //slomo
         if (gamepad1.right_bumper) slomo = true;
         else slomo = false;
-        if (slomo) moveSpeed = .6;
+        if (slomo) moveSpeed = .4;
         else moveSpeed = .75;
 
         //driving (omni wheel magic)
