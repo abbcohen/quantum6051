@@ -135,9 +135,9 @@ public class vuforiaRedAuto2 extends LinearOpMode {
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, .45); //center value
+            moveTime(1, .43); //center value
         } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, .5); // left value
+            moveTime(1, .51); // left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
             moveTime(1, 0); //right value
         } moveTime(1, .4);
