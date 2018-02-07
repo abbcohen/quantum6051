@@ -15,7 +15,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.vuforia.CameraDevice;
+import com.vuforia.HINT;
+import com.vuforia.Vuforia;
+
+import java.util.ArrayList;
 
 @Autonomous(name = "vu red 2", group = "Sensor")
 public class vuforiaRedAuto2 extends LinearOpMode {
@@ -89,6 +102,7 @@ public class vuforiaRedAuto2 extends LinearOpMode {
                 hsvValues);
 
         column = getPicto();
+
         telemetry.addData("column", column);
         telemetry.update();
 
@@ -114,24 +128,24 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("senses red", colorSensor.red());
             telemetry.update();
-            moveTime(6,.18);
+            moveTime(6, .18);
         } else {
             telemetry.addData("senses blue", colorSensor.red());
             telemetry.update();
-            moveTime(5,.18);
+            moveTime(5, .18);
         }
         JewelServo.setPosition(0);
 
         //turn back to initial position
-        if(red>blue) {
-            moveTime(5,.18);
-        } else if(blue>red) {
-            moveTime(6,.18);
+        if (red > blue) {
+            moveTime(5, .18);
+        } else if (blue > red) {
+            moveTime(6, .18);
         }
 
         //MOVE TO SAFE ZONE
 
-        moveTime(4,1.35); //side
+        moveTime(4, 1.35); //side
 
         //MOVE TO THE CORRECT COLUMN
         if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
@@ -140,34 +154,36 @@ public class vuforiaRedAuto2 extends LinearOpMode {
             moveTime(1, .51); // left value
         } else if (column == RelicRecoveryVuMark.RIGHT) {
             moveTime(1, 0); //right value
-        } moveTime(1, .4);
+        }
+        moveTime(1, .4);
 
         //turn to face cryptobox
-        moveTime(5,.908);
+        moveTime(5, .908);
 
         //move forward
-        moveTime(1,1.2);
+        moveTime(1, 1.2);
 
         //pause
-        moveTime(0,1);
+        moveTime(0, 1);
 
         //release glyph
         moveTime(8, .28);
 
         //pause
-        moveTime(0,1);
+        moveTime(0, 1);
 
         //move back
-        moveTime(2,.25);
+        moveTime(2, .25);
 
         //push back in
-        moveTime(1,.3);
+        moveTime(1, .3);
 
         //move back out
-        moveTime(2,.25);
+        moveTime(2, .25);
 
 
     }
+
     public void moveTime(int dir, double time) {
         double startTime = 0;
         if (dir == 0) {
@@ -308,6 +324,7 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         while (getRuntime() - vuStartTime < 3) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
         }
+        
 
         return vuMark;
     }
