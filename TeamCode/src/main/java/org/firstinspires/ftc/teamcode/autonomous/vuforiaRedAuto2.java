@@ -324,7 +324,7 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         while (getRuntime() - vuStartTime < 3) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
         }
-        
+
 
         return vuMark;
     }

@@ -76,10 +76,16 @@ public class a1VuNavigation extends LinearOpMode {
 
         double startTime = 0;
         int x=1;
+        float yPose = 0;
+        float xPose = 0;
         startTime = getRuntime();
         while (getRuntime() < startTime + 20) {
             pose = ((VuforiaTrackableDefaultListener) relicTrackables.get(mark).getListener()).getPose();
+            yPose= pose.get(2,0);
+            xPose= pose.get(1,0); //not sure
             telemetry.addData("VuInfo: ", pose);
+            telemetry.addData("Y-position: ", yPose);
+            telemetry.addData("X-position?: ", xPose);
             telemetry.update();
             //[2][0] is the y value
         }
