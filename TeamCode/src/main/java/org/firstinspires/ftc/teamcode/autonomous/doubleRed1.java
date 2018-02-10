@@ -3,39 +3,18 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.vuforia.CameraDevice;
-import com.vuforia.HINT;
-import com.vuforia.Vuforia;
 
-import java.util.ArrayList;
-
-@Autonomous(name = "vu red 2", group = "Sensor")
-@Disabled //SO YOU CANNOT RUN IT
-public class vuforiaRedAuto2 extends LinearOpMode {
+@Autonomous(name = "double Red 1", group = "Sensor")
+public class doubleRed1 extends LinearOpMode {
     ElapsedTime clock = new ElapsedTime();
-    RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;
+
 
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
@@ -46,6 +25,8 @@ public class vuforiaRedAuto2 extends LinearOpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private Servo JewelServo = null;
+    //    private Servo GlyphServoL = null;
+//    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
 
@@ -69,6 +50,12 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+
+        //Servo initialization
+//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
+//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
+//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
+//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
 
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -103,10 +90,8 @@ public class vuforiaRedAuto2 extends LinearOpMode {
                 (int) (colorSensor.blue() * SCALE_FACTOR),
                 hsvValues);
 
-        column = getPicto();
-
-        telemetry.addData("column", column);
         telemetry.update();
+
 
         //read color
         int red = 0;
@@ -126,43 +111,32 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         telemetry.addData("BLUE", blue);
 
         //knock off jewel
-        double jewelturntime = getRuntime();
         if (red > blue) {
-            telemetry.addData("senses red", colorSensor.red());
+            telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6, .18);
+            moveTime(6,.15);
         } else {
-            telemetry.addData("senses blue", colorSensor.red());
+            telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5, .18);
+            moveTime(5,.15);
         }
         JewelServo.setPosition(0);
 
         //turn back to initial position
-        if (red > blue) {
-            moveTime(5, .18);
-        } else if (blue > red) {
-            moveTime(6, .18);
+        if(red>blue) {
+            moveTime(5,.15);
+        } else if(blue>red) {
+            moveTime(6,.15);
         }
 
-        //MOVE TO SAFE ZONE
-
-        moveTime(4, 1.2); //side
-
         //MOVE TO THE CORRECT COLUMN
-//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, .81); //center value
-//        } else if (column == RelicRecoveryVuMark.LEFT) {
-//            moveTime(1, .91); // left value
-//        } else if (column == RelicRecoveryVuMark.RIGHT) {
-//            moveTime(1, .4); //right value
-//        }
+        moveTime(4, 1.4);
 
         //turn to face cryptobox
-        moveTime(5, .908);
+        moveTime(5, 1.78);
 
         //move forward
-        moveTime(1, 1.34);
+        moveTime(1, 1.2);
 
         //pause
         moveTime(0, 1);
@@ -180,7 +154,43 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         moveTime(1, .3);
 
         //move back out
+        moveTime(2, 1);
+
+        //turn to the stack
+        moveTime(5, 2);
+
+        //turn on the intake
+        glyphWheels(1);
+
+        //drive to center
+        moveTime(1, 4);
+
+        //turn back to the box
+        moveTime(6, 2);
+
+        //drive to the wall
+        moveTime(1, 4);
+
+        //turn back to a new column
+        moveTime(6, .3);
+
+        //drive to the wall
+        moveTime(1, .8);
+
+        //release glyph
+        moveTime(8, .28);
+
+        //pause
+        moveTime(0, 1);
+
+        //move back
         moveTime(2, .25);
+
+        //push back in
+        moveTime(1, .3);
+
+        //move back out
+        moveTime(2, .3);
 
 
     }
@@ -244,7 +254,7 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         }
     }
 
-    public void glyphWheels(double speed) {
+    public void glyphWheels(double speed) { //1 in, -1 out
         GlyphWheel1.setPower(speed);
         GlyphWheel2.setPower(speed);
     }
@@ -302,31 +312,5 @@ public class vuforiaRedAuto2 extends LinearOpMode {
         double delayStartTime = clock.milliseconds();
         while (clock.milliseconds() - delayStartTime < time) {
         }
-    }
-
-    public RelicRecoveryVuMark getPicto() { //function to figure out which column it is
-        OpenGLMatrix lastLocation = null;
-
-        VuforiaLocalizer vuforia;
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = "Aeba4Qn/////AAAAGahNOxzreUE8nItPWzsrOlF7uoyrR/qbjue3kUmhxZcfZMSd5MRyEY+3uEoVA+gpQGz5KyP3wEjBxSOAb4+FBYMZ+QblFU4byMG4+aiI+GeeBA+RatQXVzSduRBdniCW4qehTnwS204KTUMXg1ioPvUlbYQmqM5aPMx/2xnYN1b+htNBWV0Bc8Vkyspa0NNgz7PzF1gozlCIc9FgzbzNYoOMhqSG+jhKf47SZQxD6iEAtj5iAkWBvJwFDLr/EfDfPr3BIA6Cpb4xaDc0t4Iz5wJ/p4oLRiEJaLoE/noCcWFjLmPcw9ccwYXThtjC+7u0DsMX+r+1dMikBCZCWWkLzEyjWzy3pOOR3exNRYGZ0vzr";
-
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK; //look through back camera
-        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-
-        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
-        relicTrackables.activate();
-
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        double vuStartTime = getRuntime();
-        while (getRuntime() - vuStartTime < 3) {
-            vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        }
-
-
-        return vuMark;
     }
 }

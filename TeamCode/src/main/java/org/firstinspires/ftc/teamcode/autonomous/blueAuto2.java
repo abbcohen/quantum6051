@@ -3,27 +3,20 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.CRServo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-import java.util.Locale;
 
 @Autonomous(name = "blue 2", group = "Sensor")
 public class blueAuto2 extends LinearOpMode {
+    ElapsedTime clock = new ElapsedTime();
+
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
 
@@ -33,8 +26,8 @@ public class blueAuto2 extends LinearOpMode {
     private DcMotor BR = null;
     private DcMotor BL = null;
     private Servo JewelServo = null;
-    private Servo GlyphServo1 = null;
-    private Servo GlyphServo2 = null;
+    //    private Servo GlyphServoL = null;
+//    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
 
@@ -60,10 +53,10 @@ public class blueAuto2 extends LinearOpMode {
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
 
         //Servo initialization
-        GlyphServo1 = hardwareMap.get(Servo.class, "GlyphServo1");
-        GlyphServo1.setDirection(Servo.Direction.REVERSE);
-        GlyphServo2 = hardwareMap.get(Servo.class, "GlyphServo2");
-        GlyphServo2.setDirection(Servo.Direction.FORWARD);
+//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
+//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
+//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
+//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
 
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -81,6 +74,11 @@ public class blueAuto2 extends LinearOpMode {
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
 
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
         // wait for the start button to be pressed.
         waitForStart();
 
@@ -92,6 +90,8 @@ public class blueAuto2 extends LinearOpMode {
                 (int) (colorSensor.green() * SCALE_FACTOR),
                 (int) (colorSensor.blue() * SCALE_FACTOR),
                 hsvValues);
+
+        telemetry.update();
 
         //read color
         int red = 0;
@@ -115,25 +115,27 @@ public class blueAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5,.154);
+            moveTime(5,.18);
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6,.154);
+            moveTime(6,.18);
         }
 
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if(red>blue) {
-            moveTime(6,.154);
+            moveTime(6,.18);
         } else if(blue>red) {
-            moveTime(5,.154);
+            moveTime(5,.18);
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(3,1.761); //side
-        moveTime(1, .2); //back
+        moveTime(3,1.35); //side
+
+        //MOVE TO THE CORRECT COLUMN
+        moveTime(1, .81); //center value
 
         //turn to face cryptobox
         moveTime(6,.9075);
@@ -159,7 +161,6 @@ public class blueAuto2 extends LinearOpMode {
         //move back out
         moveTime(2,.25);
     }
-
     public void moveTime(int dir, double time) {
         double startTime = 0;
         if (dir == 0) {
@@ -226,44 +227,44 @@ public class blueAuto2 extends LinearOpMode {
 
     public void moveForward() {
         FR.setPower(moveSpeed);
-        FL.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
         BR.setPower(moveSpeed);
-        BL.setPower(moveSpeed);
+        BL.setPower(-moveSpeed);
     }
 
     public void moveBackward() {
         FR.setPower(-moveSpeed);
-        FL.setPower(-moveSpeed);
-        BR.setPower(-moveSpeed);
-        BL.setPower(-moveSpeed);
-    }
-
-    public void moveLeft() {
-        FR.setPower(moveSpeed);
-        FL.setPower(-moveSpeed);
+        FL.setPower(moveSpeed);
         BR.setPower(-moveSpeed);
         BL.setPower(moveSpeed);
     }
 
+    public void moveLeft() {
+        FR.setPower(moveSpeed);
+        FL.setPower(moveSpeed);
+        BR.setPower(-moveSpeed);
+        BL.setPower(-moveSpeed);
+    }
+
     public void moveRight() {
         FR.setPower(-moveSpeed);
-        FL.setPower(moveSpeed);
+        FL.setPower(-moveSpeed);
         BR.setPower(moveSpeed);
-        BL.setPower(-moveSpeed);
+        BL.setPower(moveSpeed);
     }
 
     public void turnClockwise() {
         FR.setPower(-turnSpeed);
-        FL.setPower(turnSpeed);
+        FL.setPower(-turnSpeed);
         BR.setPower(-turnSpeed);
-        BL.setPower(turnSpeed);
+        BL.setPower(-turnSpeed);
     }
 
     public void turnCounterClockwise() {
         FR.setPower(turnSpeed);
-        FL.setPower(-turnSpeed);
+        FL.setPower(turnSpeed);
         BR.setPower(turnSpeed);
-        BL.setPower(-turnSpeed);
+        BL.setPower(turnSpeed);
     }
 
     public void driveStop() {
@@ -271,5 +272,11 @@ public class blueAuto2 extends LinearOpMode {
         FL.setPower(0);
         BR.setPower(0);
         BL.setPower(0);
+    }
+
+    public void delay(int time) {
+        double delayStartTime = clock.milliseconds();
+        while (clock.milliseconds() - delayStartTime < time) {
+        }
     }
 }

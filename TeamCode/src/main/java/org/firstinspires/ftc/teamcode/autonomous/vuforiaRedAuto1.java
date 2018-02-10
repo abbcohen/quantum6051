@@ -6,6 +6,7 @@ import android.view.View;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 @Autonomous(name = "vu red 1", group = "Sensor")
+@Disabled //SO YOU CANNOT RUN IT
 public class vuforiaRedAuto1 extends LinearOpMode {
     ElapsedTime clock = new ElapsedTime();
     RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;
@@ -124,14 +126,14 @@ public class vuforiaRedAuto1 extends LinearOpMode {
             moveTime(5,.15);
         }
         JewelServo.setPosition(0);
-        delay(400);
+
         //turn back to initial position
         if(red>blue) {
             moveTime(5,.15);
         } else if(blue>red) {
             moveTime(6,.15);
         }
-        delay(400);
+
         //MOVE TO THE CORRECT COLUMN
 //        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
         moveTime(4, 1.6); //fill w center value
@@ -140,7 +142,7 @@ public class vuforiaRedAuto1 extends LinearOpMode {
 //        } else if (column == RelicRecoveryVuMark.RIGHT) {
 //            moveTime(4, 0);//fill w right value
 //        } else moveTime(4,1.761);
-        delay(400);
+
         //turn to face cryptobox
         moveTime(5, 1.614);
 
