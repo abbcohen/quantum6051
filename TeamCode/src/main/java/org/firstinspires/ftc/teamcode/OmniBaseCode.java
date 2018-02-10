@@ -29,11 +29,14 @@ public class OmniBaseCode extends OpMode {
     private Servo RelicFingerServo = null;
 
     //declare variables
-    private double moveSpeed = .75;
+    private double moveSpeed = .9;
     private double relicSpeed = .7;
     private double liftSpeed = 1;
     private boolean slomo = false;
-    private boolean read = false;
+    private boolean readhand = false;
+    private boolean readwrist = false;
+    private boolean readframe = false;
+    private boolean defaultFrame = true;
 
 
     //Code to run ONCE when the driver hits INIT
@@ -138,7 +141,15 @@ public class OmniBaseCode extends OpMode {
         if (gamepad1.right_bumper) slomo = true;
         else slomo = false;
         if (slomo) moveSpeed = .4;
-        else moveSpeed = .75;
+        else moveSpeed = .9;
+
+        //flip reference frame
+        if (gamepad1.y) {
+            if (!readframe) {
+                readframe = true;
+                defaultFrame=!defaultFrame;
+            }
+        } else readframe = false;
 
         //driving (omni wheel magic)
         double gamepad1LeftY = -gamepad1.left_stick_y;
@@ -160,10 +171,17 @@ public class OmniBaseCode extends OpMode {
             backLeft = 0;
         }
         //scale the omni magic speeds to the speeds we like
-        FR.setPower(frontRight * moveSpeed);
-        FL.setPower(frontLeft * moveSpeed);
-        BR.setPower(backRight * moveSpeed);
-        BL.setPower(backLeft * moveSpeed);
+        if(defaultFrame) {
+            FR.setPower(frontRight * moveSpeed);
+            FL.setPower(frontLeft * moveSpeed);
+            BR.setPower(backRight * moveSpeed);
+            BL.setPower(backLeft * moveSpeed);
+        }else{
+            FR.setPower(backRight * moveSpeed);
+            FL.setPower(frontRight * moveSpeed);
+            BR.setPower(backLeft * moveSpeed);
+            BL.setPower(frontLeft * moveSpeed);
+        }
 
         //stop driving
         if (gamepad1.left_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0)
@@ -176,11 +194,11 @@ public class OmniBaseCode extends OpMode {
 
         //grabber
         if (gamepad2.dpad_down) { //in
-            GlyphServoL.setPosition(.17);
-            GlyphServoR.setPosition(.2);
+            GlyphServoL.setPosition(.2);
+            GlyphServoR.setPosition(.23);
         } else if (gamepad2.dpad_up) { //out
-            GlyphServoL.setPosition(.275);
-            GlyphServoR.setPosition(.28);
+            GlyphServoL.setPosition(.375);
+            GlyphServoR.setPosition(.375);
         } else if (gamepad2.dpad_left) { //left in
             GlyphServoL.setPosition(.25);
             GlyphServoR.setPosition(.4);
@@ -188,12 +206,12 @@ public class OmniBaseCode extends OpMode {
             GlyphServoL.setPosition(.4);
             GlyphServoR.setPosition(.27);
         } else { //out
-            GlyphServoL.setPosition(.375);
-            GlyphServoR.setPosition(.375);
+            GlyphServoL.setPosition(.275);
+            GlyphServoR.setPosition(.28);
         }
 
         //glyph pusher plate
-        if (gamepad2.a) PushServo.setPosition(.3);//out (up)
+        if (gamepad2.right_trigger>.2) PushServo.setPosition(.3);//out (up)
         else PushServo.setPosition(.7); // in (down)
 
         //lift
@@ -205,16 +223,18 @@ public class OmniBaseCode extends OpMode {
         if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
         else relicArmStop();
         if (gamepad2.x) {
-            if (!read) {
-                read = true;
+            if (!readhand) {
+                readhand = true;
                 RelicHandClose();
             }
-        }else if (gamepad2.b) {
-            if (!read) {
-                read = true;
+        }else readhand=false;
+
+        if (gamepad2.y) {
+            if (!readwrist) {
+                readwrist = true;
                 FlipRelicWrist();
                 }
-        } else read = false;
+        } else readwrist = false;
 
             //Keep the jewel servo up
             JewelServo.setPosition(.5);

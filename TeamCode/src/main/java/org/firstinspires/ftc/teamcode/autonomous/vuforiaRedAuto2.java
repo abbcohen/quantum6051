@@ -145,23 +145,22 @@ public class vuforiaRedAuto2 extends LinearOpMode {
 
         //MOVE TO SAFE ZONE
 
-        moveTime(4, 1.35); //side
+        moveTime(4, 1.2); //side
 
         //MOVE TO THE CORRECT COLUMN
-        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, .43); //center value
-        } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, .51); // left value
-        } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(1, 0); //right value
-        }
-        moveTime(1, .4);
+//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+            moveTime(1, .81); //center value
+//        } else if (column == RelicRecoveryVuMark.LEFT) {
+//            moveTime(1, .91); // left value
+//        } else if (column == RelicRecoveryVuMark.RIGHT) {
+//            moveTime(1, .4); //right value
+//        }
 
         //turn to face cryptobox
         moveTime(5, .908);
 
         //move forward
-        moveTime(1, 1.2);
+        moveTime(1, 1.34);
 
         //pause
         moveTime(0, 1);

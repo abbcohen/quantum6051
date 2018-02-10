@@ -131,21 +131,25 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
 
         JewelServo.setPosition(0);
 
+
         //turn back to initial position
         if(red>blue) {
             moveTime(6,.154);
-        } else if(blue>red) {
+        } else {
             moveTime(5,.154);
         }
 
+
         //MOVE TO THE CORRECT COLUMN
-        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(3, 0); //fill w center value
-        } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(3, 0); //fill w left value
-        } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(3, 0);//fill w right value
-        } else moveTime(3,1.763);
+//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+            moveTime(3, 1.6); //fill w center value
+//        } else if (column == RelicRecoveryVuMark.LEFT) {
+//            moveTime(3, 0); //fill w left value
+//        } else if (column == RelicRecoveryVuMark.RIGHT) {
+//            moveTime(3, 0);//fill w right value
+//        } else moveTime(3,1.763);
+
+        
 
         //turn to face cryptobox
         moveTime(6,1.61);

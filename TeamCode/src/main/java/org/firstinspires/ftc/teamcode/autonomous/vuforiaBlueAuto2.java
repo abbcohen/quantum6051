@@ -122,33 +122,33 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5,.154);
+            moveTime(5,.18);
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6,.154);
+            moveTime(6,.18);
         }
 
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if(red>blue) {
-            moveTime(6,.154);
+            moveTime(6,.18);
         } else if(blue>red) {
-            moveTime(5,.154);
+            moveTime(5,.18);
         }
 
         //MOVE TO SAFE ZONE
-        moveTime(3,1.761); //side
+        moveTime(3,1.35); //side
 
         //MOVE TO THE CORRECT COLUMN
-        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
-            moveTime(1, 0); //center value
-        } else if (column == RelicRecoveryVuMark.LEFT) {
-            moveTime(1, 0); // left value
-        } else if (column == RelicRecoveryVuMark.RIGHT) {
-            moveTime(1, 0); //right value
-        } moveTime(1, .86);
+//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+            moveTime(1, .81); //center value
+//        } else if (column == RelicRecoveryVuMark.LEFT) {
+//            moveTime(1, .38); // left value
+//        } else if (column == RelicRecoveryVuMark.RIGHT) {
+//            moveTime(1,.58); //right value
+//        }
 
         //turn to face cryptobox
         moveTime(6,.9075);
