@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.view.View;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -12,10 +8,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import java.util.Locale;
+
 
 @Autonomous(name = "blue 2", group = "Sensor")
 public class blueAuto2 extends LinearOpMode {
     ElapsedTime clock = new ElapsedTime();
+
+    // The IMU sensor object
+    BNO055IMU imu;
 
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
@@ -74,10 +81,23 @@ public class blueAuto2 extends LinearOpMode {
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
 
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+        // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
 
         // wait for the start button to be pressed.
         waitForStart();
@@ -111,24 +131,23 @@ public class blueAuto2 extends LinearOpMode {
         telemetry.addData("BLUE", blue);
 
         //knock off jewel
-        double jewelturntime = getRuntime();
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(5,.18);
+            turn(15, "clockwise");
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            moveTime(6,.18);
+            turn(15, "counterclockwise");
         }
 
         JewelServo.setPosition(0);
 
         //turn back to initial position
-        if(red>blue) {
-            moveTime(6,.18);
-        } else if(blue>red) {
-            moveTime(5,.18);
+        if (red > blue) {
+            turn(15, "counterclockwise");
+        } else if (blue > red) {
+            turn(15, "clockwise");
         }
 
         //MOVE TO SAFE ZONE
@@ -138,7 +157,7 @@ public class blueAuto2 extends LinearOpMode {
         moveTime(1, .81); //center value
 
         //turn to face cryptobox
-        moveTime(6,.9075);
+        turn(90, "counterclockwise");
 
         //move forward
         moveTime(1,1.2);
@@ -278,5 +297,54 @@ public class blueAuto2 extends LinearOpMode {
         double delayStartTime = clock.milliseconds();
         while (clock.milliseconds() - delayStartTime < time) {
         }
+    }
+
+    double angle() {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+    }
+
+    public void turn(double angle, String direction) {
+        double startingAngle = angle();
+        while (getAngleDiff(startingAngle, angle()) < angle) {
+            telemetry.addData("not working", "plz");
+            telemetry.addData("angleDiff", getAngleDiff(startingAngle, angle()));
+            telemetry.addData("startingAngle", startingAngle);
+            if (direction=="counterclockwise") {
+                if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
+                    turnCounterClockwise();
+                } else {
+                    driveStop();
+                }
+            }else{
+                if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
+                    turnClockwise();
+                } else {
+                    driveStop();
+                }
+            }
+            telemetry.update();
+        }
+    }
+
+
+    public double getAngleDiff(double angle1, double angle2) {
+        if(Math.abs(angle1 - angle2) < 180.0)
+            return Math.abs(angle1-angle2);
+        else if(angle1 > angle2) {
+            angle1 -= 360;
+            return Math.abs(angle2-angle1);
+        } else {
+            angle2 -= 360;
+            return Math.abs(angle1-angle2);
+        }
+    }
+
+    String formatAngle(AngleUnit angleUnit, double angle) {
+        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+    }
+
+    String formatDegrees(double degrees){
+        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 }

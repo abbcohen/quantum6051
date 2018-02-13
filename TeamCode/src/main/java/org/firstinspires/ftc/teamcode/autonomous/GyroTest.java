@@ -239,7 +239,6 @@ public class GyroTest extends LinearOpMode {ElapsedTime clock = new ElapsedTime(
         else if(angle1 > angle2)
         {
             angle1 -= 360;
-            //hackerman
             return Math.abs(angle2-angle1);
         }
         else

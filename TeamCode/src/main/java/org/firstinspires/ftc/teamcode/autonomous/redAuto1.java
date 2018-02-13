@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.view.View;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -319,14 +314,13 @@ public class redAuto1 extends LinearOpMode {
             telemetry.addData("not working", "plz");
             telemetry.addData("angleDiff", getAngleDiff(startingAngle, angle()));
             telemetry.addData("startingAngle", startingAngle);
-            if (direction=="clockwise") {
+            if (direction=="counterclockwise") {
                 if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
-                    turnClockwise();
+                    turnCounterClockwise();
                 } else {
                     driveStop();
                 }
-            }
-            if (direction=="counterclockwise") {
+            }else{
                 if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
                     turnClockwise();
                 } else {
@@ -336,6 +330,7 @@ public class redAuto1 extends LinearOpMode {
             telemetry.update();
         }
     }
+
 
     public double getAngleDiff(double angle1, double angle2) {
         if(Math.abs(angle1 - angle2) < 180.0)
