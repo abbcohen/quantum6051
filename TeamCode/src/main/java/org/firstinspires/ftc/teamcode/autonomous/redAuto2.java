@@ -134,6 +134,8 @@ public class redAuto2 extends LinearOpMode {
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
 
+        double initialAngle = angle();
+
         //knock off jewel
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
@@ -144,6 +146,7 @@ public class redAuto2 extends LinearOpMode {
             telemetry.update();
             turn(15, "clockwise");
         }
+
         JewelServo.setPosition(0);
 
         //turn back to initial position
@@ -153,8 +156,14 @@ public class redAuto2 extends LinearOpMode {
             turn(15, "counterclockwise");
         }
 
-        //MOVE TO THE CORRECT COLUMN
-        moveTime(4, 1.4);
+        //Move off the stone
+        moveTime(4,.4);
+
+        //correct position
+//        correctPosition(initialAngle);
+
+        //MOVE TO THE CRYPTOBOX
+        moveTime(4, 1);
 
         //turn to face cryptobox
         moveTime(5, 1.78);
@@ -330,6 +339,18 @@ public class redAuto2 extends LinearOpMode {
         }
     }
 
+    public void correctPosition(double initialAngle) {
+        while (getAngleDiff(initialAngle, angle()) > 0) {
+            telemetry.addData("not working", "plz");
+            telemetry.addData("angleDiff", getAngleDiff(initialAngle, angle()));
+            telemetry.addData("startingAngle", initialAngle);
+            if (angle() - getAngleDiff(initialAngle, angle()) < 20.0) {
+                turnCounterClockwise();
+            } else {
+                driveStop();
+            }
+        }
+    }
 
     public double getAngleDiff(double angle1, double angle2) {
         if(Math.abs(angle1 - angle2) < 180.0)

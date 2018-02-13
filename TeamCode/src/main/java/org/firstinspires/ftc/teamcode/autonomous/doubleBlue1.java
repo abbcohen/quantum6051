@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.view.View;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -135,6 +132,8 @@ public class doubleBlue1 extends LinearOpMode {
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
 
+        double initialAngle = angle();
+
         //knock off jewel
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
@@ -155,9 +154,14 @@ public class doubleBlue1 extends LinearOpMode {
             turn(15, "clockwise");
         }
 
+        //Move off the stone
+        moveTime(3,.4);
+
+        //correct position
+//        correctPosition(initialAngle);
 
         //MOVE TO THE CORRECT COLUMN
-        moveTime(3, 1.6);
+        moveTime(3, 1);
 
         //turn to face cryptobox
         turn(180,"clockwise");
@@ -322,6 +326,15 @@ public class doubleBlue1 extends LinearOpMode {
         BL.setPower(-turnSpeed);
     }
 
+    public void turnSpeed(double speed) {
+        if(speed > .3) speed = 0.3;
+        if(speed > -.3) speed = -0.3;
+        FR.setPower(speed);
+        FL.setPower(speed);
+        BR.setPower(speed);
+        BL.setPower(speed);
+    }
+
     public void turnCounterClockwise() {
         FR.setPower(turnSpeed);
         FL.setPower(turnSpeed);
@@ -353,7 +366,7 @@ public class doubleBlue1 extends LinearOpMode {
             telemetry.addData("angleDiff", getAngleDiff(startingAngle, angle()));
             telemetry.addData("startingAngle", startingAngle);
             if (direction=="counterclockwise") {
-                if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
+                if (getAngleDiff(startingAngle, angle())-angle() < 20.0) {
                     turnCounterClockwise();
                 } else {
                     driveStop();
@@ -366,6 +379,13 @@ public class doubleBlue1 extends LinearOpMode {
                 }
             }
             telemetry.update();
+        }
+    }
+
+    public void ryanturn(double angle){
+        double startingAngle = angle();
+        while (getAngleDiff(startingAngle, angle()) < angle) {
+
         }
     }
 
@@ -388,5 +408,17 @@ public class doubleBlue1 extends LinearOpMode {
 
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+    }
+    public void correctPosition(double initialAngle) {
+        while (getAngleDiff(initialAngle, angle()) > 0) {
+            telemetry.addData("not working", "plz");
+            telemetry.addData("angleDiff", getAngleDiff(initialAngle, angle()));
+            telemetry.addData("startingAngle", initialAngle);
+            if (angle() - getAngleDiff(initialAngle, angle()) < 20.0) {
+                turnCounterClockwise();
+            } else {
+                driveStop();
+            }
+        }
     }
 }

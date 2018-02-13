@@ -43,7 +43,7 @@ public class doubleRed1 extends LinearOpMode {
     private DcMotor GlyphWheel2 = null;
 
     private double moveSpeed = .25;
-    private double turnSpeed = .15;
+    private double turnSpeed = .2;
 
     @Override
     public void runOpMode() {
@@ -139,31 +139,38 @@ public class doubleRed1 extends LinearOpMode {
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
 
+        double initialAngle = angle();
+
         //knock off jewel
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            turn(15, "counterclockwise");
+            turn(10, "counterclockwise");
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            turn(15, "clockwise");
+            turn(10, "clockwise");
         }
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if (red > blue) {
-            turn(15, "clockwise");
+            turn(10, "clockwise");
         } else if (blue > red) {
-            turn(15, "counterclockwise");
+            turn(10, "counterclockwise");
         }
 
+        //Move off the stone
+        moveTime(4,.4);
+
+        //correct position
+//        correctPosition(initialAngle);
 
         //MOVE TO THE CORRECT COLUMN
-        moveTime(4, 1.4);
+        moveTime(4, 1);
 
         //turn to face cryptobox
-       turn(180,"counterclockwise");
+       turn(180,"clockwise");
 
         //move forward
         moveTime(1, 1.2);
@@ -202,9 +209,9 @@ public class doubleRed1 extends LinearOpMode {
         moveTime(1, 4);
 
         //turn back to a new column
-        turn(10, "counterclockwise");
+        turn(10, "clockwise");
 
-        //drive to the wall
+        //drive to the wall`
         moveTime(1, .8);
 
         //release glyph
@@ -387,5 +394,17 @@ public class doubleRed1 extends LinearOpMode {
 
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+    }
+    public void correctPosition(double initialAngle) {
+        while (getAngleDiff(initialAngle, angle()) > 0) {
+            telemetry.addData("not working", "plz");
+            telemetry.addData("angleDiff", getAngleDiff(initialAngle, angle()));
+            telemetry.addData("startingAngle", initialAngle);
+            if (angle() - getAngleDiff(initialAngle, angle()) < 20.0) {
+                turnCounterClockwise();
+            } else {
+                driveStop();
+            }
+        }
     }
 }

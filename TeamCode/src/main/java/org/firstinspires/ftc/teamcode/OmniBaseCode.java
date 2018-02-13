@@ -33,6 +33,7 @@ public class OmniBaseCode extends OpMode {
     private double relicSpeed = .7;
     private double liftSpeed = 1;
     private boolean slomo = false;
+    private boolean ultraslomo = false;
     private boolean readhand = false;
     private boolean readwrist = false;
     private boolean readframe = false;
@@ -143,6 +144,11 @@ public class OmniBaseCode extends OpMode {
         if (slomo) moveSpeed = .4;
         else moveSpeed = .9;
 
+        //ultra slowdo
+        if (gamepad1.right_trigger > 0.5)  ultraslomo = true;
+        else ultraslomo = false;
+        if(ultraslomo) moveSpeed = .2;
+        else moveSpeed = .9;
         //flip reference frame
         if (gamepad1.y) {
             if (!readframe) {

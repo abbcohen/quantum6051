@@ -91,7 +91,7 @@ public class GyroTest extends LinearOpMode {ElapsedTime clock = new ElapsedTime(
     private DcMotor GlyphWheel2 = null;
 
     private double moveSpeed = .25;
-    private double turnSpeed = .15;
+    private double turnSpeed = .2;
 
     @Override
     public void runOpMode() {
@@ -138,6 +138,7 @@ public class GyroTest extends LinearOpMode {ElapsedTime clock = new ElapsedTime(
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
+        turn(90);
 
 
 

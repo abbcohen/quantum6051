@@ -130,6 +130,8 @@ public class blueAuto1 extends LinearOpMode {
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
 
+        double initialAngle = angle();
+
         //knock off jewel
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
@@ -149,9 +151,14 @@ public class blueAuto1 extends LinearOpMode {
             turn(15, "clockwise");
         }
 
+        //Move off the stone
+        moveTime(3,.4);
+
+        //correct position
+//        correctPosition(initialAngle);
 
         //MOVE TO THE CORRECT COLUMN
-        moveTime(3, 1.6);
+        moveTime(3, 1);
 
         //turn to face cryptobox
         turn(180,"clockwise");
@@ -343,5 +350,17 @@ public class blueAuto1 extends LinearOpMode {
 
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+    }
+    public void correctPosition(double initialAngle) {
+        while (getAngleDiff(initialAngle, angle()) > 0) {
+            telemetry.addData("not working", "plz");
+            telemetry.addData("angleDiff", getAngleDiff(initialAngle, angle()));
+            telemetry.addData("startingAngle", initialAngle);
+            if (angle() - getAngleDiff(initialAngle, angle()) < 20.0) {
+                turnCounterClockwise();
+            } else {
+                driveStop();
+            }
+        }
     }
 }
