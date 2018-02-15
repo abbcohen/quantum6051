@@ -143,19 +143,19 @@ public class OmniBaseCode extends OpMode {
         else slomo = false;
         if (slomo) moveSpeed = .4;
         else moveSpeed = .9;
-
-        //ultra slowdo
-        if (gamepad1.right_trigger > 0.5)  ultraslomo = true;
-        else ultraslomo = false;
-        if(ultraslomo) moveSpeed = .2;
-        else moveSpeed = .9;
-        //flip reference frame
-        if (gamepad1.y) {
-            if (!readframe) {
-                readframe = true;
-                defaultFrame=!defaultFrame;
-            }
-        } else readframe = false;
+//
+//        //ultra slowdo
+//        if (gamepad1.right_trigger > 0.5)  ultraslomo = true;
+//        else ultraslomo = false;
+//        if(ultraslomo) moveSpeed = .2;
+//        else moveSpeed = .9;
+//        //flip reference frame
+//        if (gamepad1.y) {
+//            if (!readframe) {
+//                readframe = true;
+//                defaultFrame=!defaultFrame;
+//            }
+//        } else readframe = false;
 
         //driving (omni wheel magic)
         double gamepad1LeftY = -gamepad1.left_stick_y;

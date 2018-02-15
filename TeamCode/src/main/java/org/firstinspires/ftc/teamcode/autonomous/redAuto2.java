@@ -140,33 +140,41 @@ public class redAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            turn(15, "counterclockwise");
+            turn(5, "counterclockwise");
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            turn(15, "clockwise");
+            turn(5, "clockwise");
         }
+        telemetry.addData("checkpoint", "knocked");
+        telemetry.update();
 
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if (red > blue) {
-            turn(15, "clockwise");
+            turn(5, "clockwise");
         } else if (blue > red) {
-            turn(15, "counterclockwise");
+            turn(5, "counterclockwise");
         }
+        telemetry.addData("checkpoint", "turn back");
+        telemetry.update();
+        moveTime(0,1);
 
-        //Move off the stone
-        moveTime(4,.4);
+        //Move to the box
+        moveTime(4,1.4);
 
-        //correct position
-//        correctPosition(initialAngle);
-
-        //MOVE TO THE CRYPTOBOX
-        moveTime(4, 1);
+        telemetry.addData("checkpoint", "at the box");
+        telemetry.update();
+        moveTime(0,1);
 
         //turn to face cryptobox
-        moveTime(5, 1.78);
+        turn(90, "clockwise");
+
+        moveTime(0,1);
+
+        telemetry.addData("checkpoint", "facing the box");
+        telemetry.update();
 
         //move forward
         moveTime(1, 1.2);
@@ -188,8 +196,6 @@ public class redAuto2 extends LinearOpMode {
 
         //move back out
         moveTime(2, .7);
-
-
     }
 
     public void moveTime(int dir, double time) {
@@ -337,6 +343,7 @@ public class redAuto2 extends LinearOpMode {
             }
             telemetry.update();
         }
+        driveStop();
     }
 
     public void correctPosition(double initialAngle) {

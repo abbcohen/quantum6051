@@ -145,44 +145,45 @@ public class doubleRed1 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            turn(10, "counterclockwise");
+            turn(5, "counterclockwise");
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            turn(10, "clockwise");
+            turn(5, "clockwise");
         }
+        telemetry.addData("checkpoint", "knocked");
+        telemetry.update();
+
         JewelServo.setPosition(0);
+        moveTime(0,1);
 
         //turn back to initial position
         if (red > blue) {
-            turn(10, "clockwise");
+            turn(5, "clockwise");
         } else if (blue > red) {
-            turn(10, "counterclockwise");
+            turn(5, "counterclockwise");
         }
+        telemetry.addData("checkpoint", "turn back");
+        telemetry.update();
+        moveTime(0,1);
 
         //Move off the stone
-        moveTime(4,.4);
+        moveTime(4,2);
 
-        //correct position
-//        correctPosition(initialAngle);
+        telemetry.addData("checkpoint", "at the box");
+        telemetry.update();
 
-        //MOVE TO THE CORRECT COLUMN
-        moveTime(4, 1);
+        moveTime(0,1);
 
         //turn to face cryptobox
-       turn(180,"clockwise");
+        turn(90, "clockwise");
+        turn(90, "clockwise");
 
         //move forward
         moveTime(1, 1.2);
 
-        //pause
-        moveTime(0, 1);
-
         //release glyph
-        moveTime(8, .28);
-
-        //pause
-        moveTime(0, 1);
+        glyphWheels(-1);
 
         //move back
         moveTime(2, .25);
@@ -194,7 +195,8 @@ public class doubleRed1 extends LinearOpMode {
         moveTime(2, 1);
 
         //turn to the stack
-        turn(180, "clockwise");
+        turn(90, "clockwise");
+        turn(90, "clockwise");
 
         //turn on the intake
         glyphWheels(1);
@@ -203,7 +205,8 @@ public class doubleRed1 extends LinearOpMode {
         moveTime(1, 4);
 
         //turn back to the box
-        turn(180, "clockwise");
+        turn(90, "clockwise");
+        turn(90, "clockwise");
 
         //drive to the wall
         moveTime(1, 4);
@@ -374,6 +377,7 @@ public class doubleRed1 extends LinearOpMode {
             }
             telemetry.update();
         }
+        driveStop();
     }
 
     public double getAngleDiff(double angle1, double angle2) {
