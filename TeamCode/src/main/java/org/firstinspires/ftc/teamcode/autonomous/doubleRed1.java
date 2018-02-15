@@ -338,6 +338,12 @@ public class doubleRed1 extends LinearOpMode {
         BR.setPower(turnSpeed);
         BL.setPower(turnSpeed);
     }
+    public void turnSpeed(double speed) {
+        FR.setPower(speed);
+        FL.setPower(speed);
+        BR.setPower(speed);
+        BL.setPower(speed);
+    }
 
     public void driveStop() {
         FR.setPower(0);
@@ -378,6 +384,29 @@ public class doubleRed1 extends LinearOpMode {
             telemetry.update();
         }
         driveStop();
+    }
+
+    public void otherturn(double angle){
+        double startingAngle = angle();
+        while(getAngleDiff(startingAngle,angle())<angle) {
+            telemetry.addData("not working", "plz");
+            telemetry.addData("angleDiff", getAngleDiff(startingAngle, angle()));
+            telemetry.addData("startingAngle", startingAngle);
+            if (angle>0) {
+                if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
+                    turnCounterClockwise();
+                } else {
+                    driveStop();
+                }
+            }else{
+                if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
+                    turnClockwise();
+                } else {
+                    driveStop();
+                }
+            }
+            telemetry.update();
+        }
     }
 
     public double getAngleDiff(double angle1, double angle2) {
