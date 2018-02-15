@@ -136,30 +136,28 @@ public class blueAuto2 extends LinearOpMode {
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();
-            turn(15, "clockwise");
+            turn(5, "clockwise");
         } else {
             telemetry.addData("Blue Wins!", colorSensor.red());
             telemetry.update();
-            turn(15, "counterclockwise");
+            turn(5, "counterclockwise");
         }
 
         JewelServo.setPosition(0);
 
         //turn back to initial position
         if (red > blue) {
-            turn(15, "counterclockwise");
+            turn(5, "counterclockwise");
         } else if (blue > red) {
-            turn(15, "clockwise");
+            turn(5, "clockwise");
         }
 
+        telemetry.addData("checkpoint", "turn back");
+        telemetry.update();
+        moveTime(0,1);
+
         //Move off the stone
-        moveTime(3,.4);
-
-        //correct position
-//        correctPosition(initialAngle);
-
-        //MOVE TO SAFE ZONE
-        moveTime(3,.95); //side
+        moveTime(3,1.4);
 
         //MOVE TO THE CORRECT COLUMN
         moveTime(1, .81); //center value
@@ -333,27 +331,8 @@ public class blueAuto2 extends LinearOpMode {
             }
             telemetry.update();
         }
+        driveStop();
     }
-
-//    public void turn(double angle, String direction) {
-//        telemetry.addData("test", "test");
-//        double startingAngle = angle();
-//        while (getAngleDiff(startingAngle, angle()) < angle) {
-//            telemetry.addData("not working", "plz");
-//            telemetry.addData("angleDiff", getAngleDiff(startingAngle, angle()));
-//            telemetry.addData("startingAngle", startingAngle);
-//            if (angle() - getAngleDiff(startingAngle, angle()) < 20.0) {
-//                drive((power / Math.abs(power))*.15, 0, 0);
-//            } else {
-//                driveStop();
-//            }
-//            telemetry.update();
-//        }
-//        FL.setPower(0);
-//        BL.setPower(0);
-//        FR.setPower(0);
-//        BR.setPower(0);
-//    }
 
     public void correctPosition(double initialAngle) {
         while (getAngleDiff(initialAngle, angle()) > 0) {
@@ -387,5 +366,4 @@ public class blueAuto2 extends LinearOpMode {
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
-
 }

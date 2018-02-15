@@ -19,8 +19,8 @@ public class OmniBaseCode extends OpMode {
     private DcMotor BL = null;
     private DcMotor LiftMotor = null;
     private DcMotor RelicMotor = null;
-    private DcMotor GlyphWheel1 = null;
-    private DcMotor GlyphWheel2 = null;
+//    private DcMotor GlyphWheel1 = null;
+//    private DcMotor GlyphWheel2 = null;
     private Servo GlyphServoL = null;
     private Servo GlyphServoR = null;
     private Servo JewelServo = null;
@@ -52,8 +52,8 @@ public class OmniBaseCode extends OpMode {
         BL = hardwareMap.get(DcMotor.class, "BL");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         RelicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
-        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
-        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+//        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
+//        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
         GlyphServoL = hardwareMap.get(Servo.class, "GlyphServoL");
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
@@ -66,8 +66,8 @@ public class OmniBaseCode extends OpMode {
         BL.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
-        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
-        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+//        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
+//        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
         GlyphServoL.setDirection(Servo.Direction.REVERSE);
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
         JewelServo.setDirection(Servo.Direction.REVERSE);
@@ -87,10 +87,10 @@ public class OmniBaseCode extends OpMode {
         BL.setPower(0);
     }
 
-    public void glyphWheels(double speed) {
-        GlyphWheel1.setPower(speed);
-        GlyphWheel2.setPower(speed);
-    }
+//    public void glyphWheels(double speed) {
+//        GlyphWheel1.setPower(speed);
+//        GlyphWheel2.setPower(speed);
+//    }
 
     public void liftMove() {
         LiftMotor.setPower(gamepad2.right_stick_y * liftSpeed);
@@ -193,10 +193,10 @@ public class OmniBaseCode extends OpMode {
         if (gamepad1.left_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0)
             stopDriving();
 
-        //glyph intake wheels
-        if (gamepad2.right_bumper) glyphWheels(1); //pull glyph in
-        else if (gamepad2.left_bumper) glyphWheels(-1); //push glyph out
-        else glyphWheels(0); //stop glyph wheels
+//        //glyph intake wheels
+//        if (gamepad2.right_bumper) glyphWheels(1); //pull glyph in
+//        else if (gamepad2.left_bumper) glyphWheels(-1); //push glyph out
+//        else glyphWheels(0); //stop glyph wheels
 
         //grabber
         if (gamepad2.dpad_down) { //in
