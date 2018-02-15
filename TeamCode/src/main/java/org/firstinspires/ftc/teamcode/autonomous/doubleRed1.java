@@ -27,10 +27,8 @@ public class doubleRed1 extends LinearOpMode {
     BNO055IMU imu;
 
     ElapsedTime clock = new ElapsedTime();
-
     ColorSensor colorSensor;
     DistanceSensor sensorDistance;
-
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor FR = null;
     private DcMotor FL = null;
@@ -41,35 +39,13 @@ public class doubleRed1 extends LinearOpMode {
 //    private Servo GlyphServoR = null;
     private DcMotor GlyphWheel1 = null;
     private DcMotor GlyphWheel2 = null;
-
     private double moveSpeed = .25;
     private double turnSpeed = .2;
 
     @Override
     public void runOpMode() {
-        FR = hardwareMap.get(DcMotor.class, "FR");
-        FL = hardwareMap.get(DcMotor.class, "FL");
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
-        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
-        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
-        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
-
-        JewelServo.setDirection(Servo.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        BL.setDirection(DcMotor.Direction.REVERSE);
-        BR.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.REVERSE);
-        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
-        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
-
-        //Servo initialization
-//        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
-//        GlyphServoL.setDirection(Servo.Direction.REVERSE);
-//        GlyphServoR = hardwareMap.get(Servo.class, "GlyphServo2");
-//        GlyphServoR.setDirection(Servo.Direction.FORWARD);
-
-
+        setupHardware();
+        setupSoftware();
         // get a reference to the color sensor.
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
@@ -85,24 +61,6 @@ public class doubleRed1 extends LinearOpMode {
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
-
-
-        // Set up the parameters with which we will use our IMU. Note that integration
-        // algorithm here just reports accelerations to the logcat log; it doesn't actually
-        // provide positional information.
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
 
 
         // wait for the start button to be pressed.
@@ -344,6 +302,23 @@ public class doubleRed1 extends LinearOpMode {
         BR.setPower(speed);
         BL.setPower(speed);
     }
+    public void moveDirection(int angle){
+        double[] array = new double[4];
+        int largest = 0;
+        array[0] = Math.cos(Math.toRadians(angle+135)); //FL
+        array[1] = Math.cos(Math.toRadians(angle+135+90)); //BL
+        array[2] = Math.cos(Math.toRadians(angle+135+180)); //BR
+        array[3] = Math.cos(Math.toRadians(angle+135+270)); //FR
+        //Following lines scale
+        for(int a = 1; a < 4; a++) if(array[a]>array[a-1]) largest = a;
+        double scale = 1/array[largest];
+        for(int a = 0; a < 4; a++) array[a] = array[a]*scale*moveSpeed;
+        //Set Power
+        FL.setPower(array[0]);
+        BL.setPower(array[1]);
+        BR.setPower(array[2]);
+        FR.setPower(array[3]);
+    }
 
     public void driveStop() {
         FR.setPower(0);
@@ -439,5 +414,43 @@ public class doubleRed1 extends LinearOpMode {
                 driveStop();
             }
         }
+    }
+    public void setupSoftware(){
+        // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+
+    }
+    public void setupHardware(){
+        FR = hardwareMap.get(DcMotor.class, "FR");
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        BR = hardwareMap.get(DcMotor.class, "BR");
+        BL = hardwareMap.get(DcMotor.class, "BL");
+        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
+        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
+        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+
+        JewelServo.setDirection(Servo.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.REVERSE);
+        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+
     }
 }
