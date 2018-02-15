@@ -302,6 +302,23 @@ public class doubleRed1 extends LinearOpMode {
         BR.setPower(speed);
         BL.setPower(speed);
     }
+    public void moveDirection(int angle){
+        double[] array = new double[4];
+        int largest = 0;
+        array[0] = Math.cos(Math.toRadians(angle+135)); //FL
+        array[1] = Math.cos(Math.toRadians(angle+135+90)); //BL
+        array[2] = Math.cos(Math.toRadians(angle+135+180)); //BR
+        array[3] = Math.cos(Math.toRadians(angle+135+270)); //FR
+        //Following lines scale
+        for(int a = 1; a < 4; a++) if(array[a]>array[a-1]) largest = a;
+        double scale = 1/array[largest];
+        for(int a = 0; a < 4; a++) array[a] = array[a]*scale*moveSpeed;
+        //Set Power
+        FL.setPower(array[0]);
+        BL.setPower(array[1]);
+        BR.setPower(array[2]);
+        FR.setPower(array[3]);
+    }
 
     public void driveStop() {
         FR.setPower(0);
