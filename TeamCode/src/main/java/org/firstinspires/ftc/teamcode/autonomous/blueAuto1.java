@@ -4,6 +4,7 @@ import android.graphics.Color;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.Locale;
 
 @Autonomous(name = "blue 1", group = "Sensor")
+@Disabled //SO YOU CANNOT RUN IT
 public class blueAuto1 extends LinearOpMode {
     // The IMU sensor object
     BNO055IMU imu;

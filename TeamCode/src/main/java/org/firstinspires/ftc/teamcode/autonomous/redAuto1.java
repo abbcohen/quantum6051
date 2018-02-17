@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,8 +20,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.Locale;
-
 @Autonomous(name = "red 1", group = "Sensor")
+@Disabled //SO YOU CANNOT RUN IT
 public class redAuto1 extends LinearOpMode {
     // The IMU sensor object
     BNO055IMU imu;
@@ -182,10 +183,7 @@ public class redAuto1 extends LinearOpMode {
         moveTime(1, 1.2);
 
         //release glyph
-        moveTime(8, .28);
-
-        //pause
-        moveTime(0, 1);
+        glyphWheels(-1);
 
         //move back
         moveTime(2, .25);

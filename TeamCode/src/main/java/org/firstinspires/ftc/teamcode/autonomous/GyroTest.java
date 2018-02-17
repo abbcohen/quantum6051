@@ -60,6 +60,7 @@ import java.util.Locale;
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 @Autonomous(name = "Gyro test", group = "Sensor")
+@Disabled //SO YOU CANNOT RUN IT
 public class GyroTest extends LinearOpMode {ElapsedTime clock = new ElapsedTime();
     //----------------------------------------------------------------------------------------------
     // State

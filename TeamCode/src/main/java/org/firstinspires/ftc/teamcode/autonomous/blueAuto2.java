@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,7 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.Locale;
 
 
-@Autonomous(name = "blue 2", group = "Sensor")
+@Autonomous(name = "blue 2 gyro", group = "Sensor")
+@Disabled //SO YOU CANNOT RUN IT
 public class blueAuto2 extends LinearOpMode {
     ElapsedTime clock = new ElapsedTime();
 
