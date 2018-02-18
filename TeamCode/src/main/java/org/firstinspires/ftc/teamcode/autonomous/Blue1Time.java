@@ -152,7 +152,7 @@ public class Blue1Time extends LinearOpMode {
 
 
         //turn to face cryptobox
-        moveTime(6,1.61);
+        moveTime(6,1.6);
 
         //move forward
         moveTime(1,1.2);

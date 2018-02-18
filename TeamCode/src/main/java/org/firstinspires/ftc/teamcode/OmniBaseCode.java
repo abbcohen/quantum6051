@@ -29,7 +29,7 @@ public class OmniBaseCode extends OpMode {
     private Servo RelicFingerServo = null;
 
     //declare variables
-    private double moveSpeed = .9;
+    private double moveSpeed = .99;
     private double relicSpeed = .7;
     private double liftSpeed = 1;
     private boolean slomo = false;
@@ -97,7 +97,7 @@ public class OmniBaseCode extends OpMode {
     }
 
     public void liftStop() {
-        LiftMotor.setPower(.05);
+        LiftMotor.setPower(-.15);
     }
 
     public void relicArmMove() {
@@ -142,7 +142,7 @@ public class OmniBaseCode extends OpMode {
         if (gamepad1.right_bumper) slomo = true;
         else slomo = false;
         if (slomo) moveSpeed = .4;
-        else moveSpeed = .9;
+        else moveSpeed = .99;
 //
 //        //ultra slowdo
 //        if (gamepad1.right_trigger > 0.5)  ultraslomo = true;
@@ -201,7 +201,7 @@ public class OmniBaseCode extends OpMode {
         //grabber
         if (gamepad2.dpad_down) { //in
             GlyphServoL.setPosition(.2);
-            GlyphServoR.setPosition(.23);
+            GlyphServoR.setPosition(.25);
         } else if (gamepad2.dpad_up) { //out
             GlyphServoL.setPosition(.375);
             GlyphServoR.setPosition(.375);
@@ -213,17 +213,19 @@ public class OmniBaseCode extends OpMode {
             GlyphServoR.setPosition(.27);
         } else { //out
             GlyphServoL.setPosition(.275);
-            GlyphServoR.setPosition(.28);
+            GlyphServoR.setPosition(.3);
         }
 
         //glyph pusher plate
-        if (gamepad2.right_trigger>.2) PushServo.setPosition(.3);//out (up)
-        else PushServo.setPosition(.8); // in (down)
+        if (gamepad2.right_trigger>.2) PushServo.setPosition(.45);//out (up)
+        else PushServo.setPosition(.85); // in (down)
 
         //lift
         if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) liftMove();
-        else if (gamepad2.right_stick_x < -.1) liftStop();
-        else LiftMotor.setPower(0);
+        else liftStop();
+        //else if (gamepad2.right_stick_x < -.1) liftStop();
+        // else LiftMotor.setPower(0);
+
 
         //relic
         if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
