@@ -65,7 +65,7 @@ public class OmniBaseCode extends OpMode {
         FL.setDirection(DcMotor.Direction.FORWARD);
         BL.setDirection(DcMotor.Direction.FORWARD);
         BR.setDirection(DcMotor.Direction.FORWARD);
-        FR.setDirection(DcMotor.Direction.FORWARDgi);
+        FR.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
         GlyphServoL.setDirection(Servo.Direction.REVERSE);
