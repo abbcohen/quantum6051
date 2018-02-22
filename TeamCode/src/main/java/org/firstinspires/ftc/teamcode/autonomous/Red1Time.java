@@ -45,10 +45,10 @@ public class Red1Time extends LinearOpMode {
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
 
         JewelServo.setDirection(Servo.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        BL.setDirection(DcMotor.Direction.REVERSE);
-        BR.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.FORWARD);
+        BL.setDirection(DcMotor.Direction.FORWARD);
+        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
 

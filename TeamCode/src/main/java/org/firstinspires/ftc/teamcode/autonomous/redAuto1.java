@@ -47,10 +47,10 @@ public class redAuto1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        FR = hardwareMap.get(DcMotor.class, "FR");
-        FL = hardwareMap.get(DcMotor.class, "FL");
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
+        FL.setDirection(DcMotor.Direction.FORWARD);
+        BL.setDirection(DcMotor.Direction.FORWARD);
+        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.FORWARD);
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");

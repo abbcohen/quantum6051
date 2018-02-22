@@ -52,13 +52,18 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
 
         JewelServo.setDirection(Servo.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        BL.setDirection(DcMotor.Direction.REVERSE);
-        BR.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.FORWARD);
+        BL.setDirection(DcMotor.Direction.FORWARD);
+        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
 
+        // Set the behaviour when motors' power is set to zero -- whether to brake
+        FR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        FL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        BR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        BL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
         //Servo initialization
 //        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
 //        GlyphServoL.setDirection(Servo.Direction.REVERSE);
@@ -143,13 +148,13 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
 
 
         //MOVE TO THE CORRECT COLUMN
-//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
             moveTime(3, 1.6); //fill w center value
-//        } else if (column == RelicRecoveryVuMark.LEFT) {
-//            moveTime(3, 0); //fill w left value
-//        } else if (column == RelicRecoveryVuMark.RIGHT) {
-//            moveTime(3, 0);//fill w right value
-//        } else moveTime(3,1.763);
+        } else if (column == RelicRecoveryVuMark.LEFT) {
+            moveTime(3, 0); //fill w left value
+        } else if (column == RelicRecoveryVuMark.RIGHT) {
+            moveTime(3, 0);//fill w right value
+        } else moveTime(3,1.763);
 
 
 
@@ -320,4 +325,5 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
 
         return vuMark;
     }
+    static final DcMotor.ZeroPowerBehavior ZERO_POWER_BEHAVIOR = DcMotor.ZeroPowerBehavior.BRAKE;
 }

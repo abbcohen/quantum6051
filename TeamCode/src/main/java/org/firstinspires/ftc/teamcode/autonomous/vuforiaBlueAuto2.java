@@ -43,10 +43,10 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        FR = hardwareMap.get(DcMotor.class, "FR");
-        FL = hardwareMap.get(DcMotor.class, "FL");
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
+        FL.setDirection(DcMotor.Direction.FORWARD);
+        BL.setDirection(DcMotor.Direction.FORWARD);
+        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.FORWARD);
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
@@ -58,6 +58,12 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
         FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+
+        // Set the behaviour when motors' power is set to zero -- whether to brake
+        FR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        FL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        BR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        BL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
 
         //Servo initialization
 //        GlyphServoL = hardwareMap.get(Servo.class, "GlyphServo1");
@@ -144,13 +150,13 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
         moveTime(3,1.35); //side
 
         //MOVE TO THE CORRECT COLUMN
-//        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
+        if (column == RelicRecoveryVuMark.CENTER || column == RelicRecoveryVuMark.UNKNOWN) {
             moveTime(1, .81); //center value
-//        } else if (column == RelicRecoveryVuMark.LEFT) {
-//            moveTime(1, .38); // left value
-//        } else if (column == RelicRecoveryVuMark.RIGHT) {
-//            moveTime(1,.58); //right value
-//        }
+        } else if (column == RelicRecoveryVuMark.LEFT) {
+            moveTime(1, .38); // left value
+        } else if (column == RelicRecoveryVuMark.RIGHT) {
+            moveTime(1,.58); //right value
+        }
 
         //turn to face cryptobox
         moveTime(6,.9075);
@@ -319,4 +325,5 @@ public class vuforiaBlueAuto2 extends LinearOpMode {
 
         return vuMark;
     }
+    static final DcMotor.ZeroPowerBehavior ZERO_POWER_BEHAVIOR = DcMotor.ZeroPowerBehavior.BRAKE;
 }

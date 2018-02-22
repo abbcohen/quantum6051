@@ -43,13 +43,14 @@ public class wheeltest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        FR = hardwareMap.get(DcMotor.class, "FR");
-        FL = hardwareMap.get(DcMotor.class, "FL");
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
+        FL.setDirection(DcMotor.Direction.FORWARD);
+        BL.setDirection(DcMotor.Direction.FORWARD);
+        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.FORWARD);
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
         GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+
 
         JewelServo.setDirection(Servo.Direction.REVERSE);
         FL.setDirection(DcMotor.Direction.REVERSE);
@@ -58,6 +59,7 @@ public class wheeltest extends LinearOpMode {
         FR.setDirection(DcMotor.Direction.REVERSE);
         GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
         GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+
 
         moveTime(3,2);
         moveTime(4,2);
@@ -209,4 +211,5 @@ public class wheeltest extends LinearOpMode {
 
         return vuMark;
     }
+
 }

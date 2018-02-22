@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 
 @TeleOp(name="DOBBY GAME TIME", group="Iterative Opmode")
 public class OmniBaseCode extends OpMode {
@@ -74,6 +75,13 @@ public class OmniBaseCode extends OpMode {
         PushServo.setDirection(Servo.Direction.REVERSE);
         RelicWristServo.setDirection(Servo.Direction.FORWARD);
         RelicFingerServo.setDirection(Servo.Direction.FORWARD);
+
+
+        // Set the behaviour when motors' power is set to zero -- whether to brake
+        FR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        FL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        BR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        BL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -265,6 +273,7 @@ public class OmniBaseCode extends OpMode {
             telemetry.addData("left bumper", gamepad2.left_bumper);
             telemetry.addData("lift", gamepad2.right_stick_y);
         }
+    static final ZeroPowerBehavior ZERO_POWER_BEHAVIOR = ZeroPowerBehavior.BRAKE;
 
     //Code to run ONCE after the driver hits STOP
     @Override
