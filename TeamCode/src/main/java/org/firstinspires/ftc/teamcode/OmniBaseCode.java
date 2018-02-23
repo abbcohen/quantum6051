@@ -82,6 +82,10 @@ public class OmniBaseCode extends OpMode {
         FL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
         BR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
         BL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        LiftMotor.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        RelicMotor.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        GlyphWheel1.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
+        GlyphWheel2.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -230,9 +234,9 @@ public class OmniBaseCode extends OpMode {
 
         //lift
         if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) liftMove();
-        else liftStop();
+        //else liftStop();
         //else if (gamepad2.right_stick_x < -.1) liftStop();
-        // else LiftMotor.setPower(0);
+         else LiftMotor.setPower(0);
 
 
         //relic
