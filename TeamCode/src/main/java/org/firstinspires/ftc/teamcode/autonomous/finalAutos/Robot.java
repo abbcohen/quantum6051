@@ -57,8 +57,8 @@ public class Robot {
     public Servo JewelServo = null;
     private Servo GlyphServoL = null;
     private Servo GlyphServoR = null;
-    private DcMotor GlyphWheel1 = null;
-    private DcMotor GlyphWheel2 = null;
+    private DcMotor GlyphWheelL = null;
+    private DcMotor GlyphWheelR = null;
     private double moveSpeed = .25;
     private double turnSpeed = .25;
 
@@ -66,7 +66,6 @@ public class Robot {
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
-
 
     public void init(LinearOpMode o){
         //SYSTEM THINGS
@@ -81,15 +80,15 @@ public class Robot {
         BL = hardwareMap.get(DcMotor.class, "BL");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         JewelServo = hardwareMap.get(Servo.class, "JewelServo");
-        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
-        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+        GlyphWheelL = hardwareMap.get(DcMotor.class, "GlyphWheelL");
+        GlyphWheelR = hardwareMap.get(DcMotor.class, "GlyphWheelR");
         JewelServo.setDirection(Servo.Direction.REVERSE);
         FL.setDirection(DcMotor.Direction.FORWARD);
         BL.setDirection(DcMotor.Direction.FORWARD);
         BR.setDirection(DcMotor.Direction.FORWARD);
         FR.setDirection(DcMotor.Direction.FORWARD);
-        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
-        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+        GlyphWheelL.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheelR.setDirection(DcMotor.Direction.REVERSE);
         GlyphServoL = hardwareMap.get(Servo.class, "GlyphServoL");
         GlyphServoL.setDirection(Servo.Direction.REVERSE);
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
@@ -191,8 +190,8 @@ public class Robot {
     }
 
     public void glyphWheels(double speed) {
-        GlyphWheel1.setPower(speed);
-        GlyphWheel2.setPower(speed);
+        GlyphWheelL.setPower(speed);
+        GlyphWheelR.setPower(speed);
     }
 
     public void moveForward() {

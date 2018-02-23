@@ -13,33 +13,17 @@ import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 public class OmniBaseCode extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
-    //declare motors and servos
-    private DcMotor FR = null;
-    private DcMotor FL = null;
-    private DcMotor BR = null;
-    private DcMotor BL = null;
-    private DcMotor LiftMotor = null;
-    private DcMotor RelicMotor = null;
-    private DcMotor GlyphWheel1 = null;
-    private DcMotor GlyphWheel2 = null;
-    private Servo GlyphServoL = null;
-    private Servo GlyphServoR = null;
-    private Servo JewelServo = null;
-    private Servo PushServo = null;
-    private Servo RelicWristServo = null;
-    private Servo RelicFingerServo = null;
-
     //declare variables
-    private double moveSpeed = .99;
-    private double relicSpeed = .7;
+    private double moveSpeed = 1;
     private double liftSpeed = 1;
+    private double relicSpeed = .75;
     private boolean slomo = false;
-    private boolean ultraslomo = false;
-    private boolean readhand = false;
-    private boolean readwrist = false;
-    private boolean readframe = false;
-    private boolean defaultFrame = true;
+    private boolean relicHandPos = true;
+    private boolean relicWristPos = true;
 
+    //declare motors and servos
+    private DcMotor FR, FL, BR, BL, LiftMotor, RelicMotor, GlyphWheelL, GlyphWheelR = null;
+    private Servo GlyphServoL, GlyphServoR, PushServo, JewelServo, RelicWristServo, RelicHandServo = null;
 
     //Code to run ONCE when the driver hits INIT
     @Override
@@ -53,44 +37,45 @@ public class OmniBaseCode extends OpMode {
         BL = hardwareMap.get(DcMotor.class, "BL");
         LiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         RelicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
-        GlyphWheel1 = hardwareMap.get(DcMotor.class, "GlyphWheel1");
-        GlyphWheel2 = hardwareMap.get(DcMotor.class, "GlyphWheel2");
+        GlyphWheelL = hardwareMap.get(DcMotor.class, "GlyphWheelL");
+        GlyphWheelR = hardwareMap.get(DcMotor.class, "GlyphWheelR");
         GlyphServoL = hardwareMap.get(Servo.class, "GlyphServoL");
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
-        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         PushServo = hardwareMap.get(Servo.class, "PushServo");
+        JewelServo = hardwareMap.get(Servo.class, "JewelServo");
         RelicWristServo = hardwareMap.get(Servo.class, "RelicWristServo");
-        RelicFingerServo = hardwareMap.get(Servo.class, "RelicFingerServo");
+        RelicHandServo = hardwareMap.get(Servo.class, "RelicHandServo");
 
         //set motor and servo directions
         FL.setDirection(DcMotor.Direction.FORWARD);
         BL.setDirection(DcMotor.Direction.FORWARD);
         BR.setDirection(DcMotor.Direction.FORWARD);
         FR.setDirection(DcMotor.Direction.FORWARD);
-        GlyphWheel1.setDirection(DcMotor.Direction.FORWARD);
-        GlyphWheel2.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.FORWARD);
+        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        RelicMotor.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheelL.setDirection(DcMotor.Direction.FORWARD);
+        GlyphWheelR.setDirection(DcMotor.Direction.REVERSE);
         GlyphServoL.setDirection(Servo.Direction.REVERSE);
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
         JewelServo.setDirection(Servo.Direction.REVERSE);
         PushServo.setDirection(Servo.Direction.REVERSE);
         RelicWristServo.setDirection(Servo.Direction.FORWARD);
-        RelicFingerServo.setDirection(Servo.Direction.FORWARD);
+        RelicHandServo.setDirection(Servo.Direction.FORWARD);
 
+        //set motor braking on
+        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RelicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        GlyphWheelL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        GlyphWheelR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Set the behaviour when motors' power is set to zero -- whether to brake
-        FR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        FL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        BR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        BL.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        LiftMotor.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        RelicMotor.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        GlyphWheel1.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-        GlyphWheel2.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
-
-        // Tell the driver that initialization is complete.
+        //initialization complete
         telemetry.addData("Status", "Initialized");
     }
-
 
     public void stopDriving() {
         FR.setPower(0);
@@ -100,43 +85,24 @@ public class OmniBaseCode extends OpMode {
     }
 
     public void glyphWheels(double speed) {
-        GlyphWheel1.setPower(speed);
-        GlyphWheel2.setPower(speed);
+        GlyphWheelL.setPower(speed);
+        GlyphWheelR.setPower(speed);
     }
 
-    public void liftMove() {
-        LiftMotor.setPower(gamepad2.right_stick_y * liftSpeed);
-    }
-
-    public void liftStop() {
-        LiftMotor.setPower(-.15);
-    }
-
-    public void relicArmMove() {
-        RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
-    }
-
-    public void relicArmStop() {
-        RelicMotor.setPower(.05);
-    }
-
-    public void FlipRelicWrist() {
+    public void moveRelicWrist() { //0 is down, 1 is up
         if (RelicWristServo.getPosition()>.5) RelicWristServo.setPosition(.1);
-        else RelicWristServo.setPosition(.9); //0 is down, 1 is up
+        else RelicWristServo.setPosition(.9);
     }
 
-    public void RelicHandClose(){
-        if (RelicFingerServo.getPosition()>.6) RelicFingerServo.setPosition(.5);
-        else RelicFingerServo.setPosition(.7); //.1 is in, .8 is out
+    public void moveRelicHand() { //.1 is in, .8 is out
+        if (RelicHandServo.getPosition()>.6) RelicHandServo.setPosition(.5);
+        else RelicHandServo.setPosition(.7);
     }
 
     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
-        FR.setPower(0);
-        FL.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
+        stopDriving();
         JewelServo.setPosition(.5);
     }
 
@@ -149,25 +115,6 @@ public class OmniBaseCode extends OpMode {
     //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
     @Override
     public void loop() {
-
-        //slomo
-        if (gamepad1.right_bumper) slomo = true;
-        else slomo = false;
-        if (slomo) moveSpeed = .4;
-        else moveSpeed = .99;
-//
-//        //ultra slowdo
-//        if (gamepad1.right_trigger > 0.5)  ultraslomo = true;
-//        else ultraslomo = false;
-//        if(ultraslomo) moveSpeed = .2;
-//        else moveSpeed = .9;
-//        //flip reference frame
-//        if (gamepad1.y) {
-//            if (!readframe) {
-//                readframe = true;
-//                defaultFrame=!defaultFrame;
-//            }
-//        } else readframe = false;
 
         //driving (omni wheel magic)
         double gamepad1LeftY = -gamepad1.left_stick_y;
@@ -188,29 +135,28 @@ public class OmniBaseCode extends OpMode {
             backRight = 0;
             backLeft = 0;
         }
-        //scale the omni magic speeds to the speeds we like
-        if(defaultFrame) {
-            FR.setPower(frontRight * moveSpeed);
-            FL.setPower(frontLeft * moveSpeed);
-            BR.setPower(backRight * moveSpeed);
-            BL.setPower(backLeft * moveSpeed);
-        }else{
-            FR.setPower(backRight * moveSpeed);
-            FL.setPower(frontRight * moveSpeed);
-            BR.setPower(backLeft * moveSpeed);
-            BL.setPower(frontLeft * moveSpeed);
-        }
 
         //stop driving
-        if (gamepad1.left_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0)
-            stopDriving();
+        if (gamepad1.left_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0) stopDriving();
 
-//        //glyph intake wheels
-        if (gamepad2.right_bumper) glyphWheels(1); //pull glyph in
-        else if (gamepad2.left_bumper) glyphWheels(-1); //push glyph out
-        else glyphWheels(0); //stop glyph wheels
+        //driving slomo
+        if (gamepad1.right_bumper) slomo = true;
+        else slomo = false;
+        if (slomo) moveSpeed = .4;
+        else moveSpeed = .99;
 
-        //grabber
+        //set omniwheel speeds
+        FR.setPower(backRight * moveSpeed);
+        FL.setPower(frontRight * moveSpeed);
+        BR.setPower(backLeft * moveSpeed);
+        BL.setPower(frontLeft * moveSpeed);
+
+        //glyph intake wheel
+        if (gamepad2.right_bumper) glyphWheels(1); //pull in
+        else if (gamepad2.left_bumper) glyphWheels(-1); //push out
+        else glyphWheels(0); //stop
+
+        //glyph grabbers
         if (gamepad2.dpad_down) { //in
             GlyphServoL.setPosition(.2);
             GlyphServoR.setPosition(.25);
@@ -228,59 +174,53 @@ public class OmniBaseCode extends OpMode {
             GlyphServoR.setPosition(.3);
         }
 
-        //glyph pusher plate
-        if (gamepad2.right_trigger>.2) PushServo.setPosition(.45);//out (up)
-        else PushServo.setPosition(.85); // in (down)
+        //glyph pusher
+        if (gamepad2.right_trigger>.2) PushServo.setPosition(.45); //out
+        else PushServo.setPosition(.85); //in
 
-        //lift
-        if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) liftMove();
-        //else liftStop();
-        //else if (gamepad2.right_stick_x < -.1) liftStop();
-         else LiftMotor.setPower(0);
+        //lift motor
+        if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) LiftMotor.setPower(gamepad2.right_stick_y * liftSpeed);
+        else LiftMotor.setPower(0);
 
+        //relic motor
+        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
+        else RelicMotor.setPower(0);
 
-        //relic
-        if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) relicArmMove();
-        else relicArmStop();
-        if (gamepad2.x) {
-            if (!readhand) {
-                readhand = true;
-                RelicHandClose();
-            }
-        }else readhand=false;
-
+        //relic wrist
         if (gamepad2.y) {
-            if (!readwrist) {
-                readwrist = true;
-                FlipRelicWrist();
-                }
-        } else readwrist = false;
-
-            //Keep the jewel servo up
-            JewelServo.setPosition(.5);
-
-            //console
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("FR", frontRight);
-            telemetry.addData("FL", frontLeft);
-            telemetry.addData("BR", backRight);
-            telemetry.addData("BL", backLeft);
-            telemetry.addData("relicFinger", RelicFingerServo.getPosition());
-            telemetry.addData("relicWrist", RelicWristServo.getPosition());
-            telemetry.addData("Glyph Servo 1", GlyphServoL.getPosition());
-            telemetry.addData("Glyph Servo 2", GlyphServoR.getPosition());
-            telemetry.addData("left_stick_y", gamepad1.left_stick_y);
-            telemetry.addData("left_stick_x", gamepad1.left_stick_x);
-            telemetry.addData("right_stick_y", gamepad1.right_stick_y);
-            telemetry.addData("right_stick_x", gamepad1.right_stick_x);
-            telemetry.addData("right bumper", gamepad2.right_bumper);
-            telemetry.addData("left bumper", gamepad2.left_bumper);
-            telemetry.addData("lift", gamepad2.right_stick_y);
+            if (relicWristPos) RelicWristServo.setPosition(.9);
+            else RelicWristServo.setPosition(.1);
+            relicWristPos = !relicWristPos;
         }
-    static final ZeroPowerBehavior ZERO_POWER_BEHAVIOR = ZeroPowerBehavior.BRAKE;
+
+        //relic hand
+        if (gamepad2.x) {
+            if (relicHandPos) RelicHandServo.setPosition(.7);
+            else RelicHandServo.setPosition(.5);
+            relicHandPos = !relicHandPos;
+        }
+
+        //keep jewel servo up
+        JewelServo.setPosition(.5);
+
+        //print motor powers and servo positions
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("FR", FR.getPower());
+        telemetry.addData("FL", FL.getPower());
+        telemetry.addData("BR", BR.getPower());
+        telemetry.addData("BL", BL.getPower());
+        telemetry.addData("LiftMotor", LiftMotor.getPower());
+        telemetry.addData("RelicMotor", RelicMotor.getPower());
+        telemetry.addData("GlyphWheelL", GlyphWheelL.getPower());
+        telemetry.addData("GlyphWheelR", GlyphWheelR.getPower());
+        telemetry.addData("GlyphServoL", GlyphServoL.getPosition());
+        telemetry.addData("GlyphServoR", GlyphServoR.getPosition());
+        telemetry.addData("JewelServo", JewelServo.getPosition());
+        telemetry.addData("RelicWristServo", RelicWristServo.getPosition());
+        telemetry.addData("RelicHandServo", RelicHandServo.getPosition());
+    }
 
     //Code to run ONCE after the driver hits STOP
     @Override
-    public void stop() {
-    }
+    public void stop() {}
 }
