@@ -28,20 +28,19 @@ public class red1 extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+        //Get starting angle
+        double veryStartAngle = dobby.currentAngle();
+
+        //Flip Jewel Out
         dobby.JewelServo.setPosition(70);
-        // convert the RGB values to HSV values.
-        // multiply by the SCALE_FACTOR.
-        // then cast it back to int (SCALE_FACTOR is a double)
+
+        //Setup Color
         Color.RGBToHSV((int) (dobby.colorSensor.red() * dobby.SCALE_FACTOR),
                 (int) (dobby.colorSensor.green() * dobby.SCALE_FACTOR),
                 (int) (dobby.colorSensor.blue() * dobby.SCALE_FACTOR),
                 dobby.hsvValues);
 
-        dobby.column = dobby.getPicto();
-        telemetry.addData("column", dobby.column);
-        telemetry.update();
-
-        //read color
+        //Read color
         int red = 0;
         int blue = 0;
         for (int i = 0; i < 40; i++) {
@@ -50,6 +49,7 @@ public class red1 extends LinearOpMode {
             telemetry.update();
         }
 
+        //Print color
         telemetry.addData("Clear", dobby.colorSensor.alpha());
         telemetry.addData("Red  ", dobby.colorSensor.red());
         telemetry.addData("Green", dobby.colorSensor.green());
@@ -58,60 +58,82 @@ public class red1 extends LinearOpMode {
         telemetry.addData("RED", red);
         telemetry.addData("BLUE", blue);
 
+        //Read Column
+        dobby.column = dobby.getPicto();
+        telemetry.addData("column", dobby.column);
+        telemetry.addData("things were done",0);
+        telemetry.update();
+
+        //grab glyph
+        dobby.grabberIn();
+        dobby.lift(1);
+        dobby.moveTime(0,.35);
+        dobby.lift(0);
+
         //knock off jewel
         double jewelturntime = getRuntime();
-        if (red > blue) {
-            telemetry.addData("Red Wins!", dobby.colorSensor.red());
-            telemetry.update();
-            dobby.moveTime(5,.154);
-        } else {
-            telemetry.addData("Blue Wins!", dobby.colorSensor.red());
-            telemetry.update();
-            dobby.moveTime(6,.154);
-        }
+//        if (red > blue) {
+//            telemetry.addData("Red Wins!", dobby.colorSensor.red());
+//            telemetry.update();
+//            dobby.turnAngle(2);
+//        } else {
+//            telemetry.addData("Blue Wins!", dobby.colorSensor.red());
+//            telemetry.update();
+//            dobby.turnAngle(-2);
+//        }
 
+        //Flip Jewel In
         dobby.JewelServo.setPosition(0);
+        dobby.moveTime(0,.2);
 
         //turn back to initial position
-        if(red>blue) {
-            dobby.moveTime(6,.154);
-        } else {
-            dobby.moveTime(5,.154);
-        }
+//        if(red>blue) {
+//            dobby.turnAngle(-2);
+//        } else {
+//            dobby.turnAngle(2);
+//        }
+        dobby.moveTime(0,.2);
 
-
-        //MOVE TO THE CORRECT COLUMN
-        if (dobby.column == RelicRecoveryVuMark.CENTER || dobby.column == RelicRecoveryVuMark.UNKNOWN) {
-            dobby.moveTime(3, 1.6); //fill w center value
-        } else if (dobby.column == RelicRecoveryVuMark.LEFT) {
-            dobby.moveTime(3, 0); //fill w left value
-        } else if (dobby.column == RelicRecoveryVuMark.RIGHT) {
-            dobby.moveTime(3, 0);//fill w right value
-        } else dobby.moveTime(3,1.763);
-
-
-        //turn to face cryptobox
-        dobby.moveTime(6,1.61);
-
-        //move forward
-        dobby.moveTime(1,1.2);
-
-        //pause
+        //Drive off stone to center
+        dobby.moveTime(4,2.2);
         dobby.moveTime(0,1);
 
-        //release glyph
-        dobby.moveTime(8, .28);
+        //Turn to original heading
+        dobby.turnAngle(dobby.currentAngle()-veryStartAngle);
+        dobby.moveTime(0,3);
+        dobby.turnAngle(90);
+        dobby.moveTime(0,1);
+        dobby.turnAngle(90);
+        dobby.moveTime(0,1);
 
-        //pause
+
+        //Turn towards correct column
+        if (dobby.column == RelicRecoveryVuMark.LEFT) {
+            dobby.turnAngle(-10);
+        } else if (dobby.column == RelicRecoveryVuMark.RIGHT) {
+            dobby.turnAngle(10);
+        }
+        dobby.moveTime(0,1);
+
+        //move forward
+        dobby.moveTime(1,2.2);
+        dobby.moveTime(0,1);
+
+        //release glyph forever
+        dobby.grabberOut();
+        dobby.glyphWheels(-1);
         dobby.moveTime(0,1);
 
         //move back
         dobby.moveTime(2,.25);
+        dobby.moveTime(0,.5);
 
         //push back in
         dobby.moveTime(1,.3);
+        dobby.moveTime(0,.5);
 
         //move back out
         dobby.moveTime(2,.25);
+        dobby.moveTime(0,.5);
     }
 }

@@ -19,7 +19,9 @@ public class OmniBaseCode extends OpMode {
     private double relicSpeed = .75;
     private boolean slomo = false;
     private boolean relicHandPos = true;
+    private boolean yJustPressed = false;
     private boolean relicWristPos = true;
+    private boolean xJustPressed = false;
 
     //declare motors and servos
     private DcMotor FR, FL, BR, BL, LiftMotor, RelicMotor, GlyphWheelL, GlyphWheelR = null;
@@ -28,6 +30,7 @@ public class OmniBaseCode extends OpMode {
     //Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
+
         telemetry.addData("Status", "Initialized");
 
         //initialize motors and servos
@@ -89,16 +92,6 @@ public class OmniBaseCode extends OpMode {
         GlyphWheelR.setPower(speed);
     }
 
-    public void moveRelicWrist() { //0 is down, 1 is up
-        if (RelicWristServo.getPosition()>.5) RelicWristServo.setPosition(.1);
-        else RelicWristServo.setPosition(.9);
-    }
-
-    public void moveRelicHand() { //.1 is in, .8 is out
-        if (RelicHandServo.getPosition()>.6) RelicHandServo.setPosition(.5);
-        else RelicHandServo.setPosition(.7);
-    }
-
     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
@@ -146,10 +139,10 @@ public class OmniBaseCode extends OpMode {
         else moveSpeed = .99;
 
         //set omniwheel speeds
-        FR.setPower(backRight * moveSpeed);
-        FL.setPower(frontRight * moveSpeed);
-        BR.setPower(backLeft * moveSpeed);
-        BL.setPower(frontLeft * moveSpeed);
+        FR.setPower(frontRight * moveSpeed);
+        FL.setPower(frontLeft * moveSpeed);
+        BR.setPower(backRight * moveSpeed);
+        BL.setPower(backLeft * moveSpeed);
 
         //glyph intake wheel
         if (gamepad2.right_bumper) glyphWheels(1); //pull in
@@ -187,18 +180,24 @@ public class OmniBaseCode extends OpMode {
         else RelicMotor.setPower(0);
 
         //relic wrist
-        if (gamepad2.y) {
+        if (gamepad2.y && !yJustPressed) {
             if (relicWristPos) RelicWristServo.setPosition(.9);
             else RelicWristServo.setPosition(.1);
             relicWristPos = !relicWristPos;
+            yJustPressed = true;
         }
 
+        if (!gamepad2.y) yJustPressed = false;
+
         //relic hand
-        if (gamepad2.x) {
+        if (gamepad2.x && !xJustPressed) {
             if (relicHandPos) RelicHandServo.setPosition(.7);
             else RelicHandServo.setPosition(.5);
             relicHandPos = !relicHandPos;
+            xJustPressed = true;
         }
+
+        if (!gamepad2.x) xJustPressed = false;
 
         //keep jewel servo up
         JewelServo.setPosition(.5);

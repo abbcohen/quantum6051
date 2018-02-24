@@ -273,7 +273,7 @@ public class Robot {
     }
 
     public void lift(int power){
-        LiftMotor.setPower(power);
+        LiftMotor.setPower(-power);
     }
 
     public RelicRecoveryVuMark getPicto() { //function to figure out which column it is
@@ -315,8 +315,8 @@ public class Robot {
             double difference = ((angle-getAngleDiff(startingAngle,currentAngle()))/(angle*4));
             telemetry.addData("difference",difference);
             telemetry.update();
-            if(difference > .1) turnClockwise(difference);
-            else turnClockwise(.1);
+            if(difference > .15) turnClockwise(difference);
+            else turnClockwise(.15);
         }
         driveStop();
     }
@@ -326,8 +326,8 @@ public class Robot {
             double difference = ((angle-getAngleDiff(startingAngle,currentAngle()))/(angle*4));
             telemetry.addData("difference",difference);
             telemetry.update();
-            if(difference > .1) turnCounterClockwise(difference);
-            else turnCounterClockwise(.1);
+            if(difference > .15) turnCounterClockwise(difference);
+            else turnCounterClockwise(.15);
         }
         driveStop();
     }
