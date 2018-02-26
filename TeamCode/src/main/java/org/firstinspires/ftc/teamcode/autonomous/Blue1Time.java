@@ -6,6 +6,7 @@ import android.view.View;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,7 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+
 @Autonomous(name = "blue 1 TIME", group = "Sensor")
+@Disabled
 public class Blue1Time extends LinearOpMode {
     ElapsedTime clock = new ElapsedTime();
     RelicRecoveryVuMark column = RelicRecoveryVuMark.UNKNOWN;

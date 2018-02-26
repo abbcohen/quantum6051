@@ -22,6 +22,10 @@ public class OmniBaseCode extends OpMode {
     private boolean yJustPressed = false;
     private boolean relicWristPos = true;
     private boolean xJustPressed = false;
+    private boolean downJustPressed = false;
+    private boolean upJustPressed = false;
+    private boolean rightJustPressed = false;
+    private boolean leftJustPressed = false;
 
     //declare motors and servos
     private DcMotor FR, FL, BR, BL, LiftMotor, RelicMotor, GlyphWheelL, GlyphWheelR = null;
@@ -150,7 +154,7 @@ public class OmniBaseCode extends OpMode {
         else glyphWheels(0); //stop
 
         //glyph grabbers
-        if (gamepad2.dpad_down) { //in
+        if (gamepad2.dpad_down ) { //in
             GlyphServoL.setPosition(.2);
             GlyphServoR.setPosition(.25);
         } else if (gamepad2.dpad_up) { //out
@@ -167,13 +171,18 @@ public class OmniBaseCode extends OpMode {
             GlyphServoR.setPosition(.3);
         }
 
+        if (!gamepad2.dpad_down) downJustPressed = false;
+        if (!gamepad2.dpad_left) leftJustPressed = false;
+        if (!gamepad2.dpad_right) rightJustPressed = false;
+        if (!gamepad2.dpad_up)  upJustPressed = false;
+
         //glyph pusher
         if (gamepad2.right_trigger>.2) PushServo.setPosition(.45); //out
         else PushServo.setPosition(.85); //in
 
         //lift motor
         if ((gamepad2.right_stick_y > .1) || (gamepad2.right_stick_y < -.1)) LiftMotor.setPower(gamepad2.right_stick_y * liftSpeed);
-        else LiftMotor.setPower(0);
+        else LiftMotor.setPower(-.15);
 
         //relic motor
         if ((gamepad2.left_stick_y > .1) || (gamepad2.left_stick_y < -.1)) RelicMotor.setPower(gamepad2.left_stick_y * relicSpeed);
@@ -191,7 +200,7 @@ public class OmniBaseCode extends OpMode {
 
         //relic hand
         if (gamepad2.x && !xJustPressed) {
-            if (relicHandPos) RelicHandServo.setPosition(.7);
+            if (relicHandPos) RelicHandServo.setPosition(.62);
             else RelicHandServo.setPosition(.5);
             relicHandPos = !relicHandPos;
             xJustPressed = true;

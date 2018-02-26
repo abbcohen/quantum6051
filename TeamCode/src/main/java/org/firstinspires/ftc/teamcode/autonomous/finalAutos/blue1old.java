@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@Autonomous(name = "Blue 1", group = "Sensor")
-public class blue1 extends LinearOpMode {
+@Autonomous(name = "Blue 1 old", group = "Sensor")
+public class blue1old extends LinearOpMode {
     Robot dobby;
     public void runOpMode() {
         dobby = new Robot();
@@ -41,14 +41,13 @@ public class blue1 extends LinearOpMode {
         dobby.readColumn();
 
         //grab glyph
-        dobby.flipOutarms();
         dobby.liftGlyph();
 
         //knock appropriate jewel
         dobby.knockBlueAlliance();
 
         //Drive off stone to center
-        dobby.moveTime(3, 1.5);
+        dobby.moveTime(3, 2.2);
         dobby.moveTime(0, .1);
 
         //Turn to original heading

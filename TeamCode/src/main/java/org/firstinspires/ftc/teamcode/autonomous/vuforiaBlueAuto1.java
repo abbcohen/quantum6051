@@ -125,7 +125,6 @@ public class vuforiaBlueAuto1 extends LinearOpMode {
         telemetry.addData("BLUE", blue);
 
         //knock off jewel
-        double jewelturntime = getRuntime();
         if (red > blue) {
             telemetry.addData("Red Wins!", colorSensor.red());
             telemetry.update();

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.finalAutos;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -62,10 +63,15 @@ public class Robot {
     private double moveSpeed = .25;
     private double turnSpeed = .25;
 
+    //COLOR SENSOR THINGS
+    public int red = 0;
+    public int blue = 0;
+
     //GYRO THINGS
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
+    public double veryStartAngle;
 
     public void init(LinearOpMode o){
         //SYSTEM THINGS
@@ -93,6 +99,7 @@ public class Robot {
         GlyphServoL.setDirection(Servo.Direction.REVERSE);
         GlyphServoR = hardwareMap.get(Servo.class, "GlyphServoR");
         GlyphServoR.setDirection(Servo.Direction.FORWARD);
+
         //Braking
         final DcMotor.ZeroPowerBehavior ZERO_POWER_BEHAVIOR = DcMotor.ZeroPowerBehavior.BRAKE;
         FR.setZeroPowerBehavior(ZERO_POWER_BEHAVIOR);
@@ -121,6 +128,7 @@ public class Robot {
 
         // wait for the start button to be pressed.
     }
+
     public void idle(){
         opMode.idle();
     }
@@ -272,7 +280,7 @@ public class Robot {
         GlyphServoR.setPosition(.375);
     }
 
-    public void lift(int power){
+    public void lift(double power){
         LiftMotor.setPower(-power);
     }
 
@@ -305,6 +313,141 @@ public class Robot {
         return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
     }
 
+    public void columnPlace(){
+        //Turn towards correct column
+        if (column == RelicRecoveryVuMark.LEFT) {
+            moveTime(3,.4);
+            turnAngle(-6);
+        } else if (column == RelicRecoveryVuMark.RIGHT) {
+            moveTime(4,.4);
+            turnAngle(6);
+        }
+        moveTime(0,.1);
+
+        //move forward
+        moveTime(1,2.2);
+        moveTime(0,.1);
+
+        //release glyph forever
+        grabberOut();
+        glyphWheels(-1);
+        moveTime(0,.1);
+    }
+
+    public void jewelOut(){
+        JewelServo.setPosition(70);
+    }
+
+    public void setStartAngle(){
+        veryStartAngle = currentAngle();
+    }
+
+    public void knockBlueAlliance(){
+        if (red > blue) {
+            telemetry.addData("Red Wins!", colorSensor.red());
+            telemetry.update();
+            moveTime(5,.154);
+        } else {
+            telemetry.addData("Blue Wins!", colorSensor.red());
+            telemetry.update();
+            moveTime(6,.154);
+        }
+        JewelServo.setPosition(0);
+
+        //turn back to initial position
+        if(red>blue) {
+            moveTime(6,.154);
+        } else {
+            moveTime(5,.154);
+        }
+    }
+
+    public void knockRedAlliance(){
+        if (red > blue) {
+            telemetry.addData("Red Wins!", colorSensor.red());
+            telemetry.update();
+            moveTime(6,.15);
+        } else {
+            telemetry.addData("Blue Wins!", colorSensor.red());
+            telemetry.update();
+            moveTime(5,.15);
+        }
+        JewelServo.setPosition(0);
+
+        //turn back to initial position
+        if(red>blue) {
+            moveTime(5,.15);
+        } else if(blue>red) {
+            moveTime(6,.15);
+        }
+    }
+
+    public void readColumn(){
+        //Read Column
+        column = getPicto();
+        telemetry.addData("column", column);
+        telemetry.addData("things were done",0);
+        telemetry.update();
+    }
+
+    public void liftGlyph(){
+        grabberIn();
+        moveTime(0,.2);
+        lift(1);
+        moveTime(0,.2);
+        lift(0);
+    }
+
+    public void  flipOutarms(){
+        lift(1);
+        moveTime(0,.3);
+        lift(.2);
+        grabberOut();
+        moveTime(0,.5);
+        lift(-1);
+        moveTime(0,.3);
+        lift((.2));
+        moveTime(0,.2);
+    }
+
+    public void readColor(){
+        //Setup Color
+        Color.RGBToHSV((int) (colorSensor.red() *SCALE_FACTOR),
+                (int) (colorSensor.green() * SCALE_FACTOR),
+                (int) (colorSensor.blue() * SCALE_FACTOR),
+                hsvValues);
+
+        //Read color
+        for (int i = 0; i < 40; i++) {
+            if (colorSensor.red() > colorSensor.blue()) red++;
+            if (colorSensor.red() < colorSensor.blue()) blue++;
+            telemetry.update();
+        }
+
+        //Print color
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+        telemetry.addData("RED", red);
+        telemetry.addData("BLUE", blue);
+    }
+
+    public void backUpFromBox(){
+        //move back
+        moveTime(2,.25);
+        moveTime(0,.1);
+
+        //push back in
+        moveTime(1,.3);
+        moveTime(0,.1);
+
+        //move back out
+        moveTime(2,.5);
+        moveTime(0,.1);
+    }
+
     public void turnAngle(double angle){
         if(angle > 0) turnAngleCW(angle);
         if(angle < 0) turnAngleCCW(-angle);
@@ -316,7 +459,7 @@ public class Robot {
             telemetry.addData("difference",difference);
             telemetry.update();
             if(difference > .15) turnClockwise(difference);
-            else turnClockwise(.15);
+            else turnClockwise(.12);
         }
         driveStop();
     }
@@ -327,7 +470,7 @@ public class Robot {
             telemetry.addData("difference",difference);
             telemetry.update();
             if(difference > .15) turnCounterClockwise(difference);
-            else turnCounterClockwise(.15);
+            else turnCounterClockwise(.12);
         }
         driveStop();
     }
